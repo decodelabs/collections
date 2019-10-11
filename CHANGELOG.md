@@ -1,3 +1,6 @@
+## v0.5.2 (2019-10-11)
+* Updated to Gadgets Then interface
+
 ## v0.5.1 (2019-10-04)
 * Removed Ds dependency
 
