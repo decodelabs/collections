@@ -9,12 +9,12 @@ namespace DecodeLabs\Collections\Native;
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
 
-use DecodeLabs\Gadgets\PipeTrait;
+use DecodeLabs\Gadgets\ThenTrait;
 
 trait CollectionTrait
 {
-    use PipeTrait;
-    
+    use ThenTrait;
+
     //const MUTABLE = false;
 
     protected $items = [];
