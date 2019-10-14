@@ -6,7 +6,7 @@
 declare(strict_types=1);
 namespace DecodeLabs\Collections;
 
-interface HashMap extends Readable, Sortable
+interface HashMap extends Collection, Sortable
 {
     public function get(string $key);
     public function pull(string $key);

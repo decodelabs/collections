@@ -7,18 +7,18 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\Readable;
+use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\HashMap;
 
 trait HashMapTrait
 {
-    use ReadableTrait;
+    use CollectionTrait;
     use SortableTrait;
 
     /**
      * Get all keys in array, enforce string formatting
      */
-    public function getKeys(): Readable
+    public function getKeys(): Collection
     {
         return new static(array_map('strval', array_keys($this->items)));
     }
@@ -90,7 +90,7 @@ trait HashMapTrait
     public function hasKey(string ...$keys): bool
     {
         foreach ($keys as $key) {
-            if (array_keys_exists($key, $this->items)) {
+            if (array_key_exists($key, $this->items)) {
                 return true;
             }
         }
@@ -104,7 +104,7 @@ trait HashMapTrait
     public function hasKeys(string ...$keys): bool
     {
         foreach ($keys as $key) {
-            if (!array_keys_exists($key, $this->items)) {
+            if (!array_key_exists($key, $this->items)) {
                 return false;
             }
         }

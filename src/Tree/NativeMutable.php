@@ -43,8 +43,6 @@ class NativeMutable implements \IteratorAggregate, Tree
         foreach ($this->items as $key => $child) {
             $this->items[$key] = clone $child;
         }
-
-        return $this;
     }
 
 
@@ -52,7 +50,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Set node value
      */
-    public function __set(string $key, $value): HashMap
+    public function __set(string $key, $value): Tree
     {
         if (is_iterable($value)) {
             $items = $value;
@@ -68,7 +66,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Get node
      */
-    public function __get(string $key): HashMap
+    public function __get(string $key): Tree
     {
         if (!array_key_exists($key, $this->items)) {
             $this->items[$key] = new static();
@@ -88,10 +86,9 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Remove node
      */
-    public function __unset(string $key): HashMap
+    public function __unset(string $key): void
     {
         unset($this->items[$key]);
-        return $this;
     }
 
 
@@ -117,13 +114,13 @@ class NativeMutable implements \IteratorAggregate, Tree
      */
     public function getNode(string $key): Tree
     {
-        if (static::KEY_SEPARATOR === null) {
+        if (static::KEY_SEPARATOR === null || false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
             return $this->__get($key);
         }
 
         $node = $this;
 
-        foreach (explode(static::KEY_SEPARATOR, $key) as $part) {
+        foreach ($parts as $part) {
             $node = $node->__get($part);
         }
 
@@ -143,9 +140,13 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
+                if (false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
+                    continue;
+                }
+
                 $node = $this;
 
-                foreach (explode(static::KEY_SEPARATOR, $key) as $part) {
+                foreach ($parts as $part) {
                     if (!$node->__isset($part)) {
                         continue 2;
                     }
@@ -173,9 +174,13 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
+                if (false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
+                    continue;
+                }
+
                 $node = $this;
 
-                foreach (explode(static::KEY_SEPARATOR, $key) as $part) {
+                foreach ($parts as $part) {
                     if (!$node->__isset($part)) {
                         return false;
                     }
@@ -221,9 +226,13 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
+                if (false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
+                    continue;
+                }
+
                 $node = $this;
 
-                foreach (explode(static::KEY_SEPARATOR, $key) as $part) {
+                foreach ($parts as $part) {
                     if (!$node->__isset($part)) {
                         continue 2;
                     }
@@ -253,9 +262,13 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
+                if (false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
+                    continue;
+                }
+
                 $node = $this;
 
-                foreach (explode(static::KEY_SEPARATOR, $key) as $part) {
+                foreach ($parts as $part) {
                     if (!$node->__isset($part)) {
                         return false;
                     }
@@ -320,7 +333,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Set by array access
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         if ($key === null) {
             if (is_iterable($value)) {
@@ -329,10 +342,8 @@ class NativeMutable implements \IteratorAggregate, Tree
                 $this->items[] = new static(null, $value);
             }
         } else {
-            $node->set((string)$key, $value);
+            $this->getNode($key)->setValue($value);
         }
-
-        return $node;
     }
 
     /**
@@ -464,10 +475,15 @@ class NativeMutable implements \IteratorAggregate, Tree
     public static function fromDelimitedString(string $string, string $setDelimiter='&', string $valueDelimiter='='): Tree
     {
         $output = new static();
-        $parts = explode($setDelimiter, $string);
+
+        if (false === ($parts = explode($setDelimiter, $string))) {
+            $parts = [];
+        }
 
         foreach ($parts as $part) {
-            $valueParts = explode($valueDelimiter, trim($part), 2);
+            if (false === ($valueParts = explode($valueDelimiter, trim($part), 2)) || empty($valueParts)) {
+                continue;
+            }
 
             $key = str_replace(['[', ']'], ['.', ''], urldecode(array_shift($valueParts)));
             $value = array_shift($valueParts);
@@ -584,9 +600,9 @@ class NativeMutable implements \IteratorAggregate, Tree
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
-                $this->value = $array->value;
+                $this->value = $array->getValue();
 
-                foreach ($array->items as $key => $node) {
+                foreach ($array->getChildren() as $key => $node) {
                     if (isset($this->items[$key])) {
                         $this->items[$key]->merge($node);
                     } else {
@@ -631,9 +647,9 @@ class NativeMutable implements \IteratorAggregate, Tree
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
-                $this->value = $array->value;
+                $this->value = $array->getValue();
 
-                foreach ($array->items as $key => $node) {
+                foreach ($array->getChildren() as $key => $node) {
                     $this->items[$key] = clone $node;
                 }
             } else {

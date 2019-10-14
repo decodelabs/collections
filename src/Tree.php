@@ -10,10 +10,10 @@ use DecodeLabs\Gadgets\Sanitizer;
 
 interface Tree extends HashMap, ValueProvider
 {
-    public function __set(string $key, $value): HashMap;
-    public function __get(string $key): HashMap;
+    public function __set(string $key, $value): Tree;
+    public function __get(string $key): Tree;
     public function __isset(string $key): bool;
-    public function __unset(string $key): HashMap;
+    public function __unset(string $key): void;
 
     public function setNode(string $key, $value): Tree;
     public function getNode(string $key): Tree;

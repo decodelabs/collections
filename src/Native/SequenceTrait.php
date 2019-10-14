@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\Readable;
+use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\Sequence;
+
+use DecodeLabs\Glitch;
 
 trait SequenceTrait
 {
-    use ReadableTrait;
+    use CollectionTrait;
     use SortableTrait;
 
     /**
@@ -29,7 +31,7 @@ trait SequenceTrait
     /**
      * Get all keys in array, enforce int formatting
      */
-    public function getKeys(): Readable
+    public function getKeys(): Collection
     {
         return new static(array_map('intval', array_keys($this->items)));
     }
@@ -44,7 +46,7 @@ trait SequenceTrait
             $key += count($this->items);
 
             if ($key < 0) {
-                throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
             }
         }
 
@@ -119,7 +121,7 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
                 }
             }
 
@@ -143,7 +145,7 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
                 }
             }
 
@@ -167,11 +169,11 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
                 }
             }
 
-            if (array_keys_exists($key, $this->items)) {
+            if (array_key_exists($key, $this->items)) {
                 return true;
             }
         }
@@ -191,11 +193,11 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
                 }
             }
 
-            if (!array_keys_exists($key, $this->items)) {
+            if (!array_key_exists($key, $this->items)) {
                 return false;
             }
         }
@@ -209,9 +211,8 @@ trait SequenceTrait
     public function remove(int ...$keys): Sequence
     {
         $output = static::MUTABLE ? $this : $this->copy();
-        $count = count($output->items);
 
-        array_walk($keys, function (&$key) use ($count) {
+        array_walk($keys, function (&$key) {
             $key = $this->normalizeKey($key);
         });
 
@@ -225,9 +226,8 @@ trait SequenceTrait
     public function keep(int ...$keys): Sequence
     {
         $output = static::MUTABLE ? $this : $this->copy();
-        $count = count($output->items);
 
-        array_walk($keys, function (&$key) use ($count) {
+        array_walk($keys, function (&$key) {
             $key = $this->normalizeKey($key);
         });
 
@@ -378,7 +378,7 @@ trait SequenceTrait
     public function replace(iterable ...$arrays): Sequence
     {
         $output = static::MUTABLE ? $this : $this->copy();
-        $output->items = array_values(array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
+        $output->items = array_values(array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)) ?? []);
         return $output;
     }
 
@@ -388,7 +388,7 @@ trait SequenceTrait
     public function replaceRecursive(iterable ...$arrays): Sequence
     {
         $output = static::MUTABLE ? $this : $this->copy();
-        $output->items = array_values(array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
+        $output->items = array_values(array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)) ?? []);
         return $output;
     }
 
@@ -530,7 +530,7 @@ trait SequenceTrait
             $key += count($this->items);
 
             if ($key < 0) {
-                throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
             }
         }
 
