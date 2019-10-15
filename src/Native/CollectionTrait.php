@@ -48,7 +48,7 @@ trait CollectionTrait
     /**
      * Duplicate collection, can change type if needed
      */
-    public function copy(): Collection
+    final public function copy(): Collection
     {
         return clone $this;
     }
