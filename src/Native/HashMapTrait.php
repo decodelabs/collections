@@ -7,18 +7,18 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\Readable;
+use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\HashMap;
 
 trait HashMapTrait
 {
-    use ReadableTrait;
+    use CollectionTrait;
     use SortableTrait;
 
     /**
      * Get all keys in array, enforce string formatting
      */
-    public function getKeys(): Readable
+    public function getKeys(): Collection
     {
         return new static(array_map('strval', array_keys($this->items)));
     }
@@ -51,7 +51,7 @@ trait HashMapTrait
      */
     public function set(string $key, $value): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items[$key] = $value;
         return $output;
     }
@@ -90,7 +90,7 @@ trait HashMapTrait
     public function hasKey(string ...$keys): bool
     {
         foreach ($keys as $key) {
-            if (array_keys_exists($key, $this->items)) {
+            if (array_key_exists($key, $this->items)) {
                 return true;
             }
         }
@@ -104,7 +104,7 @@ trait HashMapTrait
     public function hasKeys(string ...$keys): bool
     {
         foreach ($keys as $key) {
-            if (!array_keys_exists($key, $this->items)) {
+            if (!array_key_exists($key, $this->items)) {
                 return false;
             }
         }
@@ -117,7 +117,7 @@ trait HashMapTrait
      */
     public function remove(string ...$keys): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_diff_key($output->items, array_flip($keys));
         return $output;
     }
@@ -127,7 +127,7 @@ trait HashMapTrait
      */
     public function keep(string ...$keys): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_intersect_key($output->items, array_flip($keys));
         return $output;
     }
@@ -151,7 +151,7 @@ trait HashMapTrait
      */
     public function clear(): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = [];
         return $output;
     }
@@ -161,7 +161,7 @@ trait HashMapTrait
      */
     public function clearKeys(): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values($output->items);
         return $output;
     }
@@ -172,7 +172,7 @@ trait HashMapTrait
      */
     public function collapse(bool $unique=false, bool $removeNull=false): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = ArrayUtils::collapse($output->items, true, $unique, $removeNull);
         return $output;
     }
@@ -182,7 +182,7 @@ trait HashMapTrait
      */
     public function collapseValues(bool $unique=false, bool $removeNull=false): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
         return $output;
     }
@@ -218,7 +218,7 @@ trait HashMapTrait
      */
     public function changeKeyCase(int $case=CASE_LOWER): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_change_key_case($output->items, $case);
         return $output;
     }
@@ -229,7 +229,7 @@ trait HashMapTrait
      */
     public function combineWithKeys(iterable $keys): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
 
         if (false !== ($result = array_combine(ArrayUtils::iterableToArray($keys), $output->items))) {
             $output->items = $result;
@@ -243,7 +243,7 @@ trait HashMapTrait
      */
     public function combineWithValues(iterable $values): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
 
         if (false !== ($result = array_combine($output->items, ArrayUtils::iterableToArray($values)))) {
             $output->items = $result;
@@ -258,7 +258,7 @@ trait HashMapTrait
      */
     public function fill($value): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_fill_keys(array_keys($output->items), $value);
         return $output;
     }
@@ -268,7 +268,7 @@ trait HashMapTrait
      */
     public function flip(): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_flip($output->items);
         return $output;
     }
@@ -279,7 +279,7 @@ trait HashMapTrait
      */
     public function merge(iterable ...$arrays): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_merge($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
     }
@@ -289,7 +289,7 @@ trait HashMapTrait
      */
     public function mergeRecursive(iterable ...$arrays): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_merge_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
     }
@@ -300,7 +300,7 @@ trait HashMapTrait
      */
     public function replace(iterable ...$arrays): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
     }
@@ -310,7 +310,7 @@ trait HashMapTrait
      */
     public function replaceRecursive(iterable ...$arrays): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
     }
@@ -322,7 +322,7 @@ trait HashMapTrait
      */
     public function removeSlice(int $offset, int $length=null, HashMap &$removed=null): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
 
         if ($length === null) {
             $length = count($output->items);
@@ -340,7 +340,7 @@ trait HashMapTrait
      */
     public function replaceSlice(int $offset, int $length=null, iterable $replacement, HashMap &$removed=null): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
 
         if ($length === null) {
             $length = count($output->items);
@@ -359,7 +359,7 @@ trait HashMapTrait
      */
     public function unique(int $flags=SORT_STRING): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
         return $output;
     }
@@ -370,7 +370,7 @@ trait HashMapTrait
      */
     public function walk(callable $callback, $data=null): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         array_walk($output->items, $callback, $data);
         return $output;
     }
@@ -380,7 +380,7 @@ trait HashMapTrait
      */
     public function walkRecursive(callable $callback, $data=null): HashMap
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
         return $output;
     }

@@ -6,6 +6,8 @@
 declare(strict_types=1);
 namespace DecodeLabs\Collections;
 
+use DecodeLabs\Glitch;
+
 class ArrayUtils
 {
     /**
@@ -23,6 +25,8 @@ class ArrayUtils
 
             if ($isIterable = is_iterable($value)) {
                 $children = $value;
+            } else {
+                $children = null;
             }
 
             if ($isContainer = $value instanceof ValueProvider) {
@@ -67,6 +71,8 @@ class ArrayUtils
         foreach ($data as $key => $value) {
             if ($isIterable = is_iterable($value)) {
                 $children = $value;
+            } else {
+                $children = null;
             }
 
             if ($isContainer = $value instanceof ValueProvider) {
@@ -79,7 +85,7 @@ class ArrayUtils
             }
 
             if ($isIterable) {
-                yield from self::scanLeaves($children, $removeNull);
+                yield from self::scanValues($children, $removeNull);
             }
         }
     }

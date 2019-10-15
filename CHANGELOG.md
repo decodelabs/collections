@@ -1,3 +1,6 @@
+## v0.5.3 (2019-10-15)
+* Numerous fixes and updates for full PHPStan max scan
+
 ## v0.5.2 (2019-10-11)
 * Updated to Gadgets Then interface
 

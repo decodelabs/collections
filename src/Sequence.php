@@ -6,7 +6,7 @@
 declare(strict_types=1);
 namespace DecodeLabs\Collections;
 
-interface Sequence extends Readable, Sortable
+interface Sequence extends Collection, Sortable
 {
     public function get(int $key);
     public function pull(int $key);

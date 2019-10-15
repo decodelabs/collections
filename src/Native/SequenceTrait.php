@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\Readable;
+use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\Sequence;
+
+use DecodeLabs\Glitch;
 
 trait SequenceTrait
 {
-    use ReadableTrait;
+    use CollectionTrait;
     use SortableTrait;
 
     /**
@@ -29,7 +31,7 @@ trait SequenceTrait
     /**
      * Get all keys in array, enforce int formatting
      */
-    public function getKeys(): Readable
+    public function getKeys(): Collection
     {
         return new static(array_map('intval', array_keys($this->items)));
     }
@@ -44,7 +46,7 @@ trait SequenceTrait
             $key += count($this->items);
 
             if ($key < 0) {
-                throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
             }
         }
 
@@ -72,7 +74,7 @@ trait SequenceTrait
      */
     public function set(int $key, $value): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
         $key = min($this->normalizeKey($key), $count);
 
@@ -85,7 +87,7 @@ trait SequenceTrait
      */
     public function put(int $key, $value): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
         $key = $this->normalizeKey($key);
 
@@ -119,7 +121,7 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
                 }
             }
 
@@ -143,7 +145,7 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
                 }
             }
 
@@ -167,11 +169,11 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
                 }
             }
 
-            if (array_keys_exists($key, $this->items)) {
+            if (array_key_exists($key, $this->items)) {
                 return true;
             }
         }
@@ -191,11 +193,11 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
                 }
             }
 
-            if (!array_keys_exists($key, $this->items)) {
+            if (!array_key_exists($key, $this->items)) {
                 return false;
             }
         }
@@ -208,10 +210,9 @@ trait SequenceTrait
      */
     public function remove(int ...$keys): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
-        $count = count($output->items);
+        $output = static::MUTABLE ? $this : clone $this;
 
-        array_walk($keys, function (&$key) use ($count) {
+        array_walk($keys, function (&$key) {
             $key = $this->normalizeKey($key);
         });
 
@@ -224,10 +225,9 @@ trait SequenceTrait
      */
     public function keep(int ...$keys): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
-        $count = count($output->items);
+        $output = static::MUTABLE ? $this : clone $this;
 
-        array_walk($keys, function (&$key) use ($count) {
+        array_walk($keys, function (&$key) {
             $key = $this->normalizeKey($key);
         });
 
@@ -256,7 +256,7 @@ trait SequenceTrait
      */
     public function clear(): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = [];
         return $output;
     }
@@ -266,7 +266,7 @@ trait SequenceTrait
      */
     public function clearKeys(): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values($output->items);
         return $output;
     }
@@ -278,7 +278,7 @@ trait SequenceTrait
      */
     public function collapse(bool $unique=false, bool $removeNull=false): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
         return $output;
     }
@@ -314,7 +314,7 @@ trait SequenceTrait
      */
     public function append(...$values): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         array_push($output->items, ...$values);
         return $output;
     }
@@ -324,7 +324,7 @@ trait SequenceTrait
      */
     public function prepend(...$values): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         array_unshift($output->items, ...$values);
         return $output;
     }
@@ -336,7 +336,7 @@ trait SequenceTrait
      */
     public function fill($value): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_fill_keys(array_keys($output->items), $value);
         return $output;
     }
@@ -356,7 +356,7 @@ trait SequenceTrait
      */
     public function merge(iterable ...$arrays): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(array_merge($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
         return $output;
     }
@@ -366,7 +366,7 @@ trait SequenceTrait
      */
     public function mergeRecursive(iterable ...$arrays): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(array_merge_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
         return $output;
     }
@@ -377,8 +377,8 @@ trait SequenceTrait
      */
     public function replace(iterable ...$arrays): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
-        $output->items = array_values(array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
+        $output = static::MUTABLE ? $this : clone $this;
+        $output->items = array_values(array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)) ?? []);
         return $output;
     }
 
@@ -387,8 +387,8 @@ trait SequenceTrait
      */
     public function replaceRecursive(iterable ...$arrays): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
-        $output->items = array_values(array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
+        $output = static::MUTABLE ? $this : clone $this;
+        $output->items = array_values(array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)) ?? []);
         return $output;
     }
 
@@ -399,7 +399,7 @@ trait SequenceTrait
      */
     public function padLeft(int $size, $value=null): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_pad($output->items, 0 - abs($size), $value);
         return $output;
     }
@@ -409,7 +409,7 @@ trait SequenceTrait
      */
     public function padRight(int $size, $value=null): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_pad($output->items, abs($size), $value);
         return $output;
     }
@@ -419,7 +419,7 @@ trait SequenceTrait
      */
     public function padBoth(int $size, $value=null): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $length = $output->count();
 
         if (($size = abs($size)) < $length) {
@@ -442,7 +442,7 @@ trait SequenceTrait
      */
     public function removeSlice(int $offset, int $length=null, Sequence &$removed=null): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
         $offset = $this->normalizeKey($offset);
 
@@ -462,7 +462,7 @@ trait SequenceTrait
      */
     public function replaceSlice(int $offset, int $length=null, iterable $replacement, Sequence &$removed=null): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
         $offset = $this->normalizeKey($offset);
 
@@ -484,7 +484,7 @@ trait SequenceTrait
      */
     public function unique(int $flags=SORT_STRING): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
         return $output;
     }
@@ -495,7 +495,7 @@ trait SequenceTrait
      */
     public function walk(callable $callback, $data=null): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         array_walk($output->items, $callback, $data);
         return $output;
     }
@@ -505,7 +505,7 @@ trait SequenceTrait
      */
     public function walkRecursive(callable $callback, $data=null): Sequence
     {
-        $output = static::MUTABLE ? $this : $this->copy();
+        $output = static::MUTABLE ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
         return $output;
     }
@@ -530,7 +530,7 @@ trait SequenceTrait
             $key += count($this->items);
 
             if ($key < 0) {
-                throw Df\Exception::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
             }
         }
 
