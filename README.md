@@ -1,5 +1,6 @@
 # Reusable collections for PHP
 
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/decodelabs/collections?style=flat-square)](https://packagist.org/packages/decodelabs/collections)
 [![Latest Version](https://img.shields.io/packagist/v/decodelabs/collections.svg?style=flat-square)](https://packagist.org/packages/decodelabs/collections)
 [![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/collections.svg?style=flat-square)](https://packagist.org/packages/decodelabs/collections)
 [![Build Status](https://img.shields.io/travis/decodelabs/collections/develop.svg?style=flat-square)](https://travis-ci.org/decodelabs/collections)
