@@ -284,6 +284,13 @@ trait SequenceTrait
     }
 
 
+    /**
+     * Add items to the end
+     */
+    public function push(...$values): Sequence
+    {
+        return $this->append(...$values);
+    }
 
     /**
      * Pull first item
@@ -298,6 +305,14 @@ trait SequenceTrait
     }
 
     /**
+     * Add items to the start
+     */
+    public function unshift(...$values): Sequence
+    {
+        return $this->prepend(...$values);
+    }
+
+    /**
      * Pull last item
      */
     public function shift()
@@ -308,6 +323,8 @@ trait SequenceTrait
             return $this->getFirst();
         }
     }
+
+
 
     /**
      * Add items to the end

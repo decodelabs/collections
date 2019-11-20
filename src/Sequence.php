@@ -26,7 +26,9 @@ interface Sequence extends Collection, Sortable
 
     public function collapse(bool $unique=false, bool $removeNull=false): Sequence;
 
+    public function push(...$values): Sequence;
     public function pop();
+    public function unshift(...$values): Sequence;
     public function shift();
     public function append(...$values): Sequence;
     public function prepend(...$values): Sequence;
