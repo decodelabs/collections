@@ -1,3 +1,6 @@
+## v0.5.4 (2019-10-15)
+* Updated Composer dependency handling
+
 ## v0.5.3 (2019-10-15)
 * Numerous fixes and updates for full PHPStan max scan
 
