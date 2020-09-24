@@ -1,4 +1,4 @@
-## v0.5.4 (2019-10-15)
+## v0.5.4 (2020-09-24)
 * Updated Composer dependency handling
 
 ## v0.5.3 (2019-10-15)
