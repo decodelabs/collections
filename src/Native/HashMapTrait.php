@@ -20,7 +20,7 @@ trait HashMapTrait
      */
     public function getKeys(): Collection
     {
-        return new static(array_map('strval', array_keys($this->items)));
+        return $this->propagate(array_map('strval', array_keys($this->items)));
     }
 
 
@@ -328,7 +328,7 @@ trait HashMapTrait
             $length = count($output->items);
         }
 
-        $removed = new static(
+        $removed = $this->propagate(
             array_splice($output->items, $offset, $length)
         );
 
@@ -346,7 +346,7 @@ trait HashMapTrait
             $length = count($output->items);
         }
 
-        $removed = new static(
+        $removed = $this->propagate(
             array_splice($output->items, $offset, $length, ArrayUtils::iterableToArray($replacement))
         );
 
@@ -383,5 +383,16 @@ trait HashMapTrait
         $output = static::MUTABLE ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
         return $output;
+    }
+
+
+
+
+    /**
+     * Copy and reinitialise new object
+     */
+    protected static function propagate(iterable $newItems=[]): HashMap
+    {
+        return new self($newItems);
     }
 }
