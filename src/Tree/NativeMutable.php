@@ -59,7 +59,7 @@ class NativeMutable implements \IteratorAggregate, Tree
             $items = [];
         }
 
-        $this->items[$key] = new static($items, $value);
+        $this->items[$key] = $this->propagate($items, $value);
         return $this;
     }
 
@@ -69,7 +69,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     public function __get(string $key): Tree
     {
         if (!array_key_exists($key, $this->items)) {
-            $this->items[$key] = new static();
+            $this->items[$key] = $this->propagate();
         }
 
         return $this->items[$key];
@@ -337,9 +337,9 @@ class NativeMutable implements \IteratorAggregate, Tree
     {
         if ($key === null) {
             if (is_iterable($value)) {
-                $this->items[] = new static($value);
+                $this->items[] = $this->propagate($value);
             } else {
-                $this->items[] = new static(null, $value);
+                $this->items[] = $this->propagate(null, $value);
             }
         } else {
             $this->getNode($key)->setValue($value);
@@ -474,7 +474,7 @@ class NativeMutable implements \IteratorAggregate, Tree
      */
     public static function fromDelimitedString(string $string, string $setDelimiter='&', string $valueDelimiter='='): Tree
     {
-        $output = new static();
+        $output = static::propagate();
 
         if (false === ($parts = explode($setDelimiter, $string))) {
             $parts = [];
@@ -615,13 +615,13 @@ class NativeMutable implements \IteratorAggregate, Tree
                         if (isset($this->items[$key])) {
                             $this->items[$key]->merge($value);
                         } else {
-                            $this->items[$key] = new static($value);
+                            $this->items[$key] = $this->propagate($value);
                         }
                     } else {
                         if (isset($this->items[$key])) {
                             $this->items[$key]->setValue($value);
                         } else {
-                            $this->items[$key] = new static(null, $value);
+                            $this->items[$key] = $this->propagate(null, $value);
                         }
                     }
                 }
@@ -655,9 +655,9 @@ class NativeMutable implements \IteratorAggregate, Tree
             } else {
                 foreach ($array as $key => $value) {
                     if (is_iterable($value)) {
-                        $this->items[$key] = new static($value);
+                        $this->items[$key] = $this->propagate($value);
                     } else {
-                        $this->items[$key] = new static(null, $value);
+                        $this->items[$key] = $this->propagate(null, $value);
                     }
                 }
             }
@@ -750,5 +750,15 @@ class NativeMutable implements \IteratorAggregate, Tree
         }
 
         return $output;
+    }
+
+
+
+    /**
+     * Copy and reinitialise new object
+     */
+    protected static function propagate(?iterable $newItems=[], $value=null): Tree
+    {
+        return new self($newItems, $value);
     }
 }

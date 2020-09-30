@@ -10,7 +10,7 @@ use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\Sequence;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 trait SequenceTrait
 {
@@ -33,7 +33,7 @@ trait SequenceTrait
      */
     public function getKeys(): Collection
     {
-        return new static(array_map('intval', array_keys($this->items)));
+        return $this->propagate(array_map('intval', array_keys($this->items)));
     }
 
 
@@ -46,7 +46,9 @@ trait SequenceTrait
             $key += count($this->items);
 
             if ($key < 0) {
-                throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                throw Exceptional::OutOfBounds(
+                    'Index '.$key.' is not accessible', null, $this
+                );
             }
         }
 
@@ -121,7 +123,9 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Exceptional::OutOfBounds(
+                        'Index '.$key.' is not accessible', null, $this
+                    );
                 }
             }
 
@@ -145,7 +149,9 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Exceptional::OutOfBounds(
+                        'Index '.$key.' is not accessible', null, $this
+                    );
                 }
             }
 
@@ -169,7 +175,9 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Exceptional::OutOfBounds(
+                        'Index '.$key.' is not accessible', null, $this
+                    );
                 }
             }
 
@@ -193,7 +201,9 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Exceptional::OutOfBounds(
+                        'Index '.$key.' is not accessible', null, $this
+                    );
                 }
             }
 
@@ -363,7 +373,7 @@ trait SequenceTrait
      */
     public static function createFill(int $length, $value): Sequence
     {
-        return new static(array_fill(0, $length, $value));
+        return static::propagate(array_fill(0, $length, $value));
     }
 
 
@@ -467,7 +477,7 @@ trait SequenceTrait
             $length = $count;
         }
 
-        $removed = new static(
+        $removed = $this->propagate(
             array_splice($output->items, $offset, $length)
         );
 
@@ -487,7 +497,7 @@ trait SequenceTrait
             $length = $count;
         }
 
-        $removed = new static(
+        $removed = $this->propagate(
             array_splice($output->items, $offset, $length, array_values(ArrayUtils::iterableToArray($replacement)))
         );
 
@@ -534,7 +544,7 @@ trait SequenceTrait
      */
     public static function createRange(int $start, int $end, int $step=1): Sequence
     {
-        return new static(range($start, $end, $step));
+        return static::propagate(range($start, $end, $step));
     }
 
 
@@ -547,10 +557,22 @@ trait SequenceTrait
             $key += count($this->items);
 
             if ($key < 0) {
-                throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                throw Exceptional::OutOfBounds(
+                    'Index '.$key.' is not accessible', null, $this
+                );
             }
         }
 
         return $key;
+    }
+
+
+
+    /**
+     * Copy and reinitialise new object
+     */
+    protected static function propagate(iterable $newItems=[]): Sequence
+    {
+        return new self($newItems);
     }
 }

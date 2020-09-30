@@ -6,7 +6,7 @@
 declare(strict_types=1);
 namespace DecodeLabs\Collections;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 class ArrayUtils
 {
@@ -136,7 +136,9 @@ class ArrayUtils
     public static function getRandom(array $array)
     {
         if (empty($array)) {
-            throw Glitch::EUnderflow('Cannot pick random, array is empty');
+            throw Exceptional::Underflow(
+                'Cannot pick random, array is empty'
+            );
         }
 
         return $array[array_rand($array)];
@@ -154,7 +156,9 @@ class ArrayUtils
         }
 
         if ($number > $count) {
-            throw Glitch::EUnderflow('Cannot random slice '.$number.' items, only '.$count.' items in array');
+            throw Exceptional::Underflow(
+                'Cannot random slice '.$number.' items, only '.$count.' items in array'
+            );
         }
 
         return self::intersectKeys($array, (array)array_rand($array, $number));
