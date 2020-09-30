@@ -1,3 +1,6 @@
+## v0.5.5 (2020-09-30)
+* Switched to Exceptional for exception generation
+
 ## v0.5.4 (2020-09-24)
 * Updated Composer dependency handling
 
