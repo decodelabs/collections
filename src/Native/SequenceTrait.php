@@ -10,7 +10,7 @@ use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\Sequence;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 trait SequenceTrait
 {
@@ -46,7 +46,9 @@ trait SequenceTrait
             $key += count($this->items);
 
             if ($key < 0) {
-                throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                throw Exceptional::OutOfBounds(
+                    'Index '.$key.' is not accessible', null, $this
+                );
             }
         }
 
@@ -121,7 +123,9 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Exceptional::OutOfBounds(
+                        'Index '.$key.' is not accessible', null, $this
+                    );
                 }
             }
 
@@ -145,7 +149,9 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Exceptional::OutOfBounds(
+                        'Index '.$key.' is not accessible', null, $this
+                    );
                 }
             }
 
@@ -169,7 +175,9 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Exceptional::OutOfBounds(
+                        'Index '.$key.' is not accessible', null, $this
+                    );
                 }
             }
 
@@ -193,7 +201,9 @@ trait SequenceTrait
                 $key += $count;
 
                 if ($key < 0) {
-                    throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                    throw Exceptional::OutOfBounds(
+                        'Index '.$key.' is not accessible', null, $this
+                    );
                 }
             }
 
@@ -547,7 +557,9 @@ trait SequenceTrait
             $key += count($this->items);
 
             if ($key < 0) {
-                throw Glitch::EOutOfBounds('Index '.$key.' is not accessible', null, $this);
+                throw Exceptional::OutOfBounds(
+                    'Index '.$key.' is not accessible', null, $this
+                );
             }
         }
 
