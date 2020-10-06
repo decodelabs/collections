@@ -11,8 +11,7 @@ namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
-
-use DecodeLabs\Gadgets\ThenTrait;
+use DecodeLabs\Fluidity\ThenTrait;
 
 trait CollectionTrait
 {

@@ -11,7 +11,7 @@ namespace DecodeLabs\Collections;
 
 use ArrayAccess;
 use Countable;
-use DecodeLabs\Gadgets\Then;
+use DecodeLabs\Fluidity\Then;
 use JsonSerializable;
 use Traversable;
 
