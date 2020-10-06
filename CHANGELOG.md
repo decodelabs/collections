@@ -1,3 +1,4 @@
+## v0.5.7 (2020-10-06)
 * Switched to Fluidity for Then dependency
 * Applied full PSR12 standards
 * Added PSR12 check to Travis build
