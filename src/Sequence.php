@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Collections package
+ * @package Collections
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Collections;
 
 interface Sequence extends Collection, Sortable
@@ -19,12 +22,12 @@ interface Sequence extends Collection, Sortable
     public function remove(int ...$keys): Sequence;
     public function keep(int ...$keys): Sequence;
 
-    public function findKey($value, bool $strict=false): ?int;
+    public function findKey($value, bool $strict = false): ?int;
 
     public function clear(): Sequence;
     public function clearKeys(): Sequence;
 
-    public function collapse(bool $unique=false, bool $removeNull=false): Sequence;
+    public function collapse(bool $unique = false, bool $removeNull = false): Sequence;
 
     public function push(...$values): Sequence;
     public function pop();
@@ -42,17 +45,17 @@ interface Sequence extends Collection, Sortable
     public function replace(iterable ...$arrays): Sequence;
     public function replaceRecursive(iterable ...$arrays): Sequence;
 
-    public function padLeft(int $size, $value=null): Sequence;
-    public function padRight(int $size, $value=null): Sequence;
-    public function padBoth(int $size, $value=null): Sequence;
+    public function padLeft(int $size, $value = null): Sequence;
+    public function padRight(int $size, $value = null): Sequence;
+    public function padBoth(int $size, $value = null): Sequence;
 
-    public function removeSlice(int $offset, int $length=null, Sequence &$removed=null): Sequence;
-    public function replaceSlice(int $offset, int $length=null, iterable $replacement, Sequence &$removed=null): Sequence;
+    public function removeSlice(int $offset, int $length = null, Sequence &$removed = null): Sequence;
+    public function replaceSlice(int $offset, int $length = null, iterable $replacement, Sequence &$removed = null): Sequence;
 
-    public function unique(int $flags=SORT_STRING): Sequence;
+    public function unique(int $flags = SORT_STRING): Sequence;
 
-    public function walk(callable $callback, $data=null): Sequence;
-    public function walkRecursive(callable $callback, $data=null): Sequence;
+    public function walk(callable $callback, $data = null): Sequence;
+    public function walkRecursive(callable $callback, $data = null): Sequence;
 
-    public static function createRange(int $start, int $end, int $step=1): Sequence;
+    public static function createRange(int $start, int $end, int $step = 1): Sequence;
 }

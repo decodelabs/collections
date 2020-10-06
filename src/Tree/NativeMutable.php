@@ -1,15 +1,18 @@
 <?php
+
 /**
- * This file is part of the Collections package
+ * @package Collections
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Collections\Tree;
 
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\HashMap;
-use DecodeLabs\Collections\Tree;
 use DecodeLabs\Collections\Native\HashMapTrait;
+use DecodeLabs\Collections\Tree;
 
 use DecodeLabs\Gadgets\Sanitizer;
 
@@ -17,15 +20,15 @@ class NativeMutable implements \IteratorAggregate, Tree
 {
     use HashMapTrait;
 
-    const MUTABLE = true;
-    const KEY_SEPARATOR = '.';
+    public const MUTABLE = true;
+    public const KEY_SEPARATOR = '.';
 
     protected $value;
 
     /**
      * Value based construct
      */
-    public function __construct(iterable $items=null, $value=null)
+    public function __construct(iterable $items = null, $value = null)
     {
         $this->value = $value;
 
@@ -305,7 +308,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Lookup a key by value
      */
-    public function findKey($value, bool $strict=false): ?string
+    public function findKey($value, bool $strict = false): ?string
     {
         foreach ($this->items as $key => $node) {
             if ($node->isValue($value, $strict)) {
@@ -367,7 +370,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Get node and return value sanitizer
      */
-    public function sanitize(string $key, bool $required=true): Sanitizer
+    public function sanitize(string $key, bool $required = true): Sanitizer
     {
         return $this->getNode($key)->sanitizeValue($required);
     }
@@ -375,7 +378,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Get node and sanitize with custom sanitizer
      */
-    public function sanitizeWith(string $key, callable $sanitizer, bool $required=true)
+    public function sanitizeWith(string $key, callable $sanitizer, bool $required = true)
     {
         return $this->getNode($key)->sanitizeValue($required)->with($sanitizer);
     }
@@ -383,7 +386,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Return new Sanitizer with node value
      */
-    public function sanitizeValue(bool $required=true): Sanitizer
+    public function sanitizeValue(bool $required = true): Sanitizer
     {
         return new Sanitizer($this->getValue(), $required);
     }
@@ -391,7 +394,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Sanitize value with custom sanitizer
      */
-    public function sanitizeValueWith(callable $sanitizer, bool $required=true)
+    public function sanitizeValueWith(callable $sanitizer, bool $required = true)
     {
         return $this->sanitizeValue($required)->with($sanitizer);
     }
@@ -437,7 +440,7 @@ class NativeMutable implements \IteratorAggregate, Tree
             return true;
         }
 
-        foreach ($this->items as $key => $child) {
+        foreach ($this->items as $child) {
             if ($child->hasAnyValue()) {
                 return true;
             }
@@ -472,7 +475,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * From query string
      */
-    public static function fromDelimitedString(string $string, string $setDelimiter='&', string $valueDelimiter='='): Tree
+    public static function fromDelimitedString(string $string, string $setDelimiter = '&', string $valueDelimiter = '='): Tree
     {
         $output = static::propagate();
 
@@ -506,7 +509,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * To query string
      */
-    public function toDelimitedString(string $setDelimiter='&', string $valueDelimiter='='): string
+    public function toDelimitedString(string $setDelimiter = '&', string $valueDelimiter = '='): string
     {
         $output = [];
 
@@ -514,7 +517,7 @@ class NativeMutable implements \IteratorAggregate, Tree
             $key = rawurlencode($key);
 
             if (!empty($value) || $value === '0' || $value === 0) {
-                $output[] = $key.$valueDelimiter.rawurlencode((string)$value);
+                $output[] = $key . $valueDelimiter . rawurlencode((string)$value);
             } else {
                 $output[] = $key;
             }
@@ -526,7 +529,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Convert to delimited set
      */
-    public function toDelimitedSet(bool $urlEncode=false, string $prefix=null): array
+    public function toDelimitedSet(bool $urlEncode = false, string $prefix = null): array
     {
         $output = [];
 
@@ -541,7 +544,7 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
 
             if ($prefix !== null) {
-                $key = $prefix.'['.$key.']';
+                $key = $prefix . '[' . $key . ']';
             }
 
             $output = array_merge($output, $child->toDelimitedSet($urlEncode, (string)$key));
@@ -678,7 +681,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags=SORT_STRING): HashMap
+    public function unique(int $flags = SORT_STRING): HashMap
     {
         $items = array_map(function ($node) {
             return (string)$node->getValue();
@@ -757,7 +760,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Copy and reinitialise new object
      */
-    protected static function propagate(?iterable $newItems=[], $value=null): Tree
+    protected static function propagate(?iterable $newItems = [], $value = null): Tree
     {
         return new self($newItems, $value);
     }

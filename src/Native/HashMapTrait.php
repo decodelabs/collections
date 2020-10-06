@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Collections package
+ * @package Collections
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
@@ -136,7 +139,7 @@ trait HashMapTrait
     /**
      * Lookup a key by value
      */
-    public function findKey($value, bool $strict=false): ?string
+    public function findKey($value, bool $strict = false): ?string
     {
         if (false === ($key = array_search($value, $this->items, $strict))) {
             return null;
@@ -170,7 +173,7 @@ trait HashMapTrait
     /**
      * Collapse multi dimensional array to flat
      */
-    public function collapse(bool $unique=false, bool $removeNull=false): HashMap
+    public function collapse(bool $unique = false, bool $removeNull = false): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = ArrayUtils::collapse($output->items, true, $unique, $removeNull);
@@ -180,7 +183,7 @@ trait HashMapTrait
     /**
      * Collapse without the keys
      */
-    public function collapseValues(bool $unique=false, bool $removeNull=false): HashMap
+    public function collapseValues(bool $unique = false, bool $removeNull = false): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
@@ -216,7 +219,7 @@ trait HashMapTrait
     /**
      * Switch key case for all entries
      */
-    public function changeKeyCase(int $case=CASE_LOWER): HashMap
+    public function changeKeyCase(int $case = CASE_LOWER): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_change_key_case($output->items, $case);
@@ -320,7 +323,7 @@ trait HashMapTrait
     /**
      * Remove $offet + $length items
      */
-    public function removeSlice(int $offset, int $length=null, HashMap &$removed=null): HashMap
+    public function removeSlice(int $offset, int $length = null, HashMap &$removed = null): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
 
@@ -338,7 +341,7 @@ trait HashMapTrait
     /**
      * Like removeSlice, but leaves a present behind
      */
-    public function replaceSlice(int $offset, int $length=null, iterable $replacement, HashMap &$removed=null): HashMap
+    public function replaceSlice(int $offset, int $length = null, iterable $replacement, HashMap &$removed = null): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
 
@@ -357,7 +360,7 @@ trait HashMapTrait
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags=SORT_STRING): HashMap
+    public function unique(int $flags = SORT_STRING): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
@@ -368,7 +371,7 @@ trait HashMapTrait
     /**
      * Iterate each entry
      */
-    public function walk(callable $callback, $data=null): HashMap
+    public function walk(callable $callback, $data = null): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         array_walk($output->items, $callback, $data);
@@ -378,7 +381,7 @@ trait HashMapTrait
     /**
      * Iterate everything
      */
-    public function walkRecursive(callable $callback, $data=null): HashMap
+    public function walkRecursive(callable $callback, $data = null): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
@@ -391,7 +394,7 @@ trait HashMapTrait
     /**
      * Copy and reinitialise new object
      */
-    protected static function propagate(iterable $newItems=[]): HashMap
+    protected static function propagate(iterable $newItems = []): HashMap
     {
         return new self($newItems);
     }

@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Collections package
+ * @package Collections
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
@@ -14,7 +17,7 @@ trait SortableTrait
     /**
      * Sort values, keep keys
      */
-    public function sort(int $flags=\SORT_REGULAR): Sortable
+    public function sort(int $flags = \SORT_REGULAR): Sortable
     {
         $output = static::MUTABLE ? $this : clone $this;
         asort($output->items, $flags);
@@ -24,7 +27,7 @@ trait SortableTrait
     /**
      * Reverse sort values, keep keys
      */
-    public function reverseSort(int $flags=\SORT_REGULAR): Sortable
+    public function reverseSort(int $flags = \SORT_REGULAR): Sortable
     {
         $output = static::MUTABLE ? $this : clone $this;
         arsort($output->items, $flags);
@@ -66,7 +69,7 @@ trait SortableTrait
     /**
      * Sort values, ignore keys
      */
-    public function sortValues(int $flags=\SORT_REGULAR): Sortable
+    public function sortValues(int $flags = \SORT_REGULAR): Sortable
     {
         $output = static::MUTABLE ? $this : clone $this;
         sort($output->items, $flags);
@@ -76,7 +79,7 @@ trait SortableTrait
     /**
      * Reverse sort values, ignore keys
      */
-    public function reverseSortValues(int $flags=\SORT_REGULAR): Sortable
+    public function reverseSortValues(int $flags = \SORT_REGULAR): Sortable
     {
         $output = static::MUTABLE ? $this : clone $this;
         rsort($output->items, $flags);
@@ -97,7 +100,7 @@ trait SortableTrait
     /**
      * Sort values by key
      */
-    public function sortKeys(int $flags=\SORT_REGULAR): Sortable
+    public function sortKeys(int $flags = \SORT_REGULAR): Sortable
     {
         $output = static::MUTABLE ? $this : clone $this;
         ksort($output->items, $flags);
@@ -107,7 +110,7 @@ trait SortableTrait
     /**
      * Reverse sort values by key
      */
-    public function reverseSortKeys(int $flags=\SORT_REGULAR): Sortable
+    public function reverseSortKeys(int $flags = \SORT_REGULAR): Sortable
     {
         $output = static::MUTABLE ? $this : clone $this;
         krsort($output->items, $flags);

@@ -1,3 +1,6 @@
+* Applied full PSR12 standards
+* Added PSR12 check to Travis build
+
 ## v0.5.6 (2020-10-02)
 * Removed Glitch dependency
 

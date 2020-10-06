@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Collections package
+ * @package Collections
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Collections;
 
 use DecodeLabs\Exceptional;
@@ -13,7 +16,7 @@ class ArrayUtils
     /**
      * Collapse multi-dimensional collections to flat array
      */
-    public static function collapse(iterable $data, bool $keepKeys=true, bool $unique=false, bool $removeNull=false): array
+    public static function collapse(iterable $data, bool $keepKeys = true, bool $unique = false, bool $removeNull = false): array
     {
         $output = [];
         $sort = SORT_STRING;
@@ -66,7 +69,7 @@ class ArrayUtils
     /**
      * Generator, scanning all non-container nodes
      */
-    public static function scanValues(iterable $data, bool $removeNull=false): \Generator
+    public static function scanValues(iterable $data, bool $removeNull = false): \Generator
     {
         foreach ($data as $key => $value) {
             if ($isIterable = is_iterable($value)) {
@@ -105,7 +108,7 @@ class ArrayUtils
     /**
      * Get first of a collection
      */
-    public static function getFirst(iterable $data, callable $filter=null, object $callbackTarget=null)
+    public static function getFirst(iterable $data, callable $filter = null, object $callbackTarget = null)
     {
         foreach ($data as $key => $item) {
             if ($filter !== null && !$filter($item, $key, $callbackTarget)) {
@@ -121,7 +124,7 @@ class ArrayUtils
     /**
      * Get last item in an array
      */
-    public static function getLast(array $array, callable $filter=null, object $callbackTarget=null)
+    public static function getLast(array $array, callable $filter = null, object $callbackTarget = null)
     {
         if (!$filter) {
             return end($array);
@@ -157,7 +160,7 @@ class ArrayUtils
 
         if ($number > $count) {
             throw Exceptional::Underflow(
-                'Cannot random slice '.$number.' items, only '.$count.' items in array'
+                'Cannot random slice ' . $number . ' items, only ' . $count . ' items in array'
             );
         }
 
@@ -229,7 +232,7 @@ class ArrayUtils
     /**
      * Multi dimensional in_array
      */
-    public static function inArrayRecursive($value, array $array, bool $strict=false): bool
+    public static function inArrayRecursive($value, array $array, bool $strict = false): bool
     {
         if (in_array($value, $array, $strict)) {
             return true;
@@ -258,7 +261,7 @@ class ArrayUtils
 
     private static function exportLevel(array $array, int $level): string
     {
-        $output = '['."\n";
+        $output = '[' . "\n";
 
         $i = 0;
         $count = count($array);
@@ -274,10 +277,11 @@ class ArrayUtils
         $i = 0;
 
         foreach ($array as $key => $val) {
+            $i++;
             $output .= str_repeat('    ', $level);
 
             if (!$isNumericIndex) {
-                $output .= '\''.addslashes($key).'\' => ';
+                $output .= '\'' . addslashes($key) . '\' => ';
             }
 
             if (is_object($val) || is_null($val)) {
@@ -293,17 +297,17 @@ class ArrayUtils
                     $output .= 'false';
                 }
             } else {
-                $output .= '\''.addslashes($val).'\'';
+                $output .= '\'' . addslashes($val) . '\'';
             }
 
-            if (++$i < $count) {
+            if ($count > $i) {
                 $output .= ',';
             }
 
             $output .= "\n";
         }
 
-        $output .= str_repeat('    ', $level - 1).']';
+        $output .= str_repeat('    ', $level - 1) . ']';
 
         return $output;
     }
