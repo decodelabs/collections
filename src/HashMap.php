@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Collections package
+ * @package Collections
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Collections;
 
 interface HashMap extends Collection, Sortable
@@ -18,18 +21,18 @@ interface HashMap extends Collection, Sortable
     public function remove(string ...$keys): HashMap;
     public function keep(string ...$keys): HashMap;
 
-    public function findKey($value, bool $strict=false): ?string;
+    public function findKey($value, bool $strict = false): ?string;
 
     public function clear(): HashMap;
     public function clearKeys(): HashMap;
 
-    public function collapse(bool $unique=false, bool $removeNull=false): HashMap;
-    public function collapseValues(bool $unique=false, bool $removeNull=false): HashMap;
+    public function collapse(bool $unique = false, bool $removeNull = false): HashMap;
+    public function collapseValues(bool $unique = false, bool $removeNull = false): HashMap;
 
     public function pop();
     public function shift();
 
-    public function changeKeyCase(int $case=CASE_LOWER): HashMap;
+    public function changeKeyCase(int $case = CASE_LOWER): HashMap;
 
     public function combineWithKeys(iterable $keys): HashMap;
     public function combineWithValues(iterable $values): HashMap;
@@ -43,11 +46,11 @@ interface HashMap extends Collection, Sortable
     public function replace(iterable ...$arrays): HashMap;
     public function replaceRecursive(iterable ...$arrays): HashMap;
 
-    public function removeSlice(int $offset, int $length=null, HashMap &$removed=null): HashMap;
-    public function replaceSlice(int $offset, int $length=null, iterable $replacement, HashMap &$removed=null): HashMap;
+    public function removeSlice(int $offset, int $length = null, HashMap &$removed = null): HashMap;
+    public function replaceSlice(int $offset, int $length = null, iterable $replacement, HashMap &$removed = null): HashMap;
 
-    public function unique(int $flags=SORT_STRING): HashMap;
+    public function unique(int $flags = SORT_STRING): HashMap;
 
-    public function walk(callable $callback, $data=null): HashMap;
-    public function walkRecursive(callable $callback, $data=null): HashMap;
+    public function walk(callable $callback, $data = null): HashMap;
+    public function walkRecursive(callable $callback, $data = null): HashMap;
 }

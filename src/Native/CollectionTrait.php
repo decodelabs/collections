@@ -1,15 +1,17 @@
 <?php
+
 /**
- * This file is part of the Collections package
+ * @package Collections
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
-
-use DecodeLabs\Gadgets\ThenTrait;
+use DecodeLabs\Fluidity\ThenTrait;
 
 trait CollectionTrait
 {
@@ -66,7 +68,7 @@ trait CollectionTrait
     /**
      * Get first item, matching filter
      */
-    public function getFirst(callable $filter=null)
+    public function getFirst(callable $filter = null)
     {
         return ArrayUtils::getFirst($this->items, $filter, $this);
     }
@@ -74,7 +76,7 @@ trait CollectionTrait
     /**
      * Get the last item in the list, matching filter
      */
-    public function getLast(callable $filter=null)
+    public function getLast(callable $filter = null)
     {
         return ArrayUtils::getLast($this->items, $filter, $this);
     }
@@ -100,7 +102,7 @@ trait CollectionTrait
     /**
      * Is the value in the collection?
      */
-    public function contains($value, bool $strict=false): bool
+    public function contains($value, bool $strict = false): bool
     {
         return in_array($value, $this->items, $strict);
     }
@@ -108,7 +110,7 @@ trait CollectionTrait
     /**
      * Is the value in the collection, including child arrays?
      */
-    public function containsRecursive($value, bool $strict=false): bool
+    public function containsRecursive($value, bool $strict = false): bool
     {
         return ArrayUtils::inArrayRecursive($value, $this->items, $strict);
     }
@@ -118,7 +120,7 @@ trait CollectionTrait
     /**
      * Return new collection containing $offset + $length items
      */
-    public function slice(int $offset, int $length=null): Collection
+    public function slice(int $offset, int $length = null): Collection
     {
         return $this->propagate(array_slice(
             $this->items,
@@ -380,7 +382,7 @@ trait CollectionTrait
     /**
      * Return subset of collection where callback returns true
      */
-    public function filter(callable $callback=null): Collection
+    public function filter(callable $callback = null): Collection
     {
         if ($callback) {
             return $this->propagate(array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH));
@@ -424,7 +426,7 @@ trait CollectionTrait
     /**
      * Whittle down collection to single value
      */
-    public function reduce(callable $callback, $initial=null)
+    public function reduce(callable $callback, $initial = null)
     {
         return array_reduce($this->items, $callback, $initial);
     }
@@ -433,7 +435,7 @@ trait CollectionTrait
     /**
      * Add all numeric values in collection
      */
-    public function getSum(callable $filter=null)
+    public function getSum(callable $filter = null)
     {
         return $this->reduce(function ($result, $item) use ($filter) {
             if ($filter) {
@@ -451,7 +453,7 @@ trait CollectionTrait
     /**
      * Multiple all numeric values in collection
      */
-    public function getProduct(callable $filter=null)
+    public function getProduct(callable $filter = null)
     {
         return $this->reduce(function ($result, $item) use ($filter) {
             if ($filter) {
@@ -469,7 +471,7 @@ trait CollectionTrait
     /**
      * Get average value of numerics
      */
-    public function getAvg(callable $filter=null)
+    public function getAvg(callable $filter = null)
     {
         if (!$count = count($this->items)) {
             return null;
@@ -482,7 +484,7 @@ trait CollectionTrait
     /**
      * Combine a column with optional key column into single array
      */
-    public function pluck(string $valueKey, string $indexKey=null): Collection
+    public function pluck(string $valueKey, string $indexKey = null): Collection
     {
         return $this->propagate(array_column($this->items, $valueKey, $indexKey));
     }
@@ -564,5 +566,5 @@ trait CollectionTrait
     /**
      * Copy and reinitialise new object
      */
-    abstract protected static function propagate(iterable $newItems=[]): Collection;
+    abstract protected static function propagate(iterable $newItems = []): Collection;
 }

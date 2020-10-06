@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Collections package
+ * @package Collections
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
@@ -47,7 +50,9 @@ trait SequenceTrait
 
             if ($key < 0) {
                 throw Exceptional::OutOfBounds(
-                    'Index '.$key.' is not accessible', null, $this
+                    'Index ' . $key . ' is not accessible',
+                    null,
+                    $this
                 );
             }
         }
@@ -97,7 +102,6 @@ trait SequenceTrait
 
         if ($key < $count) {
             $addVals = array_splice($output->items, $key);
-            $count = $key;
         }
 
         $output->items[] = $value;
@@ -124,7 +128,9 @@ trait SequenceTrait
 
                 if ($key < 0) {
                     throw Exceptional::OutOfBounds(
-                        'Index '.$key.' is not accessible', null, $this
+                        'Index ' . $key . ' is not accessible',
+                        null,
+                        $this
                     );
                 }
             }
@@ -150,7 +156,9 @@ trait SequenceTrait
 
                 if ($key < 0) {
                     throw Exceptional::OutOfBounds(
-                        'Index '.$key.' is not accessible', null, $this
+                        'Index ' . $key . ' is not accessible',
+                        null,
+                        $this
                     );
                 }
             }
@@ -176,7 +184,9 @@ trait SequenceTrait
 
                 if ($key < 0) {
                     throw Exceptional::OutOfBounds(
-                        'Index '.$key.' is not accessible', null, $this
+                        'Index ' . $key . ' is not accessible',
+                        null,
+                        $this
                     );
                 }
             }
@@ -202,7 +212,9 @@ trait SequenceTrait
 
                 if ($key < 0) {
                     throw Exceptional::OutOfBounds(
-                        'Index '.$key.' is not accessible', null, $this
+                        'Index ' . $key . ' is not accessible',
+                        null,
+                        $this
                     );
                 }
             }
@@ -250,7 +262,7 @@ trait SequenceTrait
     /**
      * Lookup a key by value
      */
-    public function findKey($value, bool $strict=false): ?int
+    public function findKey($value, bool $strict = false): ?int
     {
         if (false === ($key = array_search($value, $this->items, $strict))) {
             return null;
@@ -286,7 +298,7 @@ trait SequenceTrait
     /**
      * Collapse multi dimensional array to flat
      */
-    public function collapse(bool $unique=false, bool $removeNull=false): Sequence
+    public function collapse(bool $unique = false, bool $removeNull = false): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
@@ -424,7 +436,7 @@ trait SequenceTrait
     /**
      * Ensure sequence is at least $size long
      */
-    public function padLeft(int $size, $value=null): Sequence
+    public function padLeft(int $size, $value = null): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_pad($output->items, 0 - abs($size), $value);
@@ -434,7 +446,7 @@ trait SequenceTrait
     /**
      * Ensure sequence is at least $size long
      */
-    public function padRight(int $size, $value=null): Sequence
+    public function padRight(int $size, $value = null): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_pad($output->items, abs($size), $value);
@@ -444,7 +456,7 @@ trait SequenceTrait
     /**
      * Ensure sequence is at least $size long
      */
-    public function padBoth(int $size, $value=null): Sequence
+    public function padBoth(int $size, $value = null): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         $length = $output->count();
@@ -467,7 +479,7 @@ trait SequenceTrait
     /**
      * Remove $offet + $length items
      */
-    public function removeSlice(int $offset, int $length=null, Sequence &$removed=null): Sequence
+    public function removeSlice(int $offset, int $length = null, Sequence &$removed = null): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
@@ -487,7 +499,7 @@ trait SequenceTrait
     /**
      * Like removeSlice, but leaves a present behind
      */
-    public function replaceSlice(int $offset, int $length=null, iterable $replacement, Sequence &$removed=null): Sequence
+    public function replaceSlice(int $offset, int $length = null, iterable $replacement, Sequence &$removed = null): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
@@ -509,7 +521,7 @@ trait SequenceTrait
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags=SORT_STRING): Sequence
+    public function unique(int $flags = SORT_STRING): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
@@ -520,7 +532,7 @@ trait SequenceTrait
     /**
      * Iterate each entry
      */
-    public function walk(callable $callback, $data=null): Sequence
+    public function walk(callable $callback, $data = null): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         array_walk($output->items, $callback, $data);
@@ -530,7 +542,7 @@ trait SequenceTrait
     /**
      * Iterate everything
      */
-    public function walkRecursive(callable $callback, $data=null): Sequence
+    public function walkRecursive(callable $callback, $data = null): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
@@ -542,7 +554,7 @@ trait SequenceTrait
     /**
      * Create a collection of numbers
      */
-    public static function createRange(int $start, int $end, int $step=1): Sequence
+    public static function createRange(int $start, int $end, int $step = 1): Sequence
     {
         return static::propagate(range($start, $end, $step));
     }
@@ -558,7 +570,9 @@ trait SequenceTrait
 
             if ($key < 0) {
                 throw Exceptional::OutOfBounds(
-                    'Index '.$key.' is not accessible', null, $this
+                    'Index ' . $key . ' is not accessible',
+                    null,
+                    $this
                 );
             }
         }
@@ -571,7 +585,7 @@ trait SequenceTrait
     /**
      * Copy and reinitialise new object
      */
-    protected static function propagate(iterable $newItems=[]): Sequence
+    protected static function propagate(iterable $newItems = []): Sequence
     {
         return new self($newItems);
     }
