@@ -173,7 +173,8 @@ class ArrayUtils
     public static function kshuffle(array $array): array
     {
         uksort($array, function (): int {
-            return (rand() > getrandmax() / 2) ? 1 : 0;
+            return rand() > getrandmax() / 2 ?
+                1 : 0;
         });
 
         return $array;
