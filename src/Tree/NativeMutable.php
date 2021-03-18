@@ -14,6 +14,7 @@ use DecodeLabs\Collections\HashMap;
 use DecodeLabs\Collections\Native\HashMapTrait;
 use DecodeLabs\Collections\Tree;
 
+use DecodeLabs\Exceptional;
 use DecodeLabs\Gadgets\Sanitizer;
 
 class NativeMutable implements \IteratorAggregate, Tree
@@ -53,7 +54,7 @@ class NativeMutable implements \IteratorAggregate, Tree
     /**
      * Set node value
      */
-    public function __set(string $key, $value): Tree
+    public function __set(string $key, $value): void
     {
         if (is_iterable($value)) {
             $items = $value;
@@ -63,7 +64,6 @@ class NativeMutable implements \IteratorAggregate, Tree
         }
 
         $this->items[$key] = $this->propagate($items, $value);
-        return $this;
     }
 
     /**
@@ -117,11 +117,12 @@ class NativeMutable implements \IteratorAggregate, Tree
      */
     public function getNode(string $key): Tree
     {
-        if (static::KEY_SEPARATOR === null || false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
+        if (empty(static::KEY_SEPARATOR)) {
             return $this->__get($key);
         }
 
         $node = $this;
+        $parts = explode(static::KEY_SEPARATOR, $key);
 
         foreach ($parts as $part) {
             $node = $node->__get($part);
@@ -135,7 +136,7 @@ class NativeMutable implements \IteratorAggregate, Tree
      */
     public function hasNode(string ...$keys): bool
     {
-        if (static::KEY_SEPARATOR === null) {
+        if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
                 if (isset($this->items[$key])) {
                     return true;
@@ -143,10 +144,7 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
-                if (false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
-                    continue;
-                }
-
+                $parts = explode(static::KEY_SEPARATOR, $key);
                 $node = $this;
 
                 foreach ($parts as $part) {
@@ -169,7 +167,7 @@ class NativeMutable implements \IteratorAggregate, Tree
      */
     public function hasAllNodes(string ...$keys): bool
     {
-        if (static::KEY_SEPARATOR === null) {
+        if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
                 if (!isset($this->items[$key])) {
                     return false;
@@ -177,10 +175,7 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
-                if (false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
-                    continue;
-                }
-
+                $parts = explode(static::KEY_SEPARATOR, $key);
                 $node = $this;
 
                 foreach ($parts as $part) {
@@ -221,7 +216,7 @@ class NativeMutable implements \IteratorAggregate, Tree
      */
     public function has(string ...$keys): bool
     {
-        if (static::KEY_SEPARATOR === null) {
+        if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
                 if (isset($this->items[$key]) && $this->items[$key]->hasValue()) {
                     return true;
@@ -229,10 +224,7 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
-                if (false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
-                    continue;
-                }
-
+                $parts = explode(static::KEY_SEPARATOR, $key);
                 $node = $this;
 
                 foreach ($parts as $part) {
@@ -257,7 +249,7 @@ class NativeMutable implements \IteratorAggregate, Tree
      */
     public function hasAll(string ...$keys): bool
     {
-        if (static::KEY_SEPARATOR === null) {
+        if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
                 if (!(isset($this->items[$key]) && $this->items[$key]->hasValue())) {
                     return false;
@@ -265,10 +257,7 @@ class NativeMutable implements \IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
-                if (false === ($parts = explode(static::KEY_SEPARATOR, $key))) {
-                    continue;
-                }
-
+                $parts = explode(static::KEY_SEPARATOR, $key);
                 $node = $this;
 
                 foreach ($parts as $part) {
@@ -477,17 +466,18 @@ class NativeMutable implements \IteratorAggregate, Tree
      */
     public static function fromDelimitedString(string $string, string $setDelimiter = '&', string $valueDelimiter = '='): Tree
     {
-        $output = static::propagate();
-
-        if (false === ($parts = explode($setDelimiter, $string))) {
-            $parts = [];
+        if (
+            empty($setDelimiter) ||
+            empty($valueDelimiter)
+        ) {
+            throw Exceptional::UnexpectedValue('Cannot parse delimited string with empty delimiter');
         }
 
-        foreach ($parts as $part) {
-            if (false === ($valueParts = explode($valueDelimiter, trim($part), 2)) || empty($valueParts)) {
-                continue;
-            }
+        $output = static::propagate();
+        $parts = explode($setDelimiter, $string);
 
+        foreach ($parts as $part) {
+            $valueParts = explode($valueDelimiter, trim($part), 2);
             $key = str_replace(['[', ']'], ['.', ''], urldecode(array_shift($valueParts)));
             $value = array_shift($valueParts);
 
