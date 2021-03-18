@@ -14,8 +14,8 @@ use DecodeLabs\Collections\HashMap;
 use DecodeLabs\Collections\Native\HashMapTrait;
 use DecodeLabs\Collections\Tree;
 
-use DecodeLabs\Gadgets\Sanitizer;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Gadgets\Sanitizer;
 
 class NativeMutable implements \IteratorAggregate, Tree
 {
