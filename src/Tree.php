@@ -13,7 +13,7 @@ use DecodeLabs\Gadgets\Sanitizer;
 
 interface Tree extends HashMap, ValueProvider
 {
-    public function __set(string $key, $value): Tree;
+    public function __set(string $key, $value): void;
     public function __get(string $key): Tree;
     public function __isset(string $key): bool;
     public function __unset(string $key): void;
