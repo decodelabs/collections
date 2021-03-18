@@ -1,3 +1,6 @@
+## v0.6.0 (2021-03-18)
+* Enabled PHP8 testing
+
 ## v0.5.7 (2020-10-06)
 * Switched to Fluidity for Then dependency
 * Applied full PSR12 standards
