@@ -11,6 +11,8 @@ namespace DecodeLabs\Collections;
 
 use DecodeLabs\Exceptional;
 
+use Generator;
+
 class ArrayUtils
 {
     /**
@@ -69,7 +71,7 @@ class ArrayUtils
     /**
      * Generator, scanning all non-container nodes
      */
-    public static function scanValues(iterable $data, bool $removeNull = false): \Generator
+    public static function scanValues(iterable $data, bool $removeNull = false): Generator
     {
         foreach ($data as $key => $value) {
             if ($isIterable = is_iterable($value)) {

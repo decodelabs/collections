@@ -9,9 +9,15 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Collections\Native;
 
+use ArrayIterator;
+use Closure;
+
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
 use DecodeLabs\Fluidity\ThenTrait;
+
+use Iterator;
+use ReflectionFunction;
 
 trait CollectionTrait
 {
@@ -408,7 +414,10 @@ trait CollectionTrait
      */
     public function mapSelf(callable $callback): Collection
     {
-        if ($callback instanceof \Closure && (new \ReflectionFunction($callback))->isGenerator()) {
+        if (
+            $callback instanceof Closure &&
+            (new ReflectionFunction($callback))->isGenerator()
+        ) {
             $output = [];
 
             foreach ($this->items as $key => $value) {
@@ -531,9 +540,9 @@ trait CollectionTrait
     /**
      * Iterator interface
      */
-    public function getIterator(): \Iterator
+    public function getIterator(): Iterator
     {
-        return new \ArrayIterator($this->items);
+        return new ArrayIterator($this->items);
     }
 
     /**

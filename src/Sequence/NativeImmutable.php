@@ -12,7 +12,9 @@ namespace DecodeLabs\Collections\Sequence;
 use DecodeLabs\Collections\Native\SequenceTrait;
 use DecodeLabs\Collections\Sequence;
 
-class NativeImmutable implements \IteratorAggregate, Sequence
+use IteratorAggregate;
+
+class NativeImmutable implements IteratorAggregate, Sequence
 {
     use SequenceTrait;
 

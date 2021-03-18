@@ -12,7 +12,9 @@ namespace DecodeLabs\Collections\HashMap;
 use DecodeLabs\Collections\HashMap;
 use DecodeLabs\Collections\Native\HashMapTrait;
 
-class NativeMutable implements \IteratorAggregate, HashMap
+use IteratorAggregate;
+
+class NativeMutable implements IteratorAggregate, HashMap
 {
     use HashMapTrait;
 
