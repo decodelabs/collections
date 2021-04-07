@@ -11,31 +11,122 @@ namespace DecodeLabs\Collections;
 
 use DecodeLabs\Gadgets\Sanitizer;
 
+/**
+ * @template TValue
+ * @extends HashMap<TValue>
+ * @extends ValueProvider<TValue>
+ */
 interface Tree extends HashMap, ValueProvider
 {
-    public function __set(string $key, $value): void;
-    public function __get(string $key): Tree;
-    public function __isset(string $key): bool;
-    public function __unset(string $key): void;
+    /**
+     * @param iterable<int|string, TValue|iterable>|null $items
+     * @param TValue|iterable<int|string, TValue|iterable>|null $value
+     */
+    public function __construct(iterable $items = null, $value = null);
 
-    public function setNode(string $key, $value): Tree;
-    public function getNode(string $key): Tree;
-    public function hasNode(string ...$keys): bool;
-    public function hasAllNodes(string ...$keys): bool;
+    /**
+     * @param int|string $key
+     * @param TValue|iterable<int|string, TValue|iterable>|null $value
+     */
+    public function __set($key, $value): void;
 
-    public function sanitize(string $key, bool $required = true): Sanitizer;
-    public function sanitizeWith(string $key, callable $sanitizer, bool $required = true);
+    /**
+     * @param int|string $key
+     * @return static<TValue>
+     */
+    public function __get($key): Tree;
+
+    /**
+     * @param int|string $key
+     */
+    public function __isset($key): bool;
+
+    /**
+     * @param int|string $key
+     */
+    public function __unset($key): void;
+
+    /**
+     * @param int|string $key
+     * @param TValue|iterable<TValue>|null $value
+     * @return static<TValue>
+     */
+    public function setNode($key, $value): Tree;
+
+    /**
+     * @param int|string $key
+     * @return static<TValue>
+     */
+    public function getNode($key): Tree;
+
+    /**
+     * @param int|string ...$keys
+     */
+    public function hasNode(...$keys): bool;
+
+    /**
+     * @param int|string ...$keys
+     */
+    public function hasAllNodes(...$keys): bool;
+
+    /**
+     * @param int|string $key
+     */
+    public function sanitize($key, bool $required = true): Sanitizer;
+
+    /**
+     * @param int|string $key
+     * @return mixed
+     */
+    public function sanitizeWith($key, callable $sanitizer, bool $required = true);
+
     public function sanitizeValue(bool $required = true): Sanitizer;
+
+    /**
+     * @return mixed
+     */
     public function sanitizeValueWith(callable $sanitizer, bool $required = true);
 
-    public function setValue($value): HashMap;
+
+    /**
+     * @return TValue|null
+     */
+    public function pullValue();
+
+    /**
+     * @param TValue|null $value
+     * @return static<TValue>
+     */
+    public function setValue($value): Tree;
+
     public function hasValue(): bool;
     public function hasAnyValue(): bool;
+
+    /**
+     * @param mixed $value
+     */
     public function isValue($value, bool $strict): bool;
 
+    /**
+     * @return static<TValue>
+     */
+    public function removeEmpty(): Tree;
+
+
+    /**
+     * @return static<string>
+     */
     public static function fromDelimitedString(string $string, string $setDelimiter = '&', string $valueDelimiter = '='): Tree;
+
     public function toDelimitedString(string $setDelimiter = '&', string $valueDelimiter = '='): string;
+
+    /**
+     * @return array<string, TValue|null>
+     */
     public function toDelimitedSet(bool $urlEncode = false, string $prefix = null): array;
 
+    /**
+     * @return array<static<TValue>>
+     */
     public function getChildren(): array;
 }

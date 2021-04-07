@@ -17,6 +17,9 @@ class ArrayUtils
 {
     /**
      * Collapse multi-dimensional collections to flat array
+     *
+     * @param iterable<string|int, mixed> $data
+     * @return array<string|int, mixed>
      */
     public static function collapse(iterable $data, bool $keepKeys = true, bool $unique = false, bool $removeNull = false): array
     {
@@ -38,8 +41,10 @@ class ArrayUtils
                 $value = $value->getValue();
             }
 
-            if ((!$isIterable || $isContainer)
-            && (!$removeNull || $value !== null)) {
+            if (
+                (!$isIterable || $isContainer) &&
+                (!$removeNull || $value !== null)
+            ) {
                 if (is_object($value)) {
                     $sort = SORT_REGULAR;
                 }
@@ -51,7 +56,10 @@ class ArrayUtils
                 }
             }
 
-            if ($isIterable) {
+            if (
+                $isIterable &&
+                $children !== null
+            ) {
                 $output = array_merge($output, self::collapse(
                     $children,
                     $unique,
@@ -70,6 +78,9 @@ class ArrayUtils
 
     /**
      * Generator, scanning all non-container nodes
+     *
+     * @param iterable<string|int, mixed> $data
+     * @return Generator<string|int, mixed>
      */
     public static function scanValues(iterable $data, bool $removeNull = false): Generator
     {
@@ -84,12 +95,17 @@ class ArrayUtils
                 $value = $value->getValue();
             }
 
-            if ((!$isIterable || $isContainer)
-            && (!$removeNull || $value !== null)) {
+            if (
+                (!$isIterable || $isContainer) &&
+                (!$removeNull || $value !== null)
+            ) {
                 yield $key => $value;
             }
 
-            if ($isIterable) {
+            if (
+                $isIterable &&
+                $children !== null
+            ) {
                 yield from self::scanValues($children, $removeNull);
             }
         }
@@ -98,6 +114,8 @@ class ArrayUtils
 
     /**
      * Check array is associative
+     *
+     * @param array<string|int, mixed> $array
      */
     public static function isAssoc(array $array): bool
     {
@@ -109,6 +127,11 @@ class ArrayUtils
 
     /**
      * Get first of a collection
+     *
+     * @template TKey
+     * @template TValue
+     * @param iterable<TKey, TValue> $data
+     * @return TValue|null
      */
     public static function getFirst(iterable $data, callable $filter = null, object $callbackTarget = null)
     {
@@ -125,11 +148,22 @@ class ArrayUtils
 
     /**
      * Get last item in an array
+     *
+     * @template TKey
+     * @template TValue
+     * @param iterable<TKey, TValue> $data
+     * @return TValue|null
      */
-    public static function getLast(array $array, callable $filter = null, object $callbackTarget = null)
+    public static function getLast(iterable $data, callable $filter = null, object $callbackTarget = null)
     {
+        $array = self::iterableToArray($data);
+
         if (!$filter) {
-            return end($array);
+            if (empty($array)) {
+                return null;
+            }
+
+            return $array[array_key_last($array)];
         }
 
         return self::getFirst(array_reverse($array, true), $filter, $callbackTarget);
@@ -137,6 +171,11 @@ class ArrayUtils
 
     /**
      * Get random item in array
+     *
+     * @template TKey
+     * @template TValue
+     * @param array<TKey, TValue> $array
+     * @return TValue
      */
     public static function getRandom(array $array)
     {
@@ -151,6 +190,11 @@ class ArrayUtils
 
     /**
      * Get random subset from array
+     *
+     * @template TKey
+     * @template TValue
+     * @param array<TKey, TValue> $array
+     * @return array<TKey, TValue>
      */
     public static function sliceRandom(array $array, int $number): array
     {
@@ -166,11 +210,16 @@ class ArrayUtils
             );
         }
 
-        return self::intersectKeys($array, (array)array_rand($array, $number));
+        return array_intersect_key($array, array_flip((array)array_rand($array, $number)));
     }
 
     /**
      * Key base shuffling
+     *
+     * @template TKey
+     * @template TValue
+     * @param array<TKey, TValue> $array
+     * @return array<TKey, TValue>
      */
     public static function kshuffle(array $array): array
     {
@@ -184,6 +233,12 @@ class ArrayUtils
 
     /**
      * Get subset based on key match
+     *
+     * @template TKey
+     * @template TValue
+     * @param array<TKey, TValue> $array
+     * @param array<TKey> $keys
+     * @return array<TKey, TValue>
      */
     public static function intersectKeys(array $array, array $keys): array
     {
@@ -192,6 +247,11 @@ class ArrayUtils
 
     /**
      * Filter an array
+     *
+     * @template TKey
+     * @template TValue
+     * @param array<TKey, TValue> $array
+     * @return array<TKey, TValue>
      */
     public static function filter(array $array, callable $filter): array
     {
@@ -200,6 +260,11 @@ class ArrayUtils
 
     /**
      * Convert iterable to array
+     *
+     * @template TKey
+     * @template TValue
+     * @param iterable<TKey, TValue> $iterable
+     * @return array<TKey, TValue>
      */
     public static function iterableToArray(iterable $iterable): array
     {
@@ -222,18 +287,28 @@ class ArrayUtils
 
     /**
      * Convert list of iterables to arrays
+     *
+     * @template TKey
+     * @template TValue
+     * @param iterable<TKey, TValue> ...$iterables
+     * @return array<array<TKey, TValue>>
      */
     public static function iterablesToArrays(iterable ...$iterables): array
     {
+        $output = [];
+
         foreach ($iterables as $i => $iterable) {
-            $iterables[$i] = self::iterableToArray($iterable);
+            $output[$i] = self::iterableToArray($iterable);
         }
 
-        return $iterables;
+        return $output;
     }
 
     /**
      * Multi dimensional in_array
+     *
+     * @param mixed $value
+     * @param array<string|int, mixed> $array
      */
     public static function inArrayRecursive($value, array $array, bool $strict = false): bool
     {
@@ -256,12 +331,17 @@ class ArrayUtils
 
     /**
      * Re-coding of var_export for tidiness
+     *
+     * @param array<string|int, mixed> $array
      */
     public static function export(array $array): string
     {
         return self::exportLevel($array, 1);
     }
 
+    /**
+     * @param array<string|int, mixed> $array
+     */
     private static function exportLevel(array $array, int $level): string
     {
         $output = '[' . "\n";
@@ -284,7 +364,7 @@ class ArrayUtils
             $output .= str_repeat('    ', $level);
 
             if (!$isNumericIndex) {
-                $output .= '\'' . addslashes($key) . '\' => ';
+                $output .= '\'' . addslashes((string)$key) . '\' => ';
             }
 
             if (is_object($val) || is_null($val)) {

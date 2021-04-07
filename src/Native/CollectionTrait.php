@@ -14,21 +14,32 @@ use Closure;
 
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
+use DecodeLabs\Collections\Sequence;
+use DecodeLabs\Exceptional;
 use DecodeLabs\Fluidity\ThenTrait;
 
 use Iterator;
 use ReflectionFunction;
 
+/**
+ * @template TKey
+ * @template TValue
+ */
 trait CollectionTrait
 {
     use ThenTrait;
 
     //const MUTABLE = false;
 
+    /**
+     * @var array<TKey, TValue>
+     */
     protected $items = [];
 
     /**
      * Direct set items
+     *
+     * @param iterable<TKey, TValue> $items
      */
     public function __construct(iterable $items)
     {
@@ -96,12 +107,76 @@ trait CollectionTrait
     }
 
 
+
+    /**
+     * Add items to the end
+     */
+    public function push(...$values): Collection
+    {
+        return $this->append(...$values);
+    }
+
+    /**
+     * Pull first item
+     */
+    public function pop()
+    {
+        if (static::MUTABLE) {
+            return array_pop($this->items);
+        } else {
+            return $this->getLast();
+        }
+    }
+
+    /**
+     * Add items to the start
+     */
+    public function unshift(...$values): Collection
+    {
+        return $this->prepend(...$values);
+    }
+
+    /**
+     * Pull last item
+     */
+    public function shift()
+    {
+        if (static::MUTABLE) {
+            return array_shift($this->items);
+        } else {
+            return $this->getFirst();
+        }
+    }
+
+
+    /**
+     * Add items to the end
+     */
+    public function append(...$values): Collection
+    {
+        $output = static::MUTABLE ? $this : clone $this;
+        array_push($output->items, ...$values);
+        return $output;
+    }
+
+    /**
+     * Add items to the start
+     */
+    public function prepend(...$values): Collection
+    {
+        $output = static::MUTABLE ? $this : clone $this;
+        array_unshift($output->items, ...$values);
+        return $output;
+    }
+
+
+
     /**
      * Get all keys in array
      */
-    public function getKeys(): Collection
+    public function getKeys(): array
     {
-        return $this->propagate(array_keys($this->items));
+        return array_keys($this->items);
     }
 
 
@@ -148,30 +223,42 @@ trait CollectionTrait
     /**
      * Split the current items into $size length chunks, maintain keys
      */
-    public function chunk(int $size): Collection
+    public function chunk(int $size): array
     {
-        return $this->propagate(array_chunk($this->items, $size, true));
+        $output = [];
+
+        foreach (array_chunk($this->items, $size, true) as $chunk) {
+            $output[] = $this->propagate($chunk);
+        }
+
+        return $output;
     }
 
     /**
      * Split the current items into $size length chunks, ignore keys
      */
-    public function chunkValues(int $size): Collection
+    public function chunkValues(int $size): array
     {
-        return $this->propagate(array_chunk($this->items, $size, false));
+        $output = [];
+
+        foreach (array_chunk($this->items, $size, false) as $chunk) {
+            $output[] = $this->propagate($chunk);
+        }
+
+        return $output;
     }
 
 
     /**
      * Return indexed sum list - filters non scalar first
      */
-    public function countValues(): Collection
+    public function countValues(): array
     {
-        return $this->propagate(array_count_values(
+        return array_count_values(
             array_filter($this->items, function ($value) {
                 return is_string($value) || is_int($value);
             })
-        ));
+        );
     }
 
 
@@ -192,12 +279,17 @@ trait CollectionTrait
     public function diffAssocBy(callable $keyCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $keyCallback;
 
-        return $this->propagate(array_diff_uassoc(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_diff_uassoc($this->items, ...$args)
+        );
     }
 
     /**
@@ -206,12 +298,17 @@ trait CollectionTrait
     public function diffAssocByValue(callable $valueCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $valueCallback;
 
-        return $this->propagate(array_udiff_assoc(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_udiff_assoc($this->items, ...$args)
+        );
     }
 
     /**
@@ -220,13 +317,18 @@ trait CollectionTrait
     public function diffAssocAll(callable $valueCallback, callable $keyCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $valueCallback;
         $args[] = $keyCallback;
 
-        return $this->propagate(array_udiff_uassoc(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_udiff_uassoc($this->items, ...$args)
+        );
     }
 
     /**
@@ -246,12 +348,17 @@ trait CollectionTrait
     public function diffValuesBy(callable $valueCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $valueCallback;
 
-        return $this->propagate(array_udiff(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_udiff($this->items, ...$args)
+        );
     }
 
     /**
@@ -271,12 +378,17 @@ trait CollectionTrait
     public function diffKeysBy(callable $keyCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $keyCallback;
 
-        return $this->propagate(array_diff_ukey(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_diff_ukey($this->items, ...$args)
+        );
     }
 
 
@@ -297,12 +409,17 @@ trait CollectionTrait
     public function intersectAssocBy(callable $keyCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $keyCallback;
 
-        return $this->propagate(array_intersect_uassoc(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_intersect_uassoc($this->items, ...$args)
+        );
     }
 
     /**
@@ -311,12 +428,17 @@ trait CollectionTrait
     public function intersectAssocByValue(callable $valueCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $valueCallback;
 
-        return $this->propagate(array_uintersect_assoc(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_uintersect_assoc($this->items, ...$args)
+        );
     }
 
     /**
@@ -325,13 +447,18 @@ trait CollectionTrait
     public function intersectAssocAll(callable $valueCallback, callable $keyCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $valueCallback;
         $args[] = $keyCallback;
 
-        return $this->propagate(array_uintersect_uassoc(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_uintersect_uassoc($this->items, ...$args)
+        );
     }
 
     /**
@@ -351,12 +478,17 @@ trait CollectionTrait
     public function intersectValuesBy(callable $valueCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $valueCallback;
 
-        return $this->propagate(array_uintersect(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_uintersect($this->items, ...$args)
+        );
     }
 
     /**
@@ -376,12 +508,17 @@ trait CollectionTrait
     public function intersectKeysBy(callable $keyCallback, iterable ...$arrays): Collection
     {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
+
+        if (!isset($args[0])) {
+            $args[0] = [];
+        }
+
         $args[] = $keyCallback;
 
-        return $this->propagate(array_intersect_ukey(
-            $this->items,
-            ...$args
-        ));
+        return $this->propagate(
+            /** @phpstan-ignore-next-line */
+            array_intersect_ukey($this->items, ...$args)
+        );
     }
 
 
@@ -456,7 +593,7 @@ trait CollectionTrait
             }
 
             return $result + $item;
-        }, 1);
+        }, 0);
     }
 
     /**
@@ -493,9 +630,9 @@ trait CollectionTrait
     /**
      * Combine a column with optional key column into single array
      */
-    public function pluck(string $valueKey, string $indexKey = null): Collection
+    public function pluck(string $valueKey, string $indexKey = null): array
     {
-        return $this->propagate(array_column($this->items, $valueKey, $indexKey));
+        return array_column($this->items, $valueKey, $indexKey);
     }
 
 
@@ -507,6 +644,15 @@ trait CollectionTrait
      */
     public function offsetSet($key, $value): void
     {
+        if ($key === null) {
+            if ($this instanceof Sequence) {
+                $this->push($value);
+                return;
+            } else {
+                throw Exceptional::UnexpectedValue('Cannot push to HashMaps');
+            }
+        }
+
         $this->set($key, $value);
     }
 
@@ -539,6 +685,8 @@ trait CollectionTrait
 
     /**
      * Iterator interface
+     *
+     * @return Iterator<TKey, TValue>
      */
     public function getIterator(): Iterator
     {
@@ -547,6 +695,8 @@ trait CollectionTrait
 
     /**
      * Convert to array
+     *
+     * @return array<TKey, TValue>
      */
     public function toArray(): array
     {
@@ -555,6 +705,8 @@ trait CollectionTrait
 
     /**
      * Convert to json
+     *
+     * @return array<int|string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -565,6 +717,8 @@ trait CollectionTrait
 
     /**
      * Get dump info
+     *
+     * @return array<TKey, TValue>
      */
     public function __debugInfo(): array
     {
@@ -574,6 +728,8 @@ trait CollectionTrait
 
     /**
      * Copy and reinitialise new object
+     *
+     * @return static<TKey, TValue>
      */
     abstract protected static function propagate(iterable $newItems = []): Collection;
 }

@@ -14,8 +14,16 @@ use DecodeLabs\Collections\Sequence;
 
 use IteratorAggregate;
 
-class NativeImmutable implements IteratorAggregate, Sequence
+/**
+ * @template TValue
+ * @implements Sequence<TValue>
+ * @implements IteratorAggregate<int, TValue>
+ */
+class NativeImmutable implements Sequence, IteratorAggregate
 {
+    /**
+     * @use SequenceTrait<TValue>
+     */
     use SequenceTrait;
 
     public const MUTABLE = false;
