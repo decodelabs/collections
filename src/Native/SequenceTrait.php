@@ -15,13 +15,21 @@ use DecodeLabs\Collections\Sequence;
 
 use DecodeLabs\Exceptional;
 
+/**
+ * @template TValue
+ */
 trait SequenceTrait
 {
+    /**
+     * @use CollectionTrait<int, TValue>
+     */
     use CollectionTrait;
     use SortableTrait;
 
     /**
      * Direct set items
+     *
+     * @param iterable<TValue> $items
      */
     public function __construct(iterable $items)
     {
@@ -34,9 +42,9 @@ trait SequenceTrait
     /**
      * Get all keys in array, enforce int formatting
      */
-    public function getKeys(): Collection
+    public function getKeys(): array
     {
-        return $this->propagate(array_map('intval', array_keys($this->items)));
+        return array_map('intval', array_keys($this->items));
     }
 
 
@@ -306,68 +314,6 @@ trait SequenceTrait
     }
 
 
-    /**
-     * Add items to the end
-     */
-    public function push(...$values): Sequence
-    {
-        return $this->append(...$values);
-    }
-
-    /**
-     * Pull first item
-     */
-    public function pop()
-    {
-        if (static::MUTABLE) {
-            return array_pop($this->items);
-        } else {
-            return $this->getLast();
-        }
-    }
-
-    /**
-     * Add items to the start
-     */
-    public function unshift(...$values): Sequence
-    {
-        return $this->prepend(...$values);
-    }
-
-    /**
-     * Pull last item
-     */
-    public function shift()
-    {
-        if (static::MUTABLE) {
-            return array_shift($this->items);
-        } else {
-            return $this->getFirst();
-        }
-    }
-
-
-
-    /**
-     * Add items to the end
-     */
-    public function append(...$values): Sequence
-    {
-        $output = static::MUTABLE ? $this : clone $this;
-        array_push($output->items, ...$values);
-        return $output;
-    }
-
-    /**
-     * Add items to the start
-     */
-    public function prepend(...$values): Sequence
-    {
-        $output = static::MUTABLE ? $this : clone $this;
-        array_unshift($output->items, ...$values);
-        return $output;
-    }
-
 
 
     /**
@@ -584,6 +530,10 @@ trait SequenceTrait
 
     /**
      * Copy and reinitialise new object
+     *
+     * @template FValue
+     * @param iterable<FValue> $newItems
+     * @return static<FValue>
      */
     protected static function propagate(iterable $newItems = []): Sequence
     {

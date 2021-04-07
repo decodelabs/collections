@@ -13,24 +13,30 @@ use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\HashMap;
 
+/**
+ * @template TValue
+ */
 trait HashMapTrait
 {
+    /**
+     * @use CollectionTrait<int|string, TValue>
+     */
     use CollectionTrait;
     use SortableTrait;
 
     /**
      * Get all keys in array, enforce string formatting
      */
-    public function getKeys(): Collection
+    public function getKeys(): array
     {
-        return $this->propagate(array_map('strval', array_keys($this->items)));
+        return array_map('strval', array_keys($this->items));
     }
 
 
     /**
      * Retrieve a single entry
      */
-    public function get(string $key)
+    public function get($key)
     {
         return $this->items[$key] ?? null;
     }
@@ -38,7 +44,7 @@ trait HashMapTrait
     /**
      * Retrieve entry and remove from collection
      */
-    public function pull(string $key)
+    public function pull($key)
     {
         $output = $this->items[$key] ?? null;
 
@@ -52,7 +58,7 @@ trait HashMapTrait
     /**
      * Direct set a value
      */
-    public function set(string $key, $value): HashMap
+    public function set($key, $value): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items[$key] = $value;
@@ -62,7 +68,7 @@ trait HashMapTrait
     /**
      * True if any provided keys have a set value (not null)
      */
-    public function has(string ...$keys): bool
+    public function has(...$keys): bool
     {
         foreach ($keys as $key) {
             if (isset($this->items[$key])) {
@@ -76,7 +82,7 @@ trait HashMapTrait
     /**
      * True if all provided keys have a set value (not null)
      */
-    public function hasAll(string ...$keys): bool
+    public function hasAll(...$keys): bool
     {
         foreach ($keys as $key) {
             if (!isset($this->items[$key])) {
@@ -90,7 +96,7 @@ trait HashMapTrait
     /**
      * True if any provided keys are in the collection
      */
-    public function hasKey(string ...$keys): bool
+    public function hasKey(...$keys): bool
     {
         foreach ($keys as $key) {
             if (array_key_exists($key, $this->items)) {
@@ -104,7 +110,7 @@ trait HashMapTrait
     /**
      * True if all provided keys are in the collection
      */
-    public function hasKeys(string ...$keys): bool
+    public function hasKeys(...$keys): bool
     {
         foreach ($keys as $key) {
             if (!array_key_exists($key, $this->items)) {
@@ -118,7 +124,7 @@ trait HashMapTrait
     /**
      * Remove all values associated with $keys
      */
-    public function remove(string ...$keys): HashMap
+    public function remove(...$keys): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_diff_key($output->items, array_flip($keys));
@@ -128,7 +134,7 @@ trait HashMapTrait
     /**
      * Remove all values not associated with $keys
      */
-    public function keep(string ...$keys): HashMap
+    public function keep(...$keys): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_intersect_key($output->items, array_flip($keys));
@@ -139,13 +145,13 @@ trait HashMapTrait
     /**
      * Lookup a key by value
      */
-    public function findKey($value, bool $strict = false): ?string
+    public function findKey($value, bool $strict = false)
     {
         if (false === ($key = array_search($value, $this->items, $strict))) {
             return null;
         }
 
-        return (string)$key;
+        return $key;
     }
 
 
@@ -190,30 +196,6 @@ trait HashMapTrait
         return $output;
     }
 
-
-    /**
-     * Pull first item
-     */
-    public function pop()
-    {
-        if (static::MUTABLE) {
-            return array_pop($this->items);
-        } else {
-            return $this->getLast();
-        }
-    }
-
-    /**
-     * Pull last item
-     */
-    public function shift()
-    {
-        if (static::MUTABLE) {
-            return array_shift($this->items);
-        } else {
-            return $this->getFirst();
-        }
-    }
 
 
     /**
@@ -322,6 +304,9 @@ trait HashMapTrait
 
     /**
      * Remove $offet + $length items
+     *
+     * @param static<TValue>|null $removed
+     * @return static<TValue>
      */
     public function removeSlice(int $offset, int $length = null, HashMap &$removed = null): HashMap
     {
@@ -340,6 +325,10 @@ trait HashMapTrait
 
     /**
      * Like removeSlice, but leaves a present behind
+     *
+     * @param iterable<TValue> $replacement
+     * @param static<TValue>|null $removed
+     * @return static<TValue>
      */
     public function replaceSlice(int $offset, int $length = null, iterable $replacement, HashMap &$removed = null): HashMap
     {
@@ -393,6 +382,10 @@ trait HashMapTrait
 
     /**
      * Copy and reinitialise new object
+     *
+     * @template FValue
+     * @param iterable<int|string, FValue> $newItems
+     * @return static<FValue>
      */
     protected static function propagate(iterable $newItems = []): HashMap
     {

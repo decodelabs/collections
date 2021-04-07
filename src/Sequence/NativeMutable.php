@@ -12,8 +12,18 @@ namespace DecodeLabs\Collections\Sequence;
 use DecodeLabs\Collections\Native\SequenceTrait;
 use DecodeLabs\Collections\Sequence;
 
-class NativeMutable implements \IteratorAggregate, Sequence
+use IteratorAggregate;
+
+/**
+ * @template TValue
+ * @implements Sequence<TValue>
+ * @implements IteratorAggregate<int, TValue>
+ */
+class NativeMutable implements IteratorAggregate, Sequence
 {
+    /**
+     * @use SequenceTrait<TValue>
+     */
     use SequenceTrait;
 
     public const MUTABLE = true;
