@@ -142,12 +142,7 @@ class NativeMutable implements IteratorAggregate, Tree
         }
 
         $node = $this;
-
-        if (is_string($key)) {
-            $parts = explode(static::KEY_SEPARATOR, $key);
-        } else {
-            $parts = [$key];
-        }
+        $parts = $this->splitNodeKey($key);
 
         foreach ($parts as $part) {
             $node = $node->__get($part);
@@ -169,12 +164,7 @@ class NativeMutable implements IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
-                if (is_string($key)) {
-                    $parts = explode(static::KEY_SEPARATOR, $key);
-                } else {
-                    $parts = [$key];
-                }
-
+                $parts = $this->splitNodeKey($key);
                 $node = $this;
 
                 foreach ($parts as $part) {
@@ -205,12 +195,7 @@ class NativeMutable implements IteratorAggregate, Tree
             }
         } else {
             foreach ($keys as $key) {
-                if (is_string($key)) {
-                    $parts = explode(static::KEY_SEPARATOR, $key);
-                } else {
-                    $parts = [$key];
-                }
-
+                $parts = $this->splitNodeKey($key);
                 $node = $this;
 
                 foreach ($parts as $part) {
@@ -224,6 +209,28 @@ class NativeMutable implements IteratorAggregate, Tree
         }
 
         return true;
+    }
+
+
+    /**
+     * Split node key string
+     *
+     * @param int|string $key
+     * @return array<int|string>
+     */
+    protected function splitNodeKey($key): array
+    {
+        $parts = false;
+
+        if (is_string($key)) {
+            $parts = explode(static::KEY_SEPARATOR, $key);
+        }
+
+        if ($parts === false) {
+            $parts = [$key];
+        }
+
+        return $parts;
     }
 
 
@@ -270,18 +277,16 @@ class NativeMutable implements IteratorAggregate, Tree
     {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
-                if (isset($this->items[$key]) && $this->items[$key]->hasValue()) {
+                if (
+                    isset($this->items[$key]) &&
+                    $this->items[$key]->hasValue()
+                ) {
                     return true;
                 }
             }
         } else {
             foreach ($keys as $key) {
-                if (is_string($key)) {
-                    $parts = explode(static::KEY_SEPARATOR, $key);
-                } else {
-                    $parts = [$key];
-                }
-
+                $parts = $this->splitNodeKey($key);
                 $node = $this;
 
                 foreach ($parts as $part) {
@@ -308,18 +313,16 @@ class NativeMutable implements IteratorAggregate, Tree
     {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
-                if (!(isset($this->items[$key]) && $this->items[$key]->hasValue())) {
+                if (!(
+                    isset($this->items[$key]) &&
+                    $this->items[$key]->hasValue()
+                )) {
                     return false;
                 }
             }
         } else {
             foreach ($keys as $key) {
-                if (is_string($key)) {
-                    $parts = explode(static::KEY_SEPARATOR, $key);
-                } else {
-                    $parts = [$key];
-                }
-
+                $parts = $this->splitNodeKey($key);
                 $node = $this;
 
                 foreach ($parts as $part) {
@@ -589,18 +592,18 @@ class NativeMutable implements IteratorAggregate, Tree
     public static function fromDelimitedString(string $string, string $setDelimiter = '&', string $valueDelimiter = '='): Tree
     {
         if (
-            empty($setDelimiter) ||
-            empty($valueDelimiter)
+            $setDelimiter === '' ||
+            $valueDelimiter === ''
         ) {
             throw Exceptional::UnexpectedValue('Cannot parse delimited string with empty delimiter');
         }
 
         /** @var static<string> */
         $output = new static();
-        $parts = explode($setDelimiter, $string);
+        $parts = (array)explode($setDelimiter, $string);
 
         foreach ($parts as $part) {
-            $valueParts = explode($valueDelimiter, trim($part), 2);
+            $valueParts = (array)explode($valueDelimiter, trim((string)$part), 2);
             $key = str_replace(['[', ']'], ['.', ''], urldecode((string)array_shift($valueParts)));
             $value = array_shift($valueParts);
 

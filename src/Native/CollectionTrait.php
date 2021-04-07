@@ -565,7 +565,12 @@ trait CollectionTrait
         } else {
             $keys = array_keys($this->items);
             $items = array_map($callback, $this->items, $keys);
-            return $this->propagate(array_combine($keys, $items));
+
+            if (count($keys) !== count($items)) {
+                throw Exceptional::UnexpectedValue('Combine failed - key count does not match item count');
+            }
+
+            return $this->propagate((array)array_combine($keys, $items));
         }
     }
 
