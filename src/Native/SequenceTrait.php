@@ -328,6 +328,8 @@ trait SequenceTrait
 
     /**
      * Create a new sequence with numeric range
+     *
+     * @param int<0, max> $length
      */
     public static function createFill(int $length, $value): Sequence
     {

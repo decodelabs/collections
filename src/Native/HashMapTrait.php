@@ -254,7 +254,11 @@ trait HashMapTrait
     public function flip(): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
-        $output->items = array_flip($output->items);
+
+        /** @var array<TValue> $items */
+        $items = array_flip($output->items);
+        $output->items = $items;
+
         return $output;
     }
 
