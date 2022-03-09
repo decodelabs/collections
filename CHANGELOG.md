@@ -1,3 +1,6 @@
+* Transitioned from Travis to GHA
+* Updated PHPStan and ECS dependencies
+
 ## v0.6.1 (2021-04-07)
 * Updated for max PHPStan conformance
 
