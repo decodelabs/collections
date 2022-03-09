@@ -13,17 +13,15 @@ use ArrayAccess;
 use Countable;
 use DecodeLabs\Fluidity\Then;
 use JsonSerializable;
-use Traversable;
 
 /**
  * @template TKey
  * @template TValue
  *
- * @extends Traversable<TKey, TValue>
  * @extends ArrayProvider<TKey, TValue>
  * @extends ArrayAccess<TKey, TValue>
  */
-interface Collection extends Traversable, ArrayProvider, JsonSerializable, Countable, ArrayAccess, Then
+interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAccess, Then
 {
     public function isEmpty(): bool;
     public function isMutable(): bool;
@@ -34,12 +32,12 @@ interface Collection extends Traversable, ArrayProvider, JsonSerializable, Count
     public function copy(): Collection;
 
     /**
-     * @return mixed
+     * @return TValue|null
      */
     public function getFirst(callable $filter = null);
 
     /**
-     * @return mixed
+     * @return TValue|null
      */
     public function getLast(callable $filter = null);
 
@@ -250,24 +248,13 @@ interface Collection extends Traversable, ArrayProvider, JsonSerializable, Count
     public function reduce(callable $callback, $initial = null);
 
 
-    /**
-     * @return int|float
-     */
-    public function getSum(callable $filter = null);
-
-    /**
-     * @return int|float
-     */
-    public function getProduct(callable $filter = null);
-
-    /**
-     * @return int|float|null
-     */
-    public function getAvg(callable $filter = null);
+    public function getSum(callable $filter = null): float;
+    public function getProduct(callable $filter = null): float;
+    public function getAvg(callable $filter = null): ?float;
 
 
     /**
-     * @return array<int, mixed>
+     * @return array<mixed>
      */
     public function pluck(string $valueKey, string $indexKey = null): array;
 }

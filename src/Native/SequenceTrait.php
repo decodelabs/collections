@@ -365,7 +365,9 @@ trait SequenceTrait
     public function replace(iterable ...$arrays): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
-        $output->items = array_values(array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)) ?? []);
+        $output->items = array_values(
+            array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays))
+        );
         return $output;
     }
 
@@ -375,7 +377,9 @@ trait SequenceTrait
     public function replaceRecursive(iterable ...$arrays): Sequence
     {
         $output = static::MUTABLE ? $this : clone $this;
-        $output->items = array_values(array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)) ?? []);
+        $output->items = array_values(
+            array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays))
+        );
         return $output;
     }
 

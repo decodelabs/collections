@@ -12,6 +12,7 @@ namespace DecodeLabs\Collections\Native;
 use ArrayIterator;
 use Closure;
 
+use DecodeLabs\Coercion;
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\Sequence;
@@ -87,6 +88,7 @@ trait CollectionTrait
      */
     public function getFirst(callable $filter = null)
     {
+        /* @phpstan-ignore-next-line */
         return ArrayUtils::getFirst($this->items, $filter, $this);
     }
 
@@ -95,6 +97,7 @@ trait CollectionTrait
      */
     public function getLast(callable $filter = null)
     {
+        /* @phpstan-ignore-next-line */
         return ArrayUtils::getLast($this->items, $filter, $this);
     }
 
@@ -222,6 +225,8 @@ trait CollectionTrait
 
     /**
      * Split the current items into $size length chunks, maintain keys
+     *
+     * @param int<1, max> $size
      */
     public function chunk(int $size): array
     {
@@ -236,6 +241,8 @@ trait CollectionTrait
 
     /**
      * Split the current items into $size length chunks, ignore keys
+     *
+     * @param int<1, max> $size
      */
     public function chunkValues(int $size): array
     {
@@ -586,43 +593,47 @@ trait CollectionTrait
     /**
      * Add all numeric values in collection
      */
-    public function getSum(callable $filter = null)
+    public function getSum(callable $filter = null): float
     {
-        return $this->reduce(function ($result, $item) use ($filter) {
-            if ($filter) {
-                $item = $filter($item);
-            }
+        return Coercion::toFloat(
+            $this->reduce(function ($result, $item) use ($filter) {
+                if ($filter) {
+                    $item = $filter($item);
+                }
 
-            if (!is_numeric($item)) {
-                return $result;
-            }
+                if (!is_numeric($item)) {
+                    return $result;
+                }
 
-            return $result + $item;
-        }, 0);
+                return $result + $item;
+            }, 0)
+        );
     }
 
     /**
      * Multiple all numeric values in collection
      */
-    public function getProduct(callable $filter = null)
+    public function getProduct(callable $filter = null): float
     {
-        return $this->reduce(function ($result, $item) use ($filter) {
-            if ($filter) {
-                $item = $filter($item);
-            }
+        return Coercion::toFloat(
+            $this->reduce(function ($result, $item) use ($filter) {
+                if ($filter) {
+                    $item = $filter($item);
+                }
 
-            if (!is_numeric($item)) {
-                return $result;
-            }
+                if (!is_numeric($item)) {
+                    return $result;
+                }
 
-            return $result * $item;
-        }, 1);
+                return $result * $item;
+            }, 1)
+        );
     }
 
     /**
      * Get average value of numerics
      */
-    public function getAvg(callable $filter = null)
+    public function getAvg(callable $filter = null): ?float
     {
         if (!$count = count($this->items)) {
             return null;

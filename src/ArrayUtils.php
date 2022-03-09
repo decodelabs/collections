@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Collections;
 
+use DecodeLabs\Coercion;
 use DecodeLabs\Exceptional;
 
 use Generator;
@@ -234,7 +235,7 @@ class ArrayUtils
     /**
      * Get subset based on key match
      *
-     * @template TKey
+     * @template TKey of int|string
      * @template TValue
      * @param array<TKey, TValue> $array
      * @param array<TKey> $keys
@@ -380,7 +381,7 @@ class ArrayUtils
                     $output .= 'false';
                 }
             } else {
-                $output .= '\'' . addslashes($val) . '\'';
+                $output .= '\'' . addslashes(Coercion::toString($val)) . '\'';
             }
 
             if ($count > $i) {

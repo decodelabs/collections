@@ -61,6 +61,7 @@ class NativeMutable implements IteratorAggregate, Tree
         }
 
         if (is_iterable($value)) {
+            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
             $this->merge($value);
         }
     }
@@ -124,6 +125,7 @@ class NativeMutable implements IteratorAggregate, Tree
         $node = $this->getNode($key);
 
         if (is_iterable($value)) {
+            /** @var iterable<int|string, TValue> $value */
             $node->clear()->merge($value);
         } else {
             $node->setValue($value);
@@ -419,13 +421,14 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Set by array access
      *
-     * @param TValue|iterable<int|string, TValue|iterable>|null $value
+     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function offsetSet($key, $value): void
     {
         if ($key === null) {
             $this->items[] = new static(null, $value);
         } elseif (is_iterable($value)) {
+            /** @var iterable<int|string, TValue> $value */
             $this->getNode($key)->merge($value);
         } else {
             $this->getNode($key)->setValue($value);
@@ -491,6 +494,7 @@ class NativeMutable implements IteratorAggregate, Tree
     public function setValue($value): Tree
     {
         if (is_iterable($value)) {
+            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
             return $this->merge($value);
         }
 
@@ -689,6 +693,7 @@ class NativeMutable implements IteratorAggregate, Tree
             }
         );
 
+        /* @phpstan-ignore-next-line */
         if (false !== ($result = array_combine($items, ArrayUtils::iterableToArray($values)))) {
             $this->clear()->merge($result);
         }
@@ -730,17 +735,20 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Merge all passed collections into one
      *
-     * @param iterable<int|string, TValue|iterable> ...$arrays
+     * @param iterable<int|string, TValue|iterable<mixed>> ...$arrays
      * @return static<TValue>
      */
     public function merge(iterable ...$arrays): HashMap
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
-                $this->value = $array->getValue();
+                /** @var TValue|null $value */
+                $value = $array->getValue();
+                $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
                     if (isset($this->items[$key])) {
+                        /** @var iterable<int|string, TValue|iterable<mixed>> $node */
                         $this->items[$key]->merge($node);
                     } else {
                         /** @var static<TValue> */
@@ -752,6 +760,7 @@ class NativeMutable implements IteratorAggregate, Tree
                 foreach ($array as $key => $value) {
                     if (isset($this->items[$key])) {
                         if (is_iterable($value)) {
+                            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
                             $this->items[$key]->merge($value);
                         } else {
                             $this->items[$key]->setValue($value);
@@ -782,7 +791,9 @@ class NativeMutable implements IteratorAggregate, Tree
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
-                $this->value = $array->getValue();
+                /** @var TValue|null $value */
+                $value = $array->getValue();
+                $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
                     /** @var static<TValue> */
@@ -825,7 +836,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Recursive array conversion
      *
-     * @return array<int|string, TValue|array|null>
+     * @return array<int|string, TValue|array<mixed>|null>
      */
     public function toArray(): array
     {
@@ -905,7 +916,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Copy and reinitialise new object
      *
-     * @param iterable<int|string, TValue|iterable> $newItems
+     * @param iterable<int|string, TValue|iterable<mixed>> $newItems
      * @param TValue|null $value
      * @return static<TValue>
      */

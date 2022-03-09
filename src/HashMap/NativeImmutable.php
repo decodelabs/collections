@@ -17,7 +17,7 @@ use IteratorAggregate;
 /**
  * @template TValue
  * @implements HashMap<TValue>
- * @implements IteratorAggregate<string, TValue>
+ * @implements IteratorAggregate<int|string, TValue>
  */
 class NativeImmutable implements IteratorAggregate, HashMap
 {
