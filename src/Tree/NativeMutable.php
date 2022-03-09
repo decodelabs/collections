@@ -446,7 +446,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Check by array access
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return $this->getNode($key)->hasValue();
     }
