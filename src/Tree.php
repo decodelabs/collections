@@ -19,14 +19,14 @@ use DecodeLabs\Gadgets\Sanitizer;
 interface Tree extends HashMap, ValueProvider
 {
     /**
-     * @param iterable<int|string, TValue|iterable>|null $items
-     * @param TValue|iterable<int|string, TValue|iterable>|null $value
+     * @param iterable<int|string, TValue|iterable<mixed>>|null $items
+     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function __construct(iterable $items = null, $value = null);
 
     /**
      * @param int|string $key
-     * @param TValue|iterable<int|string, TValue|iterable>|null $value
+     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function __set($key, $value): void;
 

@@ -12,16 +12,17 @@
         "php": "^7.2|^8.0",
         "symfony/polyfill-php73": "^1.22",
 
+        "decodelabs/coercion": "^0.1",
         "decodelabs/exceptional": "^0.3",
         "decodelabs/fluidity": "^0.2",
-        "decodelabs/gadgets": "^0.7"
+        "decodelabs/gadgets": "^0.8"
     },
     "require-dev": {
         "phpunit/phpunit": "^8",
-        "phpstan/phpstan": "^0.12.45",
+        "phpstan/phpstan": "^1",
         "phpstan/extension-installer": "^1.0",
-        "decodelabs/phpstan-decodelabs": "^0.4",
-        "symplify/easy-coding-standard": "^8.3"
+        "decodelabs/phpstan-decodelabs": "^0.5",
+        "symplify/easy-coding-standard": "^10"
     },
     "autoload": {
         "psr-4": {

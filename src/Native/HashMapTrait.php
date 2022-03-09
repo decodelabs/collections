@@ -182,6 +182,7 @@ trait HashMapTrait
     public function collapse(bool $unique = false, bool $removeNull = false): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
+        /* @phpstan-ignore-next-line */
         $output->items = ArrayUtils::collapse($output->items, true, $unique, $removeNull);
         return $output;
     }
@@ -192,6 +193,7 @@ trait HashMapTrait
     public function collapseValues(bool $unique = false, bool $removeNull = false): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
+        /* @phpstan-ignore-next-line */
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
         return $output;
     }
@@ -230,6 +232,7 @@ trait HashMapTrait
     {
         $output = static::MUTABLE ? $this : clone $this;
 
+        /* @phpstan-ignore-next-line */
         if (false !== ($result = array_combine($output->items, ArrayUtils::iterableToArray($values)))) {
             $output->items = $result;
         }
@@ -254,7 +257,11 @@ trait HashMapTrait
     public function flip(): HashMap
     {
         $output = static::MUTABLE ? $this : clone $this;
-        $output->items = array_flip($output->items);
+
+        /** @var array<TValue> $items */
+        $items = array_flip($output->items); /* @phpstan-ignore-line */
+        $output->items = $items;
+
         return $output;
     }
 
