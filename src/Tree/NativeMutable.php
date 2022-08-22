@@ -38,12 +38,12 @@ class NativeMutable implements IteratorAggregate, Tree
     public const KEY_SEPARATOR = '.';
 
     /**
-     * @var TValue|null
+     * @phpstan-var TValue|null
      */
     protected $value;
 
     /**
-     * @var array<int|string, static<TValue>>
+     * @phpstan-var array<int|string, static<TValue>>
      */
     protected $items = [];
 
@@ -61,7 +61,7 @@ class NativeMutable implements IteratorAggregate, Tree
         }
 
         if (is_iterable($value)) {
-            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
+            /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $value */
             $this->merge($value);
         }
     }
@@ -125,7 +125,7 @@ class NativeMutable implements IteratorAggregate, Tree
         $node = $this->getNode($key);
 
         if (is_iterable($value)) {
-            /** @var iterable<int|string, TValue> $value */
+            /** @phpstan-var iterable<int|string, TValue> $value */
             $node->clear()->merge($value);
         } else {
             $node->setValue($value);
@@ -249,7 +249,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Retrieve entry and remove from collection
      *
-     * @return TValue|null
+     * @phpstan-return TValue|null
      */
     public function pull($key)
     {
@@ -421,14 +421,14 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Set by array access
      *
-     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function offsetSet($key, $value): void
     {
         if ($key === null) {
             $this->items[] = new static(null, $value);
         } elseif (is_iterable($value)) {
-            /** @var iterable<int|string, TValue> $value */
+            /** @phpstan-var iterable<int|string, TValue> $value */
             $this->getNode($key)->merge($value);
         } else {
             $this->getNode($key)->setValue($value);
@@ -494,7 +494,7 @@ class NativeMutable implements IteratorAggregate, Tree
     public function setValue($value): Tree
     {
         if (is_iterable($value)) {
-            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
+            /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $value */
             return $this->merge($value);
         }
 
@@ -735,23 +735,23 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Merge all passed collections into one
      *
-     * @param iterable<int|string, TValue|iterable<mixed>> ...$arrays
-     * @return static<TValue>
+     * @phpstan-param iterable<int|string, TValue|iterable<mixed>> ...$arrays
+     * @phpstan-return static<TValue>
      */
     public function merge(iterable ...$arrays): HashMap
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
-                /** @var TValue|null $value */
+                /** @phpstan-var TValue|null $value */
                 $value = $array->getValue();
                 $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
                     if (isset($this->items[$key])) {
-                        /** @var iterable<int|string, TValue|iterable<mixed>> $node */
+                        /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $node */
                         $this->items[$key]->merge($node);
                     } else {
-                        /** @var static<TValue> */
+                        /** @phpstan-var static<TValue> */
                         $newNode = clone $node;
                         $this->items[$key] = $newNode;
                     }
@@ -760,7 +760,7 @@ class NativeMutable implements IteratorAggregate, Tree
                 foreach ($array as $key => $value) {
                     if (isset($this->items[$key])) {
                         if (is_iterable($value)) {
-                            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
+                            /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $value */
                             $this->items[$key]->merge($value);
                         } else {
                             $this->items[$key]->setValue($value);
@@ -791,12 +791,12 @@ class NativeMutable implements IteratorAggregate, Tree
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
-                /** @var TValue|null $value */
+                /** @phpstan-var TValue|null $value */
                 $value = $array->getValue();
                 $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
-                    /** @var static<TValue> */
+                    /** @phpstan-var static<TValue> */
                     $newNode = clone $node;
                     $this->items[$key] = $newNode;
                 }
@@ -836,7 +836,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Recursive array conversion
      *
-     * @return array<int|string, TValue|array<mixed>|null>
+     * @phpstan-return array<int|string, TValue|array<mixed>|null>
      */
     public function toArray(): array
     {
@@ -865,7 +865,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Iterator interface
      *
-     * @return Iterator<int|string, static<TValue>>
+     * @phpstan-return Iterator<int|string, static<TValue>>
      */
     public function getIterator(): Iterator
     {
@@ -916,9 +916,9 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Copy and reinitialise new object
      *
-     * @param iterable<int|string, TValue|iterable<mixed>> $newItems
-     * @param TValue|null $value
-     * @return static<TValue>
+     * @phpstan-param iterable<int|string, TValue|iterable<mixed>> $newItems
+     * @phpstan-param TValue|null $value
+     * @phpstan-return static<TValue>
      */
     protected static function propagate(?iterable $newItems = [], $value = null): Tree
     {

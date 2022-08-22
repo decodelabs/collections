@@ -20,19 +20,19 @@ interface Tree extends HashMap, ValueProvider
 {
     /**
      * @param iterable<int|string, TValue|iterable<mixed>>|null $items
-     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function __construct(iterable $items = null, $value = null);
 
     /**
      * @param int|string $key
-     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function __set($key, $value): void;
 
     /**
      * @param int|string $key
-     * @return static<TValue>
+     * @phpstan-return static<TValue>
      */
     public function __get($key): Tree;
 
@@ -48,14 +48,14 @@ interface Tree extends HashMap, ValueProvider
 
     /**
      * @param int|string $key
-     * @param TValue|iterable<TValue>|null $value
-     * @return static<TValue>
+     * @phpstan-param TValue|iterable<TValue>|null $value
+     * @phpstan-return static<TValue>
      */
     public function setNode($key, $value): Tree;
 
     /**
      * @param int|string $key
-     * @return static<TValue>
+     * @phpstan-return static<TValue>
      */
     public function getNode($key): Tree;
 
@@ -89,13 +89,13 @@ interface Tree extends HashMap, ValueProvider
 
 
     /**
-     * @return TValue|null
+     * @phpstan-return TValue|null
      */
     public function pullValue();
 
     /**
-     * @param TValue|null $value
-     * @return static<TValue>
+     * @phpstan-param TValue|null $value
+     * @phpstan-return static<TValue>
      */
     public function setValue($value): Tree;
 
@@ -108,7 +108,7 @@ interface Tree extends HashMap, ValueProvider
     public function isValue($value, bool $strict): bool;
 
     /**
-     * @return static<TValue>
+     * @phpstan-return static<TValue>
      */
     public function removeEmpty(): Tree;
 
@@ -121,12 +121,12 @@ interface Tree extends HashMap, ValueProvider
     public function toDelimitedString(string $setDelimiter = '&', string $valueDelimiter = '='): string;
 
     /**
-     * @return array<string, TValue|null>
+     * @phpstan-return array<string, TValue|null>
      */
     public function toDelimitedSet(bool $urlEncode = false, string $prefix = null): array;
 
     /**
-     * @return array<static<TValue>>
+     * @phpstan-return array<static<TValue>>
      */
     public function getChildren(): array;
 }
