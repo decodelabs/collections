@@ -29,7 +29,7 @@ trait SequenceTrait
     /**
      * Direct set items
      *
-     * @param iterable<TValue> $items
+     * @phpstan-param iterable<TValue> $items
      */
     public function __construct(iterable $items)
     {

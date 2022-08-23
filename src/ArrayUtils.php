@@ -131,8 +131,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param iterable<TKey, TValue> $data
-     * @return TValue|null
+     * @phpstan-param iterable<TKey, TValue> $data
+     * @phpstan-return TValue|null
      */
     public static function getFirst(iterable $data, callable $filter = null, object $callbackTarget = null)
     {
@@ -152,8 +152,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param iterable<TKey, TValue> $data
-     * @return TValue|null
+     * @phpstan-param iterable<TKey, TValue> $data
+     * @phpstan-return TValue|null
      */
     public static function getLast(iterable $data, callable $filter = null, object $callbackTarget = null)
     {
@@ -175,8 +175,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param array<TKey, TValue> $array
-     * @return TValue
+     * @phpstan-param array<TKey, TValue> $array
+     * @phpstan-return TValue
      */
     public static function getRandom(array $array)
     {
@@ -194,8 +194,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param array<TKey, TValue> $array
-     * @return array<TKey, TValue>
+     * @phpstan-param array<TKey, TValue> $array
+     * @phpstan-return array<TKey, TValue>
      */
     public static function sliceRandom(array $array, int $number): array
     {
@@ -219,8 +219,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param array<TKey, TValue> $array
-     * @return array<TKey, TValue>
+     * @phpstan-param array<TKey, TValue> $array
+     * @phpstan-return array<TKey, TValue>
      */
     public static function kshuffle(array $array): array
     {
@@ -237,9 +237,9 @@ class ArrayUtils
      *
      * @template TKey of int|string
      * @template TValue
-     * @param array<TKey, TValue> $array
-     * @param array<TKey> $keys
-     * @return array<TKey, TValue>
+     * @phpstan-param array<TKey, TValue> $array
+     * @phpstan-param array<TKey> $keys
+     * @phpstan-return array<TKey, TValue>
      */
     public static function intersectKeys(array $array, array $keys): array
     {
@@ -251,8 +251,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param array<TKey, TValue> $array
-     * @return array<TKey, TValue>
+     * @phpstan-param array<TKey, TValue> $array
+     * @phpstan-return array<TKey, TValue>
      */
     public static function filter(array $array, callable $filter): array
     {
@@ -264,8 +264,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param iterable<TKey, TValue> $iterable
-     * @return array<TKey, TValue>
+     * @phpstan-param iterable<TKey, TValue> $iterable
+     * @phpstan-return array<TKey, TValue>
      */
     public static function iterableToArray(iterable $iterable): array
     {
@@ -291,8 +291,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param iterable<TKey, TValue> ...$iterables
-     * @return array<array<TKey, TValue>>
+     * @phpstan-param iterable<TKey, TValue> ...$iterables
+     * @phpstan-return array<array<TKey, TValue>>
      */
     public static function iterablesToArrays(iterable ...$iterables): array
     {

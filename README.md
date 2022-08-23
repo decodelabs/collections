@@ -13,12 +13,5 @@ Yup.. there's plenty out there. This one is specifically for the sake of functio
 If you're after standard collections, you should check out the [PHP Ds extension](https://www.php.net/manual/en/book.ds.php).
 
 
-### PHP version
-
-_Please note, the final v1 releases of all Decode Labs libraries will target **PHP8** or above._
-
-Current support for earlier versions of PHP will be phased out in the coming months.
-
-
 ## Licensing
 Collections is licensed under the MIT License. See [LICENSE](./LICENSE) for the full license text.

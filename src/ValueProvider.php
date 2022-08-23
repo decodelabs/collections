@@ -15,7 +15,7 @@ namespace DecodeLabs\Collections;
 interface ValueProvider
 {
     /**
-     * @return TValue|null
+     * @phpstan-return TValue|null
      */
     public function getValue();
 }

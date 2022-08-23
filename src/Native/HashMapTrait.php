@@ -258,7 +258,7 @@ trait HashMapTrait
     {
         $output = static::MUTABLE ? $this : clone $this;
 
-        /** @var array<TValue> $items */
+        /** @phpstan-var array<TValue> $items */
         $items = array_flip($output->items); /* @phpstan-ignore-line */
         $output->items = $items;
 
@@ -312,8 +312,8 @@ trait HashMapTrait
     /**
      * Remove $offet + $length items
      *
-     * @param static<TValue>|null $removed
-     * @return static<TValue>
+     * @phpstan-param static<TValue>|null $removed
+     * @phpstan-return static<TValue>
      */
     public function removeSlice(int $offset, int $length = null, HashMap &$removed = null): HashMap
     {
@@ -333,9 +333,9 @@ trait HashMapTrait
     /**
      * Like removeSlice, but leaves a present behind
      *
-     * @param iterable<TValue> $replacement
-     * @param static<TValue>|null $removed
-     * @return static<TValue>
+     * @phpstan-param iterable<TValue> $replacement
+     * @phpstan-param static<TValue>|null $removed
+     * @phpstan-return static<TValue>
      */
     public function replaceSlice(int $offset, int $length = null, iterable $replacement, HashMap &$removed = null): HashMap
     {
