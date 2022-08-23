@@ -35,7 +35,7 @@ trait CollectionTrait
     /**
      * @phpstan-var array<TKey, TValue>
      */
-    protected $items = [];
+    protected array $items = [];
 
     /**
      * Direct set items
@@ -86,7 +86,7 @@ trait CollectionTrait
     /**
      * Get first item, matching filter
      */
-    public function getFirst(callable $filter = null)
+    public function getFirst(callable $filter = null): mixed
     {
         /* @phpstan-ignore-next-line */
         return ArrayUtils::getFirst($this->items, $filter, $this);
@@ -95,7 +95,7 @@ trait CollectionTrait
     /**
      * Get the last item in the list, matching filter
      */
-    public function getLast(callable $filter = null)
+    public function getLast(callable $filter = null): mixed
     {
         /* @phpstan-ignore-next-line */
         return ArrayUtils::getLast($this->items, $filter, $this);
@@ -104,7 +104,7 @@ trait CollectionTrait
     /**
      * Pick one entry at random
      */
-    public function getRandom()
+    public function getRandom(): mixed
     {
         return ArrayUtils::getRandom($this->items);
     }
@@ -114,7 +114,7 @@ trait CollectionTrait
     /**
      * Add items to the end
      */
-    public function push(...$values): Collection
+    public function push(mixed ...$values): Collection
     {
         return $this->append(...$values);
     }
@@ -122,7 +122,7 @@ trait CollectionTrait
     /**
      * Pull first item
      */
-    public function pop()
+    public function pop(): mixed
     {
         if (static::MUTABLE) {
             return array_pop($this->items);
@@ -134,7 +134,7 @@ trait CollectionTrait
     /**
      * Add items to the start
      */
-    public function unshift(...$values): Collection
+    public function unshift(mixed ...$values): Collection
     {
         return $this->prepend(...$values);
     }
@@ -142,7 +142,7 @@ trait CollectionTrait
     /**
      * Pull last item
      */
-    public function shift()
+    public function shift(): mixed
     {
         if (static::MUTABLE) {
             return array_shift($this->items);
@@ -155,7 +155,7 @@ trait CollectionTrait
     /**
      * Add items to the end
      */
-    public function append(...$values): Collection
+    public function append(mixed ...$values): Collection
     {
         $output = static::MUTABLE ? $this : clone $this;
         array_push($output->items, ...$values);
@@ -165,7 +165,7 @@ trait CollectionTrait
     /**
      * Add items to the start
      */
-    public function prepend(...$values): Collection
+    public function prepend(mixed ...$values): Collection
     {
         $output = static::MUTABLE ? $this : clone $this;
         array_unshift($output->items, ...$values);
@@ -186,16 +186,20 @@ trait CollectionTrait
     /**
      * Is the value in the collection?
      */
-    public function contains($value, bool $strict = false): bool
-    {
+    public function contains(
+        mixed $value,
+        bool $strict = false
+    ): bool {
         return in_array($value, $this->items, $strict);
     }
 
     /**
      * Is the value in the collection, including child arrays?
      */
-    public function containsRecursive($value, bool $strict = false): bool
-    {
+    public function containsRecursive(
+        mixed $value,
+        bool $strict = false
+    ): bool {
         return ArrayUtils::inArrayRecursive($value, $this->items, $strict);
     }
 
@@ -204,8 +208,10 @@ trait CollectionTrait
     /**
      * Return new collection containing $offset + $length items
      */
-    public function slice(int $offset, int $length = null): Collection
-    {
+    public function slice(
+        int $offset,
+        int $length = null
+    ): Collection {
         return $this->propagate(array_slice(
             $this->items,
             $offset,
@@ -283,8 +289,10 @@ trait CollectionTrait
     /**
      * DiffAssoc with custom key comparator
      */
-    public function diffAssocBy(callable $keyCallback, iterable ...$arrays): Collection
-    {
+    public function diffAssocBy(
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -302,8 +310,10 @@ trait CollectionTrait
     /**
      * DiffAssoc with custom value comparator
      */
-    public function diffAssocByValue(callable $valueCallback, iterable ...$arrays): Collection
-    {
+    public function diffAssocByValue(
+        callable $valueCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -321,8 +331,11 @@ trait CollectionTrait
     /**
      * DiffAssoc with custom key and value comparator
      */
-    public function diffAssocAll(callable $valueCallback, callable $keyCallback, iterable ...$arrays): Collection
-    {
+    public function diffAssocAll(
+        callable $valueCallback,
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -352,8 +365,10 @@ trait CollectionTrait
     /**
      * DiffValues with custom value comparator
      */
-    public function diffValuesBy(callable $valueCallback, iterable ...$arrays): Collection
-    {
+    public function diffValuesBy(
+        callable $valueCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -382,8 +397,10 @@ trait CollectionTrait
     /**
      * DiffKeys with custom key comparator
      */
-    public function diffKeysBy(callable $keyCallback, iterable ...$arrays): Collection
-    {
+    public function diffKeysBy(
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -413,8 +430,10 @@ trait CollectionTrait
     /**
      * IntersectAssoc with custom key comparator
      */
-    public function intersectAssocBy(callable $keyCallback, iterable ...$arrays): Collection
-    {
+    public function intersectAssocBy(
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -432,8 +451,10 @@ trait CollectionTrait
     /**
      * IntersectAssoc with custom value comparator
      */
-    public function intersectAssocByValue(callable $valueCallback, iterable ...$arrays): Collection
-    {
+    public function intersectAssocByValue(
+        callable $valueCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -451,8 +472,11 @@ trait CollectionTrait
     /**
      * IntersectAssoc with custom key and value comparator
      */
-    public function intersectAssocAll(callable $valueCallback, callable $keyCallback, iterable ...$arrays): Collection
-    {
+    public function intersectAssocAll(
+        callable $valueCallback,
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -482,8 +506,10 @@ trait CollectionTrait
     /**
      * IntersectValues with custom value comparator
      */
-    public function intersectValuesBy(callable $valueCallback, iterable ...$arrays): Collection
-    {
+    public function intersectValuesBy(
+        callable $valueCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -512,8 +538,10 @@ trait CollectionTrait
     /**
      * IntersectKeys with custom key comparator
      */
-    public function intersectKeysBy(callable $keyCallback, iterable ...$arrays): Collection
-    {
+    public function intersectKeysBy(
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -544,8 +572,10 @@ trait CollectionTrait
     /**
      * Combine collection with passed arrays via callback
      */
-    public function map(callable $callback, iterable ...$arrays): Collection
-    {
+    public function map(
+        callable $callback,
+        iterable ...$arrays
+    ): Collection {
         return $this->propagate(array_map(
             $callback,
             $this->items,
@@ -584,8 +614,10 @@ trait CollectionTrait
     /**
      * Whittle down collection to single value
      */
-    public function reduce(callable $callback, $initial = null)
-    {
+    public function reduce(
+        callable $callback,
+        mixed $initial = null
+    ): mixed {
         return array_reduce($this->items, $callback, $initial);
     }
 
@@ -646,8 +678,10 @@ trait CollectionTrait
     /**
      * Combine a column with optional key column into single array
      */
-    public function pluck(string $valueKey, string $indexKey = null): array
-    {
+    public function pluck(
+        string $valueKey,
+        string $indexKey = null
+    ): array {
         return array_column($this->items, $valueKey, $indexKey);
     }
 
@@ -658,8 +692,10 @@ trait CollectionTrait
     /**
      * Set by array access
      */
-    public function offsetSet($key, $value): void
-    {
+    public function offsetSet(
+        mixed $key,
+        mixed $value
+    ): void {
         if ($key === null) {
             if ($this instanceof Sequence) {
                 $this->push($value);
@@ -675,7 +711,7 @@ trait CollectionTrait
     /**
      * Get by array access
      */
-    public function offsetGet($key)
+    public function offsetGet(mixed $key): mixed
     {
         return $this->get($key);
     }
@@ -683,7 +719,7 @@ trait CollectionTrait
     /**
      * Check by array access
      */
-    public function offsetExists($key): bool
+    public function offsetExists(mixed $key): bool
     {
         return $this->has($key);
     }
@@ -691,7 +727,7 @@ trait CollectionTrait
     /**
      * Remove by array access
      */
-    public function offsetUnset($key): void
+    public function offsetUnset(mixed $key): void
     {
         $this->remove($key);
     }
@@ -747,5 +783,5 @@ trait CollectionTrait
      *
      * @phpstan-return static<TKey, TValue>
      */
-    abstract protected static function propagate(iterable $newItems = []): Collection;
+    abstract protected static function propagate(iterable $newItems = []): static;
 }

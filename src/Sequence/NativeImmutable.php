@@ -19,7 +19,9 @@ use IteratorAggregate;
  * @implements Sequence<TValue>
  * @implements IteratorAggregate<int, TValue>
  */
-class NativeImmutable implements IteratorAggregate, Sequence
+class NativeImmutable implements
+    IteratorAggregate,
+    Sequence
 {
     /**
      * @use SequenceTrait<TValue>
