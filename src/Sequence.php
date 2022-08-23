@@ -18,24 +18,30 @@ interface Sequence extends Collection, Sortable
     /**
      * @phpstan-return TValue|null
      */
-    public function get(int $key);
+    public function get(int $key): mixed;
 
     /**
      * @phpstan-return TValue|null
      */
-    public function pull(int $key);
+    public function pull(int $key): mixed;
 
     /**
      * @phpstan-param TValue $value
      * @phpstan-return static<TValue>
      */
-    public function set(int $key, $value): Sequence;
+    public function set(
+        int $key,
+        mixed $value
+    ): Sequence;
 
     /**
      * @phpstan-param TValue $value
      * @phpstan-return static<TValue>
      */
-    public function put(int $key, $value): Sequence;
+    public function put(
+        int $key,
+        mixed $value
+    ): Sequence;
 
     public function has(int ...$keys): bool;
     public function hasAll(int ...$keys): bool;
@@ -56,7 +62,10 @@ interface Sequence extends Collection, Sortable
     /**
      * @phpstan-param TValue $value
      */
-    public function findKey($value, bool $strict = false): ?int;
+    public function findKey(
+        mixed $value,
+        bool $strict = false
+    ): ?int;
 
 
     /**
@@ -73,7 +82,10 @@ interface Sequence extends Collection, Sortable
     /**
      * @phpstan-return static<TValue>
      */
-    public function collapse(bool $unique = false, bool $removeNull = false): Sequence;
+    public function collapse(
+        bool $unique = false,
+        bool $removeNull = false
+    ): Sequence;
 
 
 
@@ -81,13 +93,16 @@ interface Sequence extends Collection, Sortable
      * @phpstan-param TValue $value
      * @phpstan-return static<TValue>
      */
-    public function fill($value): Sequence;
+    public function fill(mixed $value): Sequence;
 
     /**
      * @phpstan-param TValue $value
      * @phpstan-return static<TValue>
      */
-    public static function createFill(int $length, $value): Sequence;
+    public static function createFill(
+        int $length,
+        mixed $value
+    ): Sequence;
 
 
     /**
@@ -120,33 +135,51 @@ interface Sequence extends Collection, Sortable
      * @phpstan-param TValue|null $value
      * @phpstan-return static<TValue>
      */
-    public function padLeft(int $size, $value = null): Sequence;
+    public function padLeft(
+        int $size,
+        mixed $value = null
+    ): Sequence;
 
     /**
      * @phpstan-param TValue|null $value
      * @phpstan-return static<TValue>
      */
-    public function padRight(int $size, $value = null): Sequence;
+    public function padRight(
+        int $size,
+        mixed $value = null
+    ): Sequence;
 
     /**
      * @phpstan-param TValue|null $value
      * @phpstan-return static<TValue>
      */
-    public function padBoth(int $size, $value = null): Sequence;
+    public function padBoth(
+        int $size,
+        mixed $value = null
+    ): Sequence;
 
 
     /**
      * @param static<TValue>|null $removed
      * @phpstan-return static<TValue>
      */
-    public function removeSlice(int $offset, int $length = null, Sequence &$removed = null): Sequence;
+    public function removeSlice(
+        int $offset,
+        int $length = null,
+        Sequence &$removed = null
+    ): Sequence;
 
     /**
      * @param iterable<TValue> $replacement
      * @param static<TValue>|null $removed
      * @phpstan-return static<TValue>
      */
-    public function replaceSlice(int $offset, int $length = null, iterable $replacement, Sequence &$removed = null): Sequence;
+    public function replaceSlice(
+        int $offset,
+        int $length = null,
+        iterable $replacement,
+        Sequence &$removed = null
+    ): Sequence;
 
 
     /**
@@ -156,20 +189,28 @@ interface Sequence extends Collection, Sortable
 
 
     /**
-     * @param mixed $data
      * @phpstan-return static<TValue>
      */
-    public function walk(callable $callback, $data = null): Sequence;
+    public function walk(
+        callable $callback,
+        mixed $data = null
+    ): Sequence;
 
     /**
-     * @param mixed $data
      * @phpstan-return static<TValue>
      */
-    public function walkRecursive(callable $callback, $data = null): Sequence;
+    public function walkRecursive(
+        callable $callback,
+        mixed $data = null
+    ): Sequence;
 
 
     /**
      * @return static<int>
      */
-    public static function createRange(int $start, int $end, int $step = 1): Sequence;
+    public static function createRange(
+        int $start,
+        int $end,
+        int $step = 1
+    ): Sequence;
 }

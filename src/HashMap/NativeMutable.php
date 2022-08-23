@@ -19,7 +19,9 @@ use IteratorAggregate;
  * @implements HashMap<TValue>
  * @implements IteratorAggregate<int|string, TValue>
  */
-class NativeMutable implements IteratorAggregate, HashMap
+class NativeMutable implements
+    IteratorAggregate,
+    HashMap
 {
     /**
      * @use HashMapTrait<TValue>

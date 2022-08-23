@@ -27,7 +27,9 @@ use IteratorAggregate;
  * @implements Tree<TValue>
  * @implements IteratorAggregate<int|string, static>
  */
-class NativeMutable implements IteratorAggregate, Tree
+class NativeMutable implements
+    IteratorAggregate,
+    Tree
 {
     /**
      * @use HashMapTrait<TValue>
@@ -40,18 +42,20 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * @phpstan-var TValue|null
      */
-    protected $value;
+    protected mixed $value;
 
     /**
      * @phpstan-var array<int|string, static<TValue>>
      */
-    protected $items = [];
+    protected array $items = [];
 
     /**
      * Value based construct
      */
-    public function __construct(iterable $items = null, $value = null)
-    {
+    public function __construct(
+        iterable $items = null,
+        mixed $value = null
+    ) {
         if (!is_iterable($value)) {
             $this->value = $value;
         }
@@ -70,7 +74,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Clone whole tree
      */
-    public function __clone()
+    public function __clone(): void
     {
         foreach ($this->items as $key => $child) {
             $this->items[$key] = clone $child;
@@ -82,15 +86,17 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Set node value
      */
-    public function __set($key, $value): void
-    {
+    public function __set(
+        int|string $key,
+        mixed $value
+    ): void {
         $this->items[$key] = new static(null, $value);
     }
 
     /**
      * Get node
      */
-    public function __get($key): Tree
+    public function __get(int|string $key): Tree
     {
         if (!array_key_exists($key, $this->items)) {
             $this->items[$key] = new static();
@@ -102,7 +108,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Check for node
      */
-    public function __isset($key): bool
+    public function __isset(int|string $key): bool
     {
         return array_key_exists($key, $this->items);
     }
@@ -110,7 +116,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Remove node
      */
-    public function __unset($key): void
+    public function __unset(int|string $key): void
     {
         unset($this->items[$key]);
     }
@@ -120,8 +126,10 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Set value by dot access
      */
-    public function setNode($key, $value): Tree
-    {
+    public function setNode(
+        int|string $key,
+        mixed $value
+    ): Tree {
         $node = $this->getNode($key);
 
         if (is_iterable($value)) {
@@ -137,7 +145,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Get node by dot access
      */
-    public function getNode($key): Tree
+    public function getNode(int|string $key): Tree
     {
         if (empty(static::KEY_SEPARATOR)) {
             return $this->__get($key);
@@ -156,7 +164,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * True if any provided keys exist as a node
      */
-    public function hasNode(...$keys): bool
+    public function hasNode(int|string ...$keys): bool
     {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
@@ -187,7 +195,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * True if all provided keys exist as a node
      */
-    public function hasAllNodes(...$keys): bool
+    public function hasAllNodes(int|string ...$keys): bool
     {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
@@ -217,10 +225,9 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Split node key string
      *
-     * @param int|string $key
      * @return array<int|string>
      */
-    protected function splitNodeKey($key): array
+    protected function splitNodeKey(int|string $key): array
     {
         $parts = false;
 
@@ -241,7 +248,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Get value
      */
-    public function get($key)
+    public function get(int|string $key): mixed
     {
         return $this->getNode($key)->getValue();
     }
@@ -251,7 +258,7 @@ class NativeMutable implements IteratorAggregate, Tree
      *
      * @phpstan-return TValue|null
      */
-    public function pull($key)
+    public function pull(int|string $key): mixed
     {
         $node = $this->getNode($key);
         $output = $node->pullValue();
@@ -266,8 +273,10 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Set value on node
      */
-    public function set($key, $value): HashMap
-    {
+    public function set(
+        int|string $key,
+        mixed $value
+    ): HashMap {
         $this->getNode($key)->setValue($value);
         return $this;
     }
@@ -275,7 +284,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * True if any provided keys have a set value (not null)
      */
-    public function has(...$keys): bool
+    public function has(int|string ...$keys): bool
     {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
@@ -311,7 +320,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * True if all provided keys have a set value (not null)
      */
-    public function hasAll(...$keys): bool
+    public function hasAll(int|string ...$keys): bool
     {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
@@ -348,7 +357,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Pull first item
      */
-    public function pop()
+    public function pop(): mixed
     {
         $node = array_pop($this->items);
 
@@ -362,7 +371,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Pull last item
      */
-    public function shift()
+    public function shift(): mixed
     {
         $node = array_shift($this->items);
 
@@ -393,8 +402,10 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Lookup a key by value
      */
-    public function findKey($value, bool $strict = false): ?string
-    {
+    public function findKey(
+        mixed $value,
+        bool $strict = false
+    ): ?string {
         foreach ($this->items as $key => $node) {
             if ($node->isValue($value, $strict)) {
                 return (string)$key;
@@ -423,8 +434,10 @@ class NativeMutable implements IteratorAggregate, Tree
      *
      * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
-    public function offsetSet($key, $value): void
-    {
+    public function offsetSet(
+        mixed $key,
+        mixed $value
+    ): void {
         if ($key === null) {
             $this->items[] = new static(null, $value);
         } elseif (is_iterable($value)) {
@@ -438,7 +451,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Get by array access
      */
-    public function offsetGet($key)
+    public function offsetGet(mixed $key): mixed
     {
         return $this->getNode($key)->getValue();
     }
@@ -446,7 +459,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Check by array access
      */
-    public function offsetExists($key): bool
+    public function offsetExists(mixed $key): bool
     {
         return $this->getNode($key)->hasValue();
     }
@@ -456,16 +469,21 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Get node and return value sanitizer
      */
-    public function sanitize($key, bool $required = true): Sanitizer
-    {
+    public function sanitize(
+        int|string $key,
+        bool $required = true
+    ): Sanitizer {
         return $this->getNode($key)->sanitizeValue($required);
     }
 
     /**
      * Get node and sanitize with custom sanitizer
      */
-    public function sanitizeWith($key, callable $sanitizer, bool $required = true)
-    {
+    public function sanitizeWith(
+        int|string $key,
+        callable $sanitizer,
+        bool $required = true
+    ): mixed {
         return $this->getNode($key)->sanitizeValue($required)->with($sanitizer);
     }
 
@@ -480,8 +498,10 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Sanitize value with custom sanitizer
      */
-    public function sanitizeValueWith(callable $sanitizer, bool $required = true)
-    {
+    public function sanitizeValueWith(
+        callable $sanitizer,
+        bool $required = true
+    ): mixed {
         return $this->sanitizeValue($required)->with($sanitizer);
     }
 
@@ -491,7 +511,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Set container value
      */
-    public function setValue($value): Tree
+    public function setValue(mixed $value): Tree
     {
         if (is_iterable($value)) {
             /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $value */
@@ -505,7 +525,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Get container value
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
@@ -513,7 +533,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Get container value and remove
      */
-    public function pullValue()
+    public function pullValue(): mixed
     {
         $output = $this->value;
         $this->value = null;
@@ -549,8 +569,10 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Compare value
      */
-    public function isValue($value, bool $strict): bool
-    {
+    public function isValue(
+        mixed $value,
+        bool $strict
+    ): bool {
         if ($strict) {
             return $value === $this->value;
         } else {
@@ -593,8 +615,11 @@ class NativeMutable implements IteratorAggregate, Tree
      *
      * @return static<string>
      */
-    public static function fromDelimitedString(string $string, string $setDelimiter = '&', string $valueDelimiter = '='): Tree
-    {
+    public static function fromDelimitedString(
+        string $string,
+        string $setDelimiter = '&',
+        string $valueDelimiter = '='
+    ): Tree {
         if (
             $setDelimiter === '' ||
             $valueDelimiter === ''
@@ -629,8 +654,10 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * To query string
      */
-    public function toDelimitedString(string $setDelimiter = '&', string $valueDelimiter = '='): string
-    {
+    public function toDelimitedString(
+        string $setDelimiter = '&',
+        string $valueDelimiter = '='
+    ): string {
         $output = [];
 
         foreach ($this->toDelimitedSet(true) as $key => $value) {
@@ -649,8 +676,10 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Convert to delimited set
      */
-    public function toDelimitedSet(bool $urlEncode = false, string $prefix = null): array
-    {
+    public function toDelimitedSet(
+        bool $urlEncode = false,
+        string $prefix = null
+    ): array {
         $output = [];
 
         if (
@@ -706,7 +735,7 @@ class NativeMutable implements IteratorAggregate, Tree
     /**
      * Replace all values with $value
      */
-    public function fill($value): HashMap
+    public function fill(mixed $value): HashMap
     {
         $result = array_fill_keys(array_keys($this->items), $value);
         return $this->clear()->merge($result);
@@ -918,10 +947,11 @@ class NativeMutable implements IteratorAggregate, Tree
      *
      * @phpstan-param iterable<int|string, TValue|iterable<mixed>> $newItems
      * @phpstan-param TValue|null $value
-     * @phpstan-return static<TValue>
      */
-    protected static function propagate(?iterable $newItems = [], $value = null): Tree
-    {
+    protected static function propagate(
+        ?iterable $newItems = [],
+        mixed $value = null
+    ): static {
         return new static($newItems, $value);
     }
 }

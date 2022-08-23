@@ -21,7 +21,12 @@ use JsonSerializable;
  * @extends ArrayProvider<TKey, TValue>
  * @extends ArrayAccess<TKey, TValue>
  */
-interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAccess, Then
+interface Collection extends
+    ArrayProvider,
+    JsonSerializable,
+    Countable,
+    ArrayAccess,
+    Then
 {
     public function isEmpty(): bool;
     public function isMutable(): bool;
@@ -34,76 +39,73 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
     /**
      * @phpstan-return TValue|null
      */
-    public function getFirst(callable $filter = null);
+    public function getFirst(callable $filter = null): mixed;
 
     /**
      * @phpstan-return TValue|null
      */
-    public function getLast(callable $filter = null);
+    public function getLast(callable $filter = null): mixed;
 
 
     /**
      * @phpstan-param TValue ...$values
      * @phpstan-return static<TKey, TValue>
      */
-    public function push(...$values): Collection;
+    public function push(mixed ...$values): Collection;
 
     /**
      * @phpstan-return TValue|null
      */
-    public function pop();
+    public function pop(): mixed;
 
     /**
      * @phpstan-param TValue ...$values
      * @phpstan-return static<TKey, TValue>
      */
-    public function unshift(...$values): Collection;
+    public function unshift(mixed ...$values): Collection;
 
     /**
      * @phpstan-return TValue|null
      */
-    public function shift();
+    public function shift(): mixed;
 
     /**
      * @phpstan-param TValue ...$values
      * @phpstan-return static<TKey, TValue>
      */
-    public function append(...$values): Collection;
+    public function append(mixed ...$values): Collection;
 
     /**
      * @phpstan-param TValue ...$values
      * @phpstan-return static<TKey, TValue>
      */
-    public function prepend(...$values): Collection;
+    public function prepend(mixed ...$values): Collection;
 
-
-    /**
-     * @return mixed
-     */
-    public function getRandom();
-
+    public function getRandom(): mixed;
 
     /**
      * @phpstan-return array<TKey>
      */
     public function getKeys(): array;
 
+    public function contains(
+        mixed $value,
+        bool $strict = false
+    ): bool;
 
-    /**
-     * @param mixed $value
-     */
-    public function contains($value, bool $strict = false): bool;
-
-    /**
-     * @param mixed $value
-     */
-    public function containsRecursive($value, bool $strict = false): bool;
+    public function containsRecursive(
+        mixed $value,
+        bool $strict = false
+    ): bool;
 
 
     /**
      * @phpstan-return static<TKey, TValue>
      */
-    public function slice(int $offset, int $length = null): Collection;
+    public function slice(
+        int $offset,
+        int $length = null
+    ): Collection;
 
     /**
      * @phpstan-return static<TKey, TValue>
@@ -137,19 +139,29 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function diffAssocBy(callable $keyCallback, iterable ...$arrays): Collection; // array_diff_uassoc
+    public function diffAssocBy(
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection; // array_diff_uassoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function diffAssocByValue(callable $valueCallback, iterable ...$arrays): Collection; // array_udiff_assoc
+    public function diffAssocByValue(
+        callable $valueCallback,
+        iterable ...$arrays
+    ): Collection; // array_udiff_assoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function diffAssocAll(callable $valueCallback, callable $keyCallback, iterable ...$arrays): Collection; // array_udiff_uassoc
+    public function diffAssocAll(
+        callable $valueCallback,
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection; // array_udiff_uassoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
@@ -161,7 +173,10 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function diffValuesBy(callable $valueCallback, iterable ...$arrays): Collection; // array_udiff
+    public function diffValuesBy(
+        callable $valueCallback,
+        iterable ...$arrays
+    ): Collection; // array_udiff
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
@@ -173,7 +188,10 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function diffKeysBy(callable $keyCallback, iterable ...$arrays): Collection; // array_diff_ukey
+    public function diffKeysBy(
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection; // array_diff_ukey
 
 
     /**
@@ -186,19 +204,29 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function intersectAssocBy(callable $keyCallback, iterable ...$arrays): Collection; // array_intersect_uassoc
+    public function intersectAssocBy(
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection; // array_intersect_uassoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function intersectAssocByValue(callable $valueCallback, iterable ...$arrays): Collection; // array_uintersect_assoc
+    public function intersectAssocByValue(
+        callable $valueCallback,
+        iterable ...$arrays
+    ): Collection; // array_uintersect_assoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function intersectAssocAll(callable $valueCallback, callable $keyCallback, iterable ...$arrays): Collection; // array_uintersect_uassoc
+    public function intersectAssocAll(
+        callable $valueCallback,
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection; // array_uintersect_uassoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
@@ -210,7 +238,10 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function intersectValuesBy(callable $valueCallback, iterable ...$arrays): Collection; // array_uintersect
+    public function intersectValuesBy(
+        callable $valueCallback,
+        iterable ...$arrays
+    ): Collection; // array_uintersect
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
@@ -222,7 +253,10 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
      * @phpstan-param iterable<TKey, TValue> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function intersectKeysBy(callable $keyCallback, iterable ...$arrays): Collection; // array_intersect_ukey
+    public function intersectKeysBy(
+        callable $keyCallback,
+        iterable ...$arrays
+    ): Collection; // array_intersect_ukey
 
 
     /**
@@ -234,18 +268,20 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
      * @param iterable<string|int, mixed> ...$arrays
      * @phpstan-return static<TKey, TValue>
      */
-    public function map(callable $callback, iterable ...$arrays): Collection;
+    public function map(
+        callable $callback,
+        iterable ...$arrays
+    ): Collection;
 
     /**
      * @phpstan-return static<TKey, TValue>
      */
     public function mapSelf(callable $callback): Collection;
 
-    /**
-     * @param mixed $initial
-     * @return mixed
-     */
-    public function reduce(callable $callback, $initial = null);
+    public function reduce(
+        callable $callback,
+        mixed $initial = null
+    ): mixed;
 
 
     public function getSum(callable $filter = null): float;
@@ -256,5 +292,8 @@ interface Collection extends ArrayProvider, JsonSerializable, Countable, ArrayAc
     /**
      * @return array<mixed>
      */
-    public function pluck(string $valueKey, string $indexKey = null): array;
+    public function pluck(
+        string $valueKey,
+        string $indexKey = null
+    ): array;
 }

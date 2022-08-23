@@ -17,5 +17,5 @@ interface ValueProvider
     /**
      * @phpstan-return TValue|null
      */
-    public function getValue();
+    public function getValue(): mixed;
 }

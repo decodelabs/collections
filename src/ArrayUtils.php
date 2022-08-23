@@ -22,8 +22,12 @@ class ArrayUtils
      * @param iterable<string|int, mixed> $data
      * @return array<string|int, mixed>
      */
-    public static function collapse(iterable $data, bool $keepKeys = true, bool $unique = false, bool $removeNull = false): array
-    {
+    public static function collapse(
+        iterable $data,
+        bool $keepKeys = true,
+        bool $unique = false,
+        bool $removeNull = false
+    ): array {
         $output = [];
         $sort = SORT_STRING;
 
@@ -83,8 +87,10 @@ class ArrayUtils
      * @param iterable<string|int, mixed> $data
      * @return Generator<string|int, mixed>
      */
-    public static function scanValues(iterable $data, bool $removeNull = false): Generator
-    {
+    public static function scanValues(
+        iterable $data,
+        bool $removeNull = false
+    ): Generator {
         foreach ($data as $key => $value) {
             if ($isIterable = is_iterable($value)) {
                 $children = $value;
@@ -134,8 +140,11 @@ class ArrayUtils
      * @phpstan-param iterable<TKey, TValue> $data
      * @phpstan-return TValue|null
      */
-    public static function getFirst(iterable $data, callable $filter = null, object $callbackTarget = null)
-    {
+    public static function getFirst(
+        iterable $data,
+        callable $filter = null,
+        object $callbackTarget = null
+    ): mixed {
         foreach ($data as $key => $item) {
             if ($filter !== null && !$filter($item, $key, $callbackTarget)) {
                 continue;
@@ -155,8 +164,11 @@ class ArrayUtils
      * @phpstan-param iterable<TKey, TValue> $data
      * @phpstan-return TValue|null
      */
-    public static function getLast(iterable $data, callable $filter = null, object $callbackTarget = null)
-    {
+    public static function getLast(
+        iterable $data,
+        callable $filter = null,
+        object $callbackTarget = null
+    ): mixed {
         $array = self::iterableToArray($data);
 
         if (!$filter) {
@@ -178,7 +190,7 @@ class ArrayUtils
      * @phpstan-param array<TKey, TValue> $array
      * @phpstan-return TValue
      */
-    public static function getRandom(array $array)
+    public static function getRandom(array $array): mixed
     {
         if (empty($array)) {
             throw Exceptional::Underflow(
@@ -197,8 +209,10 @@ class ArrayUtils
      * @phpstan-param array<TKey, TValue> $array
      * @phpstan-return array<TKey, TValue>
      */
-    public static function sliceRandom(array $array, int $number): array
-    {
+    public static function sliceRandom(
+        array $array,
+        int $number
+    ): array {
         $count = count($array);
 
         if ($number < 1) {
@@ -241,8 +255,10 @@ class ArrayUtils
      * @phpstan-param array<TKey> $keys
      * @phpstan-return array<TKey, TValue>
      */
-    public static function intersectKeys(array $array, array $keys): array
-    {
+    public static function intersectKeys(
+        array $array,
+        array $keys
+    ): array {
         return array_intersect_key($array, array_flip($keys));
     }
 
@@ -254,8 +270,10 @@ class ArrayUtils
      * @phpstan-param array<TKey, TValue> $array
      * @phpstan-return array<TKey, TValue>
      */
-    public static function filter(array $array, callable $filter): array
-    {
+    public static function filter(
+        array $array,
+        callable $filter
+    ): array {
         return array_filter($array, $filter, ARRAY_FILTER_USE_BOTH);
     }
 
@@ -308,11 +326,13 @@ class ArrayUtils
     /**
      * Multi dimensional in_array
      *
-     * @param mixed $value
      * @param array<string|int, mixed> $array
      */
-    public static function inArrayRecursive($value, array $array, bool $strict = false): bool
-    {
+    public static function inArrayRecursive(
+        mixed $value,
+        array $array,
+        bool $strict = false
+    ): bool {
         if (in_array($value, $array, $strict)) {
             return true;
         }
@@ -343,8 +363,10 @@ class ArrayUtils
     /**
      * @param array<string|int, mixed> $array
      */
-    private static function exportLevel(array $array, int $level): string
-    {
+    private static function exportLevel(
+        array $array,
+        int $level
+    ): string {
         $output = '[' . "\n";
 
         $i = 0;

@@ -16,96 +16,87 @@ use DecodeLabs\Gadgets\Sanitizer;
  * @extends HashMap<TValue>
  * @extends ValueProvider<TValue>
  */
-interface Tree extends HashMap, ValueProvider
+interface Tree extends
+    HashMap,
+    ValueProvider
 {
     /**
      * @param iterable<int|string, TValue|iterable<mixed>>|null $items
      * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
-    public function __construct(iterable $items = null, $value = null);
+    public function __construct(
+        iterable $items = null,
+        mixed $value = null
+    );
 
     /**
-     * @param int|string $key
      * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
-    public function __set($key, $value): void;
+    public function __set(
+        int|string $key,
+        mixed $value
+    ): void;
 
     /**
-     * @param int|string $key
      * @phpstan-return static<TValue>
      */
-    public function __get($key): Tree;
+    public function __get(int|string $key): Tree;
+    public function __isset(int|string $key): bool;
+    public function __unset(int|string $key): void;
 
     /**
-     * @param int|string $key
-     */
-    public function __isset($key): bool;
-
-    /**
-     * @param int|string $key
-     */
-    public function __unset($key): void;
-
-    /**
-     * @param int|string $key
      * @phpstan-param TValue|iterable<TValue>|null $value
      * @phpstan-return static<TValue>
      */
-    public function setNode($key, $value): Tree;
+    public function setNode(
+        int|string $key,
+        mixed $value
+    ): Tree;
 
     /**
-     * @param int|string $key
      * @phpstan-return static<TValue>
      */
-    public function getNode($key): Tree;
+    public function getNode(int|string $key): Tree;
+    public function hasNode(int|string ...$keys): bool;
+    public function hasAllNodes(int|string ...$keys): bool;
 
-    /**
-     * @param int|string ...$keys
-     */
-    public function hasNode(...$keys): bool;
+    public function sanitize(
+        int|string $key,
+        bool $required = true
+    ): Sanitizer;
 
-    /**
-     * @param int|string ...$keys
-     */
-    public function hasAllNodes(...$keys): bool;
-
-    /**
-     * @param int|string $key
-     */
-    public function sanitize($key, bool $required = true): Sanitizer;
-
-    /**
-     * @param int|string $key
-     * @return mixed
-     */
-    public function sanitizeWith($key, callable $sanitizer, bool $required = true);
+    public function sanitizeWith(
+        int|string $key,
+        callable $sanitizer,
+        bool $required = true
+    ): mixed;
 
     public function sanitizeValue(bool $required = true): Sanitizer;
 
-    /**
-     * @return mixed
-     */
-    public function sanitizeValueWith(callable $sanitizer, bool $required = true);
+    public function sanitizeValueWith(
+        callable $sanitizer,
+        bool $required = true
+    ): mixed;
 
 
     /**
      * @phpstan-return TValue|null
      */
-    public function pullValue();
+    public function pullValue(): mixed;
 
     /**
      * @phpstan-param TValue|null $value
      * @phpstan-return static<TValue>
      */
-    public function setValue($value): Tree;
+    public function setValue(mixed $value): Tree;
 
     public function hasValue(): bool;
     public function hasAnyValue(): bool;
 
-    /**
-     * @param mixed $value
-     */
-    public function isValue($value, bool $strict): bool;
+    public function isValue(
+        mixed $value,
+        bool $strict
+    ): bool;
 
     /**
      * @phpstan-return static<TValue>
@@ -116,14 +107,24 @@ interface Tree extends HashMap, ValueProvider
     /**
      * @return static<string>
      */
-    public static function fromDelimitedString(string $string, string $setDelimiter = '&', string $valueDelimiter = '='): Tree;
+    public static function fromDelimitedString(
+        string $string,
+        string $setDelimiter = '&',
+        string $valueDelimiter = '='
+    ): Tree;
 
-    public function toDelimitedString(string $setDelimiter = '&', string $valueDelimiter = '='): string;
+    public function toDelimitedString(
+        string $setDelimiter = '&',
+        string $valueDelimiter = '='
+    ): string;
 
     /**
      * @phpstan-return array<string, TValue|null>
      */
-    public function toDelimitedSet(bool $urlEncode = false, string $prefix = null): array;
+    public function toDelimitedSet(
+        bool $urlEncode = false,
+        string $prefix = null
+    ): array;
 
     /**
      * @phpstan-return array<static<TValue>>

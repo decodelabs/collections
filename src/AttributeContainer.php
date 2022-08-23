@@ -29,10 +29,12 @@ interface AttributeContainer
     public function getAttributes(): array;
 
     /**
-     * @param mixed $value
      * @return $this
      */
-    public function setAttribute(string $key, $value): AttributeContainer;
+    public function setAttribute(
+        string $key,
+        mixed $value
+    ): AttributeContainer;
 
     /**
      * @return mixed

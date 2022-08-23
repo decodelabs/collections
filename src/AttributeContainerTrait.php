@@ -11,7 +11,10 @@ namespace DecodeLabs\Collections;
 
 trait AttributeContainerTrait
 {
-    protected $attributes = [];
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $attributes = [];
 
     /**
      * Add attributes with map
@@ -44,8 +47,10 @@ trait AttributeContainerTrait
     /**
      * Replace single value
      */
-    public function setAttribute(string $key, $value): AttributeContainer
-    {
+    public function setAttribute(
+        string $key,
+        mixed $value
+    ): AttributeContainer {
         $this->attributes[$key] = $value;
         return $this;
     }
@@ -53,7 +58,7 @@ trait AttributeContainerTrait
     /**
      * Retrieve attribute value if set
      */
-    public function getAttribute(string $key)
+    public function getAttribute(string $key): mixed
     {
         return $this->attributes[$key] ?? null;
     }

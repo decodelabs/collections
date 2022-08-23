@@ -13,65 +13,52 @@ namespace DecodeLabs\Collections;
  * @template TValue
  * @extends Collection<int|string, TValue>
  */
-interface HashMap extends Collection, Sortable
+interface HashMap extends
+    Collection,
+    Sortable
 {
     /**
-     * @param int|string $key
      * @phpstan-return TValue|null
      */
-    public function get($key);
+    public function get(int|string $key): mixed;
 
     /**
-     * @param int|string $key
      * @phpstan-return TValue|null
      */
-    public function pull($key);
+    public function pull(int|string $key): mixed;
 
     /**
-     * @param int|string $key
      * @phpstan-param TValue $value
      * @phpstan-return static<TValue>
      */
-    public function set($key, $value): HashMap;
+    public function set(
+        int|string $key,
+        mixed $value
+    ): HashMap;
+
+    public function has(int|string ...$keys): bool;
+    public function hasAll(int|string ...$keys): bool;
+    public function hasKey(int|string ...$keys): bool;
+    public function hasKeys(int|string ...$keys): bool;
 
     /**
-     * @param int|string ...$keys
-     */
-    public function has(...$keys): bool;
-
-    /**
-     * @param int|string ...$keys
-     */
-    public function hasAll(...$keys): bool;
-
-    /**
-     * @param int|string ...$keys
-     */
-    public function hasKey(...$keys): bool;
-
-    /**
-     * @param int|string ...$keys
-     */
-    public function hasKeys(...$keys): bool;
-
-    /**
-     * @param int|string ...$keys
      * @phpstan-return static<TValue>
      */
-    public function remove(...$keys): HashMap;
+    public function remove(int|string ...$keys): HashMap;
 
     /**
-     * @param int|string ...$keys
      * @phpstan-return static<TValue>
      */
-    public function keep(...$keys): HashMap;
+    public function keep(int|string ...$keys): HashMap;
 
 
     /**
      * @phpstan-param TValue $value
-     * @return int|string|null
      */
-    public function findKey($value, bool $strict = false);
+    public function findKey(
+        mixed $value,
+        bool $strict = false
+    ): int|string|null;
 
     /**
      * @phpstan-return static<TValue>
@@ -87,12 +74,18 @@ interface HashMap extends Collection, Sortable
     /**
      * @phpstan-return static<TValue>
      */
-    public function collapse(bool $unique = false, bool $removeNull = false): HashMap;
+    public function collapse(
+        bool $unique = false,
+        bool $removeNull = false
+    ): HashMap;
 
     /**
      * @phpstan-return static<TValue>
      */
-    public function collapseValues(bool $unique = false, bool $removeNull = false): HashMap;
+    public function collapseValues(
+        bool $unique = false,
+        bool $removeNull = false
+    ): HashMap;
 
 
 
@@ -157,14 +150,23 @@ interface HashMap extends Collection, Sortable
      * @param static<TValue>|null $removed
      * @phpstan-return static<TValue>
      */
-    public function removeSlice(int $offset, int $length = null, HashMap &$removed = null): HashMap;
+    public function removeSlice(
+        int $offset,
+        int $length = null,
+        HashMap &$removed = null
+    ): HashMap;
 
     /**
      * @param iterable<int|string, TValue> $replacement
      * @param static<TValue>|null $removed
      * @phpstan-return static<TValue>
      */
-    public function replaceSlice(int $offset, int $length = null, iterable $replacement, HashMap &$removed = null): HashMap;
+    public function replaceSlice(
+        int $offset,
+        int $length = null,
+        iterable $replacement,
+        HashMap &$removed = null
+    ): HashMap;
 
     /**
      * @phpstan-return static<TValue>
@@ -173,14 +175,18 @@ interface HashMap extends Collection, Sortable
 
 
     /**
-     * @param mixed $data
      * @phpstan-return static<TValue>
      */
-    public function walk(callable $callback, $data = null): HashMap;
+    public function walk(
+        callable $callback,
+        mixed $data = null
+    ): HashMap;
 
     /**
-     * @param mixed $data
      * @phpstan-return static<TValue>
      */
-    public function walkRecursive(callable $callback, $data = null): HashMap;
+    public function walkRecursive(
+        callable $callback,
+        mixed $data = null
+    ): HashMap;
 }
