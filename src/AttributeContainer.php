@@ -36,10 +36,7 @@ interface AttributeContainer
         mixed $value
     ): AttributeContainer;
 
-    /**
-     * @return mixed
-     */
-    public function getAttribute(string $key);
+    public function getAttribute(string $key): mixed;
 
     /**
      * @return $this
