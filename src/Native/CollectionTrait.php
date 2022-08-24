@@ -783,5 +783,5 @@ trait CollectionTrait
      *
      * @phpstan-return static<TKey, TValue>
      */
-    abstract protected static function propagate(iterable $newItems = []): static;
+    abstract protected static function propagate(iterable $newItems = []): Collection;
 }

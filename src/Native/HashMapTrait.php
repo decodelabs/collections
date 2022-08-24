@@ -410,11 +410,13 @@ trait HashMapTrait
      * Copy and reinitialise new object
      *
      * @template FValue
-     * @param iterable<int|string, FValue> $newItems
-     * @return static<FValue>
+     * @phpstan-param iterable<int|string, FValue> $newItems
+     * @phpstan-return static<FValue>
      */
-    protected static function propagate(iterable $newItems = []): self
+    protected static function propagate(iterable $newItems = []): HashMap
     {
-        return new self($newItems);
+        /** @var static<FValue> */
+        $output = new self($newItems);
+        return $output;
     }
 }

@@ -569,10 +569,12 @@ trait SequenceTrait
      *
      * @template FValue
      * @phpstan-param iterable<FValue> $newItems
-     * @return static<FValue>
+     * @phpstan-return static<FValue>
      */
-    protected static function propagate(iterable $newItems = []): self
+    protected static function propagate(iterable $newItems = []): Sequence
     {
-        return new self($newItems);
+        /** @var static<FValue> */
+        $output = new self($newItems);
+        return $output;
     }
 }
