@@ -14,79 +14,79 @@ interface Sortable
     /**
      * @return static
      */
-    public function sort(int $flags = \SORT_REGULAR): Sortable; // asort
+    public function sort(int $flags = \SORT_REGULAR): static; // asort
 
     /**
      * @return static
      */
-    public function reverseSort(int $flags = \SORT_REGULAR): Sortable; // arsort
+    public function reverseSort(int $flags = \SORT_REGULAR): static; // arsort
 
     /**
      * @return static
      */
-    public function sortBy(callable $callable): Sortable; // uasort
-
-
-    /**
-     * @return static
-     */
-    public function sortNatural(): Sortable; // natsort
-
-    /**
-     * @return static
-     */
-    public function sortCaseNatural(): Sortable; // natcasesort
+    public function sortBy(callable $callable): static; // uasort
 
 
     /**
      * @return static
      */
-    public function sortValues(int $flags = \SORT_REGULAR): Sortable; // sort
+    public function sortNatural(): static; // natsort
 
     /**
      * @return static
      */
-    public function reverseSortValues(int $flags = \SORT_REGULAR): Sortable; // rsort
-
-    /**
-     * @return static
-     */
-    public function sortValuesBy(callable $callback): Sortable; // usort
+    public function sortCaseNatural(): static; // natcasesort
 
 
     /**
      * @return static
      */
-    public function sortKeys(int $flags = \SORT_REGULAR): Sortable; // ksort
+    public function sortValues(int $flags = \SORT_REGULAR): static; // sort
 
     /**
      * @return static
      */
-    public function reverseSortKeys(int $flags = \SORT_REGULAR): Sortable; // krsort
+    public function reverseSortValues(int $flags = \SORT_REGULAR): static; // rsort
 
     /**
      * @return static
      */
-    public function sortKeysBy(callable $callback): Sortable; // uksort
+    public function sortValuesBy(callable $callback): static; // usort
 
 
     /**
      * @return static
      */
-    public function reverse(): Sortable; // array_reverse
+    public function sortKeys(int $flags = \SORT_REGULAR): static; // ksort
 
     /**
      * @return static
      */
-    public function reverseValues(): Sortable; // array_reverse
+    public function reverseSortKeys(int $flags = \SORT_REGULAR): static; // krsort
 
     /**
      * @return static
      */
-    public function shuffle(): Sortable; // kshuffle
+    public function sortKeysBy(callable $callback): static; // uksort
+
 
     /**
      * @return static
      */
-    public function shuffleValues(): Sortable; // shuffle
+    public function reverse(): static; // array_reverse
+
+    /**
+     * @return static
+     */
+    public function reverseValues(): static; // array_reverse
+
+    /**
+     * @return static
+     */
+    public function shuffle(): static; // kshuffle
+
+    /**
+     * @return static
+     */
+    public function shuffleValues(): static; // shuffle
 }

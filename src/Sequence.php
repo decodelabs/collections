@@ -29,36 +29,26 @@ interface Sequence extends
 
     /**
      * @phpstan-param TValue $value
-     * @phpstan-return static<TValue>
      */
     public function set(
         int $key,
         mixed $value
-    ): Sequence;
+    ): static;
 
     /**
      * @phpstan-param TValue $value
-     * @phpstan-return static<TValue>
      */
     public function put(
         int $key,
         mixed $value
-    ): Sequence;
+    ): static;
 
     public function has(int ...$keys): bool;
     public function hasAll(int ...$keys): bool;
     public function hasKey(int ...$keys): bool;
     public function hasKeys(int ...$keys): bool;
-
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function remove(int ...$keys): Sequence;
-
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function keep(int ...$keys): Sequence;
+    public function remove(int ...$keys): static;
+    public function keep(int ...$keys): static;
 
 
     /**
@@ -70,149 +60,113 @@ interface Sequence extends
     ): ?int;
 
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function clear(): Sequence;
+    public function clear(): static;
+    public function clearKeys(): static;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function clearKeys(): Sequence;
-
-
-    /**
-     * @phpstan-return static<TValue>
-     */
     public function collapse(
         bool $unique = false,
         bool $removeNull = false
-    ): Sequence;
+    ): static;
 
 
 
     /**
      * @phpstan-param TValue $value
-     * @phpstan-return static<TValue>
      */
-    public function fill(mixed $value): Sequence;
+    public function fill(mixed $value): static;
 
     /**
      * @phpstan-param TValue $value
-     * @phpstan-return static<TValue>
      */
     public static function createFill(
         int $length,
         mixed $value
-    ): Sequence;
+    ): static;
 
 
     /**
      * @param iterable<TValue> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function merge(iterable ...$arrays): Sequence;
+    public function merge(iterable ...$arrays): static;
 
     /**
      * @param iterable<TValue> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function mergeRecursive(iterable ...$arrays): Sequence;
+    public function mergeRecursive(iterable ...$arrays): static;
 
 
     /**
      * @param iterable<TValue> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function replace(iterable ...$arrays): Sequence;
+    public function replace(iterable ...$arrays): static;
 
     /**
      * @param iterable<TValue> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function replaceRecursive(iterable ...$arrays): Sequence;
+    public function replaceRecursive(iterable ...$arrays): static;
 
 
     /**
      * @phpstan-param TValue|null $value
-     * @phpstan-return static<TValue>
      */
     public function padLeft(
         int $size,
         mixed $value = null
-    ): Sequence;
+    ): static;
 
     /**
      * @phpstan-param TValue|null $value
-     * @phpstan-return static<TValue>
      */
     public function padRight(
         int $size,
         mixed $value = null
-    ): Sequence;
+    ): static;
 
     /**
      * @phpstan-param TValue|null $value
-     * @phpstan-return static<TValue>
      */
     public function padBoth(
         int $size,
         mixed $value = null
-    ): Sequence;
+    ): static;
 
 
     /**
      * @param static<TValue>|null $removed
-     * @phpstan-return static<TValue>
      */
     public function removeSlice(
         int $offset,
         int $length = null,
-        Sequence &$removed = null
-    ): Sequence;
+        ?Sequence &$removed = null
+    ): static;
 
     /**
      * @param iterable<TValue> $replacement
      * @param static<TValue>|null $removed
-     * @phpstan-return static<TValue>
      */
     public function replaceSlice(
         int $offset,
         int $length = null,
         iterable $replacement,
-        Sequence &$removed = null
-    ): Sequence;
+        ?Sequence &$removed = null
+    ): static;
 
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function unique(int $flags = SORT_STRING): Sequence;
+    public function unique(int $flags = SORT_STRING): static;
 
-
-    /**
-     * @phpstan-return static<TValue>
-     */
     public function walk(
         callable $callback,
         mixed $data = null
-    ): Sequence;
+    ): static;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
     public function walkRecursive(
         callable $callback,
         mixed $data = null
-    ): Sequence;
+    ): static;
 
-
-    /**
-     * @return static<int>
-     */
     public static function createRange(
         int $start,
         int $end,
         int $step = 1
-    ): Sequence;
+    ): static;
 }

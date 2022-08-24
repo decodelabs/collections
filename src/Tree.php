@@ -37,26 +37,19 @@ interface Tree extends
         mixed $value
     ): void;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function __get(int|string $key): Tree;
+    public function __get(int|string $key): static;
     public function __isset(int|string $key): bool;
     public function __unset(int|string $key): void;
 
     /**
      * @phpstan-param TValue|iterable<TValue>|null $value
-     * @phpstan-return static<TValue>
      */
     public function setNode(
         int|string $key,
         mixed $value
-    ): Tree;
+    ): static;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function getNode(int|string $key): Tree;
+    public function getNode(int|string $key): static;
     public function hasNode(int|string ...$keys): bool;
     public function hasAllNodes(int|string ...$keys): bool;
 
@@ -86,9 +79,8 @@ interface Tree extends
 
     /**
      * @phpstan-param TValue|null $value
-     * @phpstan-return static<TValue>
      */
-    public function setValue(mixed $value): Tree;
+    public function setValue(mixed $value): static;
 
     public function hasValue(): bool;
     public function hasAnyValue(): bool;
@@ -98,14 +90,11 @@ interface Tree extends
         bool $strict
     ): bool;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function removeEmpty(): Tree;
+    public function removeEmpty(): static;
 
 
     /**
-     * @return static<string>
+     * @return Tree<string>
      */
     public static function fromDelimitedString(
         string $string,

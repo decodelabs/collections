@@ -90,7 +90,7 @@ trait SequenceTrait
     public function set(
         int $key,
         mixed $value
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
         $key = min($this->normalizeKey($key), $count);
@@ -105,7 +105,7 @@ trait SequenceTrait
     public function put(
         int $key,
         mixed $value
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
         $key = $this->normalizeKey($key);
@@ -242,7 +242,7 @@ trait SequenceTrait
     /**
      * Remove all values associated with $keys
      */
-    public function remove(int ...$keys): Sequence
+    public function remove(int ...$keys): static
     {
         $output = static::MUTABLE ? $this : clone $this;
 
@@ -257,7 +257,7 @@ trait SequenceTrait
     /**
      * Remove all values not associated with $keys
      */
-    public function keep(int ...$keys): Sequence
+    public function keep(int ...$keys): static
     {
         $output = static::MUTABLE ? $this : clone $this;
 
@@ -290,7 +290,7 @@ trait SequenceTrait
     /**
      * Reset all values
      */
-    public function clear(): Sequence
+    public function clear(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = [];
@@ -300,7 +300,7 @@ trait SequenceTrait
     /**
      * Remove all keys
      */
-    public function clearKeys(): Sequence
+    public function clearKeys(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values($output->items);
@@ -315,7 +315,7 @@ trait SequenceTrait
     public function collapse(
         bool $unique = false,
         bool $removeNull = false
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
         return $output;
@@ -327,7 +327,7 @@ trait SequenceTrait
     /**
      * Replace all values with $value
      */
-    public function fill(mixed $value): Sequence
+    public function fill(mixed $value): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_fill_keys(array_keys($output->items), $value);
@@ -342,7 +342,7 @@ trait SequenceTrait
     public static function createFill(
         int $length,
         mixed $value
-    ): Sequence {
+    ): static {
         return static::propagate(array_fill(0, $length, $value));
     }
 
@@ -351,7 +351,7 @@ trait SequenceTrait
     /**
      * Merge all passed collections into one
      */
-    public function merge(iterable ...$arrays): Sequence
+    public function merge(iterable ...$arrays): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(array_merge($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
@@ -361,7 +361,7 @@ trait SequenceTrait
     /**
      * Merge EVERYTHING :D
      */
-    public function mergeRecursive(iterable ...$arrays): Sequence
+    public function mergeRecursive(iterable ...$arrays): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(array_merge_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
@@ -372,7 +372,7 @@ trait SequenceTrait
     /**
      * Like merge, but replaces.. obvs
      */
-    public function replace(iterable ...$arrays): Sequence
+    public function replace(iterable ...$arrays): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(
@@ -384,7 +384,7 @@ trait SequenceTrait
     /**
      * Replace EVERYTHING :D
      */
-    public function replaceRecursive(iterable ...$arrays): Sequence
+    public function replaceRecursive(iterable ...$arrays): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(
@@ -401,7 +401,7 @@ trait SequenceTrait
     public function padLeft(
         int $size,
         mixed $value = null
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_pad($output->items, 0 - abs($size), $value);
         return $output;
@@ -413,7 +413,7 @@ trait SequenceTrait
     public function padRight(
         int $size,
         mixed $value = null
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_pad($output->items, abs($size), $value);
         return $output;
@@ -425,7 +425,7 @@ trait SequenceTrait
     public function padBoth(
         int $size,
         mixed $value = null
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $length = $output->count();
 
@@ -451,7 +451,7 @@ trait SequenceTrait
         int $offset,
         int $length = null,
         Sequence &$removed = null
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
         $offset = $this->normalizeKey($offset);
@@ -475,7 +475,7 @@ trait SequenceTrait
         int $length = null,
         iterable $replacement,
         Sequence &$removed = null
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $count = count($output->items);
         $offset = $this->normalizeKey($offset);
@@ -496,7 +496,7 @@ trait SequenceTrait
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags = SORT_STRING): Sequence
+    public function unique(int $flags = SORT_STRING): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
@@ -510,7 +510,7 @@ trait SequenceTrait
     public function walk(
         callable $callback,
         mixed $data = null
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         array_walk($output->items, $callback, $data);
         return $output;
@@ -522,7 +522,7 @@ trait SequenceTrait
     public function walkRecursive(
         callable $callback,
         mixed $data = null
-    ): Sequence {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
         return $output;
@@ -537,7 +537,7 @@ trait SequenceTrait
         int $start,
         int $end,
         int $step = 1
-    ): Sequence {
+    ): static {
         return static::propagate(range($start, $end, $step));
     }
 
@@ -569,11 +569,10 @@ trait SequenceTrait
      *
      * @template FValue
      * @phpstan-param iterable<FValue> $newItems
-     * @phpstan-return static<FValue>
      */
-    protected static function propagate(iterable $newItems = []): Sequence
+    protected static function propagate(iterable $newItems = []): static
     {
-        /** @var static<FValue> */
+        /** @var static $output */
         $output = new self($newItems);
         return $output;
     }

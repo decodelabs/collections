@@ -19,7 +19,7 @@ trait AttributeContainerTrait
     /**
      * Add attributes with map
      */
-    public function setAttributes(array $attributes): AttributeContainer
+    public function setAttributes(array $attributes): static
     {
         foreach ($attributes as $key => $value) {
             $this->setAttribute($key, $value);
@@ -31,7 +31,7 @@ trait AttributeContainerTrait
     /**
      * Replace all attributes with new map
      */
-    public function replaceAttributes(array $attributes): AttributeContainer
+    public function replaceAttributes(array $attributes): static
     {
         return $this->clearAttributes()->setAttributes($attributes);
     }
@@ -50,7 +50,7 @@ trait AttributeContainerTrait
     public function setAttribute(
         string $key,
         mixed $value
-    ): AttributeContainer {
+    ): static {
         $this->attributes[$key] = $value;
         return $this;
     }
@@ -66,7 +66,7 @@ trait AttributeContainerTrait
     /**
      * Remove single attribute
      */
-    public function removeAttribute(string ...$keys): AttributeContainer
+    public function removeAttribute(string ...$keys): static
     {
         foreach ($keys as $key) {
             unset($this->attributes[$key]);
@@ -106,7 +106,7 @@ trait AttributeContainerTrait
     /**
      * Remove all attributes
      */
-    public function clearAttributes(): AttributeContainer
+    public function clearAttributes(): static
     {
         $this->attributes = [];
         return $this;

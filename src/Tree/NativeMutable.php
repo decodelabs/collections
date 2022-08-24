@@ -12,10 +12,8 @@ namespace DecodeLabs\Collections\Tree;
 use ArrayIterator;
 
 use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\HashMap;
 use DecodeLabs\Collections\Native\HashMapTrait;
 use DecodeLabs\Collections\Tree;
-
 use DecodeLabs\Exceptional;
 use DecodeLabs\Gadgets\Sanitizer;
 
@@ -42,10 +40,10 @@ class NativeMutable implements
     /**
      * @phpstan-var TValue|null
      */
-    protected mixed $value;
+    protected mixed $value = null;
 
     /**
-     * @phpstan-var array<int|string, static<TValue>>
+     * @phpstan-var array<int|string, static>
      */
     protected array $items = [];
 
@@ -96,7 +94,7 @@ class NativeMutable implements
     /**
      * Get node
      */
-    public function __get(int|string $key): Tree
+    public function __get(int|string $key): static
     {
         if (!array_key_exists($key, $this->items)) {
             $this->items[$key] = new static();
@@ -129,7 +127,7 @@ class NativeMutable implements
     public function setNode(
         int|string $key,
         mixed $value
-    ): Tree {
+    ): static {
         $node = $this->getNode($key);
 
         if (is_iterable($value)) {
@@ -145,7 +143,7 @@ class NativeMutable implements
     /**
      * Get node by dot access
      */
-    public function getNode(int|string $key): Tree
+    public function getNode(int|string $key): static
     {
         if (empty(static::KEY_SEPARATOR)) {
             return $this->__get($key);
@@ -276,7 +274,7 @@ class NativeMutable implements
     public function set(
         int|string $key,
         mixed $value
-    ): HashMap {
+    ): static {
         $this->getNode($key)->setValue($value);
         return $this;
     }
@@ -386,7 +384,7 @@ class NativeMutable implements
     /**
      * Remove empty nodes
      */
-    public function removeEmpty(): Tree
+    public function removeEmpty(): static
     {
         foreach ($this->items as $key => $node) {
             $node->removeEmpty();
@@ -419,7 +417,7 @@ class NativeMutable implements
     /**
      * Reset all values
      */
-    public function clear(): HashMap
+    public function clear(): static
     {
         $this->value = null;
         $this->items = [];
@@ -511,7 +509,7 @@ class NativeMutable implements
     /**
      * Set container value
      */
-    public function setValue(mixed $value): Tree
+    public function setValue(mixed $value): static
     {
         if (is_iterable($value)) {
             /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $value */
@@ -613,7 +611,7 @@ class NativeMutable implements
     /**
      * From query string
      *
-     * @return static<string>
+     * @return Tree<string>
      */
     public static function fromDelimitedString(
         string $string,
@@ -711,7 +709,7 @@ class NativeMutable implements
     /**
      * Map $values to values of collection as keys
      */
-    public function combineWithValues(iterable $values): HashMap
+    public function combineWithValues(iterable $values): static
     {
         $items = array_filter(
             array_map(function ($node) {
@@ -735,7 +733,7 @@ class NativeMutable implements
     /**
      * Replace all values with $value
      */
-    public function fill(mixed $value): HashMap
+    public function fill(mixed $value): static
     {
         $result = array_fill_keys(array_keys($this->items), $value);
         return $this->clear()->merge($result);
@@ -745,15 +743,15 @@ class NativeMutable implements
     /**
      * Flip keys and values
      *
-     * @return static<int|string>
+     * @return Tree<int|string>
      */
-    public function flip(): HashMap
+    public function flip(): Tree
     {
         $items = array_map(function ($node) {
             return (string)$node->getValue();
         }, $this->items);
 
-        /** @var static<int|string> */
+        /** @var Tree<int|string> */
         $node = $this->clear();
 
         return $node->merge(array_flip($items));
@@ -765,9 +763,8 @@ class NativeMutable implements
      * Merge all passed collections into one
      *
      * @phpstan-param iterable<int|string, TValue|iterable<mixed>> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function merge(iterable ...$arrays): HashMap
+    public function merge(iterable ...$arrays): static
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
@@ -780,7 +777,7 @@ class NativeMutable implements
                         /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $node */
                         $this->items[$key]->merge($node);
                     } else {
-                        /** @phpstan-var static<TValue> */
+                        /** @phpstan-var static $newNode */
                         $newNode = clone $node;
                         $this->items[$key] = $newNode;
                     }
@@ -807,7 +804,7 @@ class NativeMutable implements
     /**
      * Merge EVERYTHING :D
      */
-    public function mergeRecursive(iterable ...$arrays): HashMap
+    public function mergeRecursive(iterable ...$arrays): static
     {
         return $this->merge(...$arrays);
     }
@@ -816,7 +813,7 @@ class NativeMutable implements
     /**
      * Like merge, but replaces.. obvs
      */
-    public function replace(iterable ...$arrays): HashMap
+    public function replace(iterable ...$arrays): static
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
@@ -825,7 +822,7 @@ class NativeMutable implements
                 $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
-                    /** @phpstan-var static<TValue> */
+                    /** @phpstan-var static $newNode */
                     $newNode = clone $node;
                     $this->items[$key] = $newNode;
                 }
@@ -842,7 +839,7 @@ class NativeMutable implements
     /**
      * Alias of replace
      */
-    public function replaceRecursive(iterable ...$arrays): HashMap
+    public function replaceRecursive(iterable ...$arrays): static
     {
         return $this->replace(...$arrays);
     }
@@ -851,7 +848,7 @@ class NativeMutable implements
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags = SORT_STRING): HashMap
+    public function unique(int $flags = SORT_STRING): static
     {
         $items = array_map(function ($node) {
             return (string)$node->getValue();
