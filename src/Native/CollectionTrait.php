@@ -68,7 +68,7 @@ trait CollectionTrait
     /**
      * Duplicate collection, can change type if needed
      */
-    final public function copy(): Collection
+    final public function copy(): static
     {
         return clone $this;
     }
@@ -114,7 +114,7 @@ trait CollectionTrait
     /**
      * Add items to the end
      */
-    public function push(mixed ...$values): Collection
+    public function push(mixed ...$values): static
     {
         return $this->append(...$values);
     }
@@ -134,7 +134,7 @@ trait CollectionTrait
     /**
      * Add items to the start
      */
-    public function unshift(mixed ...$values): Collection
+    public function unshift(mixed ...$values): static
     {
         return $this->prepend(...$values);
     }
@@ -155,7 +155,7 @@ trait CollectionTrait
     /**
      * Add items to the end
      */
-    public function append(mixed ...$values): Collection
+    public function append(mixed ...$values): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         array_push($output->items, ...$values);
@@ -165,7 +165,7 @@ trait CollectionTrait
     /**
      * Add items to the start
      */
-    public function prepend(mixed ...$values): Collection
+    public function prepend(mixed ...$values): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         array_unshift($output->items, ...$values);
@@ -211,7 +211,7 @@ trait CollectionTrait
     public function slice(
         int $offset,
         int $length = null
-    ): Collection {
+    ): static {
         return $this->propagate(array_slice(
             $this->items,
             $offset,
@@ -223,7 +223,7 @@ trait CollectionTrait
     /**
      * Pick a random $number length set of items
      */
-    public function sliceRandom(int $number): Collection
+    public function sliceRandom(int $number): static
     {
         return $this->propagate(ArrayUtils::sliceRandom($this->items, $number));
     }
@@ -278,7 +278,7 @@ trait CollectionTrait
     /**
      * Return all items in collection where value or key not in $arrays
      */
-    public function diffAssoc(iterable ...$arrays): Collection
+    public function diffAssoc(iterable ...$arrays): static
     {
         return $this->propagate(array_diff_assoc(
             $this->items,
@@ -292,7 +292,7 @@ trait CollectionTrait
     public function diffAssocBy(
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -313,7 +313,7 @@ trait CollectionTrait
     public function diffAssocByValue(
         callable $valueCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -335,7 +335,7 @@ trait CollectionTrait
         callable $valueCallback,
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -354,7 +354,7 @@ trait CollectionTrait
     /**
      * Return all items in collection where value not in $arrays
      */
-    public function diffValues(iterable ...$arrays): Collection
+    public function diffValues(iterable ...$arrays): static
     {
         return $this->propagate(array_diff(
             $this->items,
@@ -368,7 +368,7 @@ trait CollectionTrait
     public function diffValuesBy(
         callable $valueCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -386,7 +386,7 @@ trait CollectionTrait
     /**
      * Return all items in collection where key not in $arrays
      */
-    public function diffKeys(iterable ...$arrays): Collection
+    public function diffKeys(iterable ...$arrays): static
     {
         return $this->propagate(array_diff_key(
             $this->items,
@@ -400,7 +400,7 @@ trait CollectionTrait
     public function diffKeysBy(
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -419,7 +419,7 @@ trait CollectionTrait
     /**
      * Return all items in collection where value or key in $arrays
      */
-    public function intersectAssoc(iterable ...$arrays): Collection
+    public function intersectAssoc(iterable ...$arrays): static
     {
         return $this->propagate(array_intersect_assoc(
             $this->items,
@@ -433,7 +433,7 @@ trait CollectionTrait
     public function intersectAssocBy(
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -454,7 +454,7 @@ trait CollectionTrait
     public function intersectAssocByValue(
         callable $valueCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -476,7 +476,7 @@ trait CollectionTrait
         callable $valueCallback,
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -495,7 +495,7 @@ trait CollectionTrait
     /**
      * Return all items in collection where value in $arrays
      */
-    public function intersectValues(iterable ...$arrays): Collection
+    public function intersectValues(iterable ...$arrays): static
     {
         return $this->propagate(array_intersect(
             $this->items,
@@ -509,7 +509,7 @@ trait CollectionTrait
     public function intersectValuesBy(
         callable $valueCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -527,7 +527,7 @@ trait CollectionTrait
     /**
      * Return all items in collection where key in $arrays
      */
-    public function intersectKeys(iterable ...$arrays): Collection
+    public function intersectKeys(iterable ...$arrays): static
     {
         return $this->propagate(array_intersect_key(
             $this->items,
@@ -541,7 +541,7 @@ trait CollectionTrait
     public function intersectKeysBy(
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         $args = ArrayUtils::iterablesToArrays(...$arrays);
 
         if (!isset($args[0])) {
@@ -560,7 +560,7 @@ trait CollectionTrait
     /**
      * Return subset of collection where callback returns true
      */
-    public function filter(callable $callback = null): Collection
+    public function filter(callable $callback = null): static
     {
         if ($callback) {
             return $this->propagate(array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH));
@@ -575,7 +575,7 @@ trait CollectionTrait
     public function map(
         callable $callback,
         iterable ...$arrays
-    ): Collection {
+    ): static {
         return $this->propagate(array_map(
             $callback,
             $this->items,
@@ -586,7 +586,7 @@ trait CollectionTrait
     /**
      * Loop through collection to build new collection
      */
-    public function mapSelf(callable $callback): Collection
+    public function mapSelf(callable $callback): static
     {
         if (
             $callback instanceof Closure &&
@@ -783,5 +783,5 @@ trait CollectionTrait
      *
      * @phpstan-return static<TKey, TValue>
      */
-    abstract protected static function propagate(iterable $newItems = []): Collection;
+    abstract protected static function propagate(iterable $newItems = []): static;
 }

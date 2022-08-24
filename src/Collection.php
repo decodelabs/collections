@@ -31,10 +31,7 @@ interface Collection extends
     public function isEmpty(): bool;
     public function isMutable(): bool;
 
-    /**
-     * @phpstan-return static<TKey, TValue>
-     */
-    public function copy(): Collection;
+    public function copy(): static;
 
     /**
      * @phpstan-return TValue|null
@@ -49,9 +46,8 @@ interface Collection extends
 
     /**
      * @phpstan-param TValue ...$values
-     * @phpstan-return static<TKey, TValue>
      */
-    public function push(mixed ...$values): Collection;
+    public function push(mixed ...$values): static;
 
     /**
      * @phpstan-return TValue|null
@@ -60,9 +56,8 @@ interface Collection extends
 
     /**
      * @phpstan-param TValue ...$values
-     * @phpstan-return static<TKey, TValue>
      */
-    public function unshift(mixed ...$values): Collection;
+    public function unshift(mixed ...$values): static;
 
     /**
      * @phpstan-return TValue|null
@@ -71,15 +66,13 @@ interface Collection extends
 
     /**
      * @phpstan-param TValue ...$values
-     * @phpstan-return static<TKey, TValue>
      */
-    public function append(mixed ...$values): Collection;
+    public function append(mixed ...$values): static;
 
     /**
      * @phpstan-param TValue ...$values
-     * @phpstan-return static<TKey, TValue>
      */
-    public function prepend(mixed ...$values): Collection;
+    public function prepend(mixed ...$values): static;
 
     public function getRandom(): mixed;
 
@@ -99,18 +92,12 @@ interface Collection extends
     ): bool;
 
 
-    /**
-     * @phpstan-return static<TKey, TValue>
-     */
     public function slice(
         int $offset,
         int $length = null
-    ): Collection;
+    ): static;
 
-    /**
-     * @phpstan-return static<TKey, TValue>
-     */
-    public function sliceRandom(int $number): Collection;
+    public function sliceRandom(int $number): static;
 
 
     /**
@@ -131,152 +118,129 @@ interface Collection extends
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
-    public function diffAssoc(iterable ...$arrays): Collection; // array_diff_assoc
+    public function diffAssoc(iterable ...$arrays): static; // array_diff_assoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function diffAssocBy(
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection; // array_diff_uassoc
+    ): static; // array_diff_uassoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function diffAssocByValue(
         callable $valueCallback,
         iterable ...$arrays
-    ): Collection; // array_udiff_assoc
+    ): static; // array_udiff_assoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function diffAssocAll(
         callable $valueCallback,
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection; // array_udiff_uassoc
+    ): static; // array_udiff_uassoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
-    public function diffValues(iterable ...$arrays): Collection; // array_diff
+    public function diffValues(iterable ...$arrays): static; // array_diff
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function diffValuesBy(
         callable $valueCallback,
         iterable ...$arrays
-    ): Collection; // array_udiff
+    ): static; // array_udiff
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
-    public function diffKeys(iterable ...$arrays): Collection; // array_diff_key
+    public function diffKeys(iterable ...$arrays): static; // array_diff_key
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function diffKeysBy(
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection; // array_diff_ukey
+    ): static; // array_diff_ukey
 
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
-    public function intersectAssoc(iterable ...$arrays): Collection; // array_intersect_assoc
+    public function intersectAssoc(iterable ...$arrays): static; // array_intersect_assoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function intersectAssocBy(
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection; // array_intersect_uassoc
+    ): static; // array_intersect_uassoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function intersectAssocByValue(
         callable $valueCallback,
         iterable ...$arrays
-    ): Collection; // array_uintersect_assoc
+    ): static; // array_uintersect_assoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function intersectAssocAll(
         callable $valueCallback,
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection; // array_uintersect_uassoc
+    ): static; // array_uintersect_uassoc
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
-    public function intersectValues(iterable ...$arrays): Collection; // array_intersect
+    public function intersectValues(iterable ...$arrays): static; // array_intersect
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function intersectValuesBy(
         callable $valueCallback,
         iterable ...$arrays
-    ): Collection; // array_uintersect
+    ): static; // array_uintersect
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
-    public function intersectKeys(iterable ...$arrays): Collection; // array_intersect_key
+    public function intersectKeys(iterable ...$arrays): static; // array_intersect_key
 
     /**
      * @phpstan-param iterable<TKey, TValue> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function intersectKeysBy(
         callable $keyCallback,
         iterable ...$arrays
-    ): Collection; // array_intersect_ukey
+    ): static; // array_intersect_ukey
 
 
-    /**
-     * @phpstan-return static<TKey, TValue>
-     */
-    public function filter(callable $callback = null): Collection;
+    public function filter(callable $callback = null): static;
 
     /**
      * @param iterable<string|int, mixed> ...$arrays
-     * @phpstan-return static<TKey, TValue>
      */
     public function map(
         callable $callback,
         iterable ...$arrays
-    ): Collection;
+    ): static;
 
-    /**
-     * @phpstan-return static<TKey, TValue>
-     */
-    public function mapSelf(callable $callback): Collection;
+    public function mapSelf(callable $callback): static;
 
     public function reduce(
         callable $callback,

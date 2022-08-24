@@ -61,7 +61,7 @@ trait HashMapTrait
     public function set(
         int|string $key,
         mixed $value
-    ): HashMap {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items[$key] = $value;
         return $output;
@@ -126,7 +126,7 @@ trait HashMapTrait
     /**
      * Remove all values associated with $keys
      */
-    public function remove(int|string ...$keys): HashMap
+    public function remove(int|string ...$keys): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_diff_key($output->items, array_flip($keys));
@@ -136,7 +136,7 @@ trait HashMapTrait
     /**
      * Remove all values not associated with $keys
      */
-    public function keep(int|string ...$keys): HashMap
+    public function keep(int|string ...$keys): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_intersect_key($output->items, array_flip($keys));
@@ -162,7 +162,7 @@ trait HashMapTrait
     /**
      * Reset all values
      */
-    public function clear(): HashMap
+    public function clear(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = [];
@@ -172,7 +172,7 @@ trait HashMapTrait
     /**
      * Remove all keys
      */
-    public function clearKeys(): HashMap
+    public function clearKeys(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values($output->items);
@@ -186,7 +186,7 @@ trait HashMapTrait
     public function collapse(
         bool $unique = false,
         bool $removeNull = false
-    ): HashMap {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         /* @phpstan-ignore-next-line */
         $output->items = ArrayUtils::collapse($output->items, true, $unique, $removeNull);
@@ -199,7 +199,7 @@ trait HashMapTrait
     public function collapseValues(
         bool $unique = false,
         bool $removeNull = false
-    ): HashMap {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         /* @phpstan-ignore-next-line */
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
@@ -211,7 +211,7 @@ trait HashMapTrait
     /**
      * Switch key case for all entries
      */
-    public function changeKeyCase(int $case = CASE_LOWER): HashMap
+    public function changeKeyCase(int $case = CASE_LOWER): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_change_key_case($output->items, $case);
@@ -222,7 +222,7 @@ trait HashMapTrait
     /**
      * Map values of collection to $keys
      */
-    public function combineWithKeys(iterable $keys): HashMap
+    public function combineWithKeys(iterable $keys): static
     {
         $output = static::MUTABLE ? $this : clone $this;
 
@@ -236,7 +236,7 @@ trait HashMapTrait
     /**
      * Map $values to values of collection as keys
      */
-    public function combineWithValues(iterable $values): HashMap
+    public function combineWithValues(iterable $values): static
     {
         $output = static::MUTABLE ? $this : clone $this;
 
@@ -252,7 +252,7 @@ trait HashMapTrait
     /**
      * Replace all values with $value
      */
-    public function fill(mixed $value): HashMap
+    public function fill(mixed $value): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_fill_keys(array_keys($output->items), $value);
@@ -262,7 +262,7 @@ trait HashMapTrait
     /**
      * Flip keys and values
      */
-    public function flip(): HashMap
+    public function flip(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
 
@@ -277,7 +277,7 @@ trait HashMapTrait
     /**
      * Merge all passed collections into one
      */
-    public function merge(iterable ...$arrays): HashMap
+    public function merge(iterable ...$arrays): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_merge($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
@@ -287,7 +287,7 @@ trait HashMapTrait
     /**
      * Merge EVERYTHING :D
      */
-    public function mergeRecursive(iterable ...$arrays): HashMap
+    public function mergeRecursive(iterable ...$arrays): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_merge_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
@@ -298,7 +298,7 @@ trait HashMapTrait
     /**
      * Like merge, but replaces.. obvs
      */
-    public function replace(iterable ...$arrays): HashMap
+    public function replace(iterable ...$arrays): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
@@ -308,7 +308,7 @@ trait HashMapTrait
     /**
      * Replace EVERYTHING :D
      */
-    public function replaceRecursive(iterable ...$arrays): HashMap
+    public function replaceRecursive(iterable ...$arrays): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
@@ -321,13 +321,12 @@ trait HashMapTrait
      * Remove $offet + $length items
      *
      * @phpstan-param static<TValue>|null $removed
-     * @phpstan-return static<TValue>
      */
     public function removeSlice(
         int $offset,
         int $length = null,
-        HashMap &$removed = null
-    ): HashMap {
+        ?HashMap &$removed = null
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
 
         if ($length === null) {
@@ -346,14 +345,13 @@ trait HashMapTrait
      *
      * @phpstan-param iterable<TValue> $replacement
      * @phpstan-param static<TValue>|null $removed
-     * @phpstan-return static<TValue>
      */
     public function replaceSlice(
         int $offset,
         int $length = null,
         iterable $replacement,
-        HashMap &$removed = null
-    ): HashMap {
+        ?HashMap &$removed = null
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
 
         if ($length === null) {
@@ -371,7 +369,7 @@ trait HashMapTrait
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags = SORT_STRING): HashMap
+    public function unique(int $flags = SORT_STRING): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
@@ -385,7 +383,7 @@ trait HashMapTrait
     public function walk(
         callable $callback,
         mixed $data = null
-    ): HashMap {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         array_walk($output->items, $callback, $data);
         return $output;
@@ -397,7 +395,7 @@ trait HashMapTrait
     public function walkRecursive(
         callable $callback,
         mixed $data = null
-    ): HashMap {
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
         return $output;
@@ -411,11 +409,10 @@ trait HashMapTrait
      *
      * @template FValue
      * @phpstan-param iterable<int|string, FValue> $newItems
-     * @phpstan-return static<FValue>
      */
-    protected static function propagate(iterable $newItems = []): HashMap
+    protected static function propagate(iterable $newItems = []): static
     {
-        /** @var static<FValue> */
+        /** @var static $output */
         $output = new self($newItems);
         return $output;
     }

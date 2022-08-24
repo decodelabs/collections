@@ -29,27 +29,18 @@ interface HashMap extends
 
     /**
      * @phpstan-param TValue $value
-     * @phpstan-return static<TValue>
      */
     public function set(
         int|string $key,
         mixed $value
-    ): HashMap;
+    ): static;
 
     public function has(int|string ...$keys): bool;
     public function hasAll(int|string ...$keys): bool;
     public function hasKey(int|string ...$keys): bool;
     public function hasKeys(int|string ...$keys): bool;
-
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function remove(int|string ...$keys): HashMap;
-
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function keep(int|string ...$keys): HashMap;
+    public function remove(int|string ...$keys): static;
+    public function keep(int|string ...$keys): static;
 
 
     /**
@@ -60,59 +51,38 @@ interface HashMap extends
         bool $strict = false
     ): int|string|null;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function clear(): HashMap;
+    public function clear(): static;
+    public function clearKeys(): static;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function clearKeys(): HashMap;
-
-
-    /**
-     * @phpstan-return static<TValue>
-     */
     public function collapse(
         bool $unique = false,
         bool $removeNull = false
-    ): HashMap;
+    ): static;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
     public function collapseValues(
         bool $unique = false,
         bool $removeNull = false
-    ): HashMap;
+    ): static;
 
 
-
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function changeKeyCase(int $case = CASE_LOWER): HashMap;
+    public function changeKeyCase(int $case = CASE_LOWER): static;
 
 
     /**
      * @param iterable<string> $keys
-     * @phpstan-return static<TValue>
      */
-    public function combineWithKeys(iterable $keys): HashMap;
+    public function combineWithKeys(iterable $keys): static;
 
     /**
      * @param iterable<TValue> $values
-     * @phpstan-return static<TValue>
      */
-    public function combineWithValues(iterable $values): HashMap;
+    public function combineWithValues(iterable $values): static;
 
 
     /**
      * @phpstan-param TValue $value
-     * @phpstan-return static<TValue>
      */
-    public function fill($value): HashMap;
+    public function fill($value): static;
 
     /**
      * @return static<int|string>
@@ -122,71 +92,55 @@ interface HashMap extends
 
     /**
      * @param iterable<int|string, TValue> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function merge(iterable ...$arrays): HashMap;
+    public function merge(iterable ...$arrays): static;
 
     /**
      * @param iterable<int|string, TValue> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function mergeRecursive(iterable ...$arrays): HashMap;
+    public function mergeRecursive(iterable ...$arrays): static;
 
 
     /**
      * @param iterable<int|string, TValue> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function replace(iterable ...$arrays): HashMap;
+    public function replace(iterable ...$arrays): static;
 
     /**
      * @param iterable<int|string, TValue> ...$arrays
-     * @phpstan-return static<TValue>
      */
-    public function replaceRecursive(iterable ...$arrays): HashMap;
+    public function replaceRecursive(iterable ...$arrays): static;
 
 
     /**
      * @param static<TValue>|null $removed
-     * @phpstan-return static<TValue>
      */
     public function removeSlice(
         int $offset,
         int $length = null,
         HashMap &$removed = null
-    ): HashMap;
+    ): static;
 
     /**
      * @param iterable<int|string, TValue> $replacement
      * @param static<TValue>|null $removed
-     * @phpstan-return static<TValue>
      */
     public function replaceSlice(
         int $offset,
         int $length = null,
         iterable $replacement,
-        HashMap &$removed = null
-    ): HashMap;
+        ?HashMap &$removed = null
+    ): static;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
-    public function unique(int $flags = SORT_STRING): HashMap;
+    public function unique(int $flags = SORT_STRING): static;
 
-
-    /**
-     * @phpstan-return static<TValue>
-     */
     public function walk(
         callable $callback,
         mixed $data = null
-    ): HashMap;
+    ): static;
 
-    /**
-     * @phpstan-return static<TValue>
-     */
     public function walkRecursive(
         callable $callback,
         mixed $data = null
-    ): HashMap;
+    ): static;
 }

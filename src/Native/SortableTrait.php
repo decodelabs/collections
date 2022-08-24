@@ -10,14 +10,13 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\Sortable;
 
 trait SortableTrait
 {
     /**
      * Sort values, keep keys
      */
-    public function sort(int $flags = \SORT_REGULAR): Sortable
+    public function sort(int $flags = \SORT_REGULAR): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         asort($output->items, $flags);
@@ -27,7 +26,7 @@ trait SortableTrait
     /**
      * Reverse sort values, keep keys
      */
-    public function reverseSort(int $flags = \SORT_REGULAR): Sortable
+    public function reverseSort(int $flags = \SORT_REGULAR): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         arsort($output->items, $flags);
@@ -37,7 +36,7 @@ trait SortableTrait
     /**
      * Sort values using callback, keep keys
      */
-    public function sortBy(callable $callable): Sortable
+    public function sortBy(callable $callable): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         uasort($output->items, $callable);
@@ -48,7 +47,7 @@ trait SortableTrait
     /**
      * Natural sort values, keep keys
      */
-    public function sortNatural(): Sortable
+    public function sortNatural(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         natsort($output->items);
@@ -58,7 +57,7 @@ trait SortableTrait
     /**
      * Natural sort values, case insensitive, keep keys
      */
-    public function sortCaseNatural(): Sortable
+    public function sortCaseNatural(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         natcasesort($output->items);
@@ -69,7 +68,7 @@ trait SortableTrait
     /**
      * Sort values, ignore keys
      */
-    public function sortValues(int $flags = \SORT_REGULAR): Sortable
+    public function sortValues(int $flags = \SORT_REGULAR): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         sort($output->items, $flags);
@@ -79,7 +78,7 @@ trait SortableTrait
     /**
      * Reverse sort values, ignore keys
      */
-    public function reverseSortValues(int $flags = \SORT_REGULAR): Sortable
+    public function reverseSortValues(int $flags = \SORT_REGULAR): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         rsort($output->items, $flags);
@@ -89,7 +88,7 @@ trait SortableTrait
     /**
      * Sort values by callback, ignore keys
      */
-    public function sortValuesBy(callable $callback): Sortable
+    public function sortValuesBy(callable $callback): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         usort($output->items, $callback);
@@ -100,7 +99,7 @@ trait SortableTrait
     /**
      * Sort values by key
      */
-    public function sortKeys(int $flags = \SORT_REGULAR): Sortable
+    public function sortKeys(int $flags = \SORT_REGULAR): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         ksort($output->items, $flags);
@@ -110,7 +109,7 @@ trait SortableTrait
     /**
      * Reverse sort values by key
      */
-    public function reverseSortKeys(int $flags = \SORT_REGULAR): Sortable
+    public function reverseSortKeys(int $flags = \SORT_REGULAR): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         krsort($output->items, $flags);
@@ -120,7 +119,7 @@ trait SortableTrait
     /**
      * Sort values by key using callback
      */
-    public function sortKeysBy(callable $callback): Sortable
+    public function sortKeysBy(callable $callback): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         uksort($output->items, $callback);
@@ -131,7 +130,7 @@ trait SortableTrait
     /**
      * Reverse all entries
      */
-    public function reverse(): Sortable
+    public function reverse(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_reverse($output->items, true);
@@ -141,7 +140,7 @@ trait SortableTrait
     /**
      * Reverse all entries, ignore keys
      */
-    public function reverseValues(): Sortable
+    public function reverseValues(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_reverse($output->items, false);
@@ -151,7 +150,7 @@ trait SortableTrait
     /**
      * Randomise order, keep keys
      */
-    public function shuffle(): Sortable
+    public function shuffle(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = ArrayUtils::kshuffle($output->items);
@@ -161,7 +160,7 @@ trait SortableTrait
     /**
      * Randomise order, ignore keys
      */
-    public function shuffleValues(): Sortable
+    public function shuffleValues(): static
     {
         $output = static::MUTABLE ? $this : clone $this;
         shuffle($output->items);
