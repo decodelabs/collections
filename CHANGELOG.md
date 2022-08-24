@@ -1,3 +1,6 @@
+## v0.7.3 (2022-08-24)
+* Applied static returns to interfaces
+
 ## v0.7.2 (2022-08-24)
 * Fixed propagate() interface compatibility
 
