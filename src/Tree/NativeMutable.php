@@ -920,7 +920,7 @@ class NativeMutable implements
         if (empty($output)) {
             if ($this->value !== null) {
                 return [
-                    '⇒ value' => $this->value
+                    '⇒ value' => $this->value // @ignore-non-ascii
                 ];
             } else {
                 return [];
@@ -929,8 +929,8 @@ class NativeMutable implements
 
         if ($this->value !== null) {
             $output = [
-                '⇒ value' => $this->value,
-                '⇒ children' => $output
+                '⇒ value' => $this->value, // @ignore-non-ascii
+                '⇒ children' => $output // @ignore-non-ascii
             ];
         }
 
