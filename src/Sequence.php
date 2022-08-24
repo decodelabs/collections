@@ -13,7 +13,9 @@ namespace DecodeLabs\Collections;
  * @template TValue
  * @extends Collection<int, TValue>
  */
-interface Sequence extends Collection, Sortable
+interface Sequence extends
+    Collection,
+    Sortable
 {
     /**
      * @phpstan-return TValue|null
