@@ -1,3 +1,6 @@
+## v0.7.2 (2022-08-24)
+* Fixed propagate() interface compatibility
+
 ## v0.7.1 (2022-08-23)
 * Added concrete types to all members
 
