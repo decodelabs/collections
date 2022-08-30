@@ -14,7 +14,7 @@
         "decodelabs/coercion": "^0.2",
         "decodelabs/exceptional": "^0.4",
         "decodelabs/fluidity": "^0.3",
-        "decodelabs/gadgets": "^0.9"
+        "decodelabs/gadgets": "^0.10"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
