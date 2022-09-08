@@ -15,7 +15,7 @@ use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Native\HashMapTrait;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Gadgets\Sanitizer;
+use DecodeLabs\Lucid\Provider\MixedContextTrait as SanitizerProviderTrait;
 
 use Iterator;
 use IteratorAggregate;
@@ -33,6 +33,11 @@ class NativeMutable implements
      * @use HashMapTrait<TValue>
      */
     use HashMapTrait;
+
+    /**
+     * @use SanitizerProviderTrait<TValue>
+     */
+    use SanitizerProviderTrait;
 
     public const MUTABLE = true;
     public const KEY_SEPARATOR = '.';
@@ -464,46 +469,6 @@ class NativeMutable implements
 
 
 
-    /**
-     * Get node and return value sanitizer
-     */
-    public function sanitize(
-        int|string $key,
-        bool $required = true
-    ): Sanitizer {
-        return $this->getNode($key)->sanitizeValue($required);
-    }
-
-    /**
-     * Get node and sanitize with custom sanitizer
-     */
-    public function sanitizeWith(
-        int|string $key,
-        callable $sanitizer,
-        bool $required = true
-    ): mixed {
-        return $this->getNode($key)->sanitizeValue($required)->with($sanitizer);
-    }
-
-    /**
-     * Return new Sanitizer with node value
-     */
-    public function sanitizeValue(bool $required = true): Sanitizer
-    {
-        return new Sanitizer($this->getValue(), $required);
-    }
-
-    /**
-     * Sanitize value with custom sanitizer
-     */
-    public function sanitizeValueWith(
-        callable $sanitizer,
-        bool $required = true
-    ): mixed {
-        return $this->sanitizeValue($required)->with($sanitizer);
-    }
-
-
 
 
     /**
@@ -858,6 +823,26 @@ class NativeMutable implements
         return $this->keep(...array_map('strval', array_keys($items)));
     }
 
+
+    /**
+     * @phpstan-return array<int|string, TValue|array<mixed>|null>
+     */
+    public function getChildValues(): array
+    {
+        $output = [];
+
+        foreach ($this->items as $key => $child) {
+            if ($child->hasValue()) {
+                $output[$key] = $child->getValue();
+            } elseif (!$child->isEmpty()) {
+                $output[$key] = $child->getChildValues();
+            } else {
+                $output[$key] = null;
+            }
+        }
+
+        return $output;
+    }
 
     /**
      * Recursive array conversion
