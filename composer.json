@@ -25,6 +25,9 @@
 
         "decodelabs/phpstan-decodelabs": "^0.6"
     },
+    "suggest": {
+        "decodelabs/lucid": "Value sanitising and validation"
+    },
     "autoload": {
         "psr-4": {
             "DecodeLabs\\Collections\\": "src/"
