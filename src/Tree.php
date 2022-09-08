@@ -9,16 +9,18 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Collections;
 
-use DecodeLabs\Gadgets\Sanitizer;
+use DecodeLabs\Lucid\Provider\MixedContext as SanitizerProvider;
 
 /**
  * @template TValue
  * @extends HashMap<TValue>
  * @extends ValueProvider<TValue>
+ * @extends SanitizerProvider<TValue>
  */
 interface Tree extends
     HashMap,
-    ValueProvider
+    ValueProvider,
+    SanitizerProvider
 {
     /**
      * @param iterable<int|string, TValue|iterable<mixed>>|null $items
@@ -52,25 +54,6 @@ interface Tree extends
     public function getNode(int|string $key): static;
     public function hasNode(int|string ...$keys): bool;
     public function hasAllNodes(int|string ...$keys): bool;
-
-    public function sanitize(
-        int|string $key,
-        bool $required = true
-    ): Sanitizer;
-
-    public function sanitizeWith(
-        int|string $key,
-        callable $sanitizer,
-        bool $required = true
-    ): mixed;
-
-    public function sanitizeValue(bool $required = true): Sanitizer;
-
-    public function sanitizeValueWith(
-        callable $sanitizer,
-        bool $required = true
-    ): mixed;
-
 
     /**
      * @phpstan-return TValue|null

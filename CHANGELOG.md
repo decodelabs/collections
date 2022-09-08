@@ -1,3 +1,7 @@
+## v0.8.0 (2022-09-08)
+* Replaced Gadgets Sanitizer with Lucid
+* Updated CI environment
+
 ## v0.7.3 (2022-08-24)
 * Applied static returns to interfaces
 
