@@ -1,3 +1,4 @@
+* Fixed PHP8.1 testing
 * Updated composer check script
 
 ## v0.8.0 (2022-09-08)
