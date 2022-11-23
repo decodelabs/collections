@@ -12,12 +12,15 @@ namespace DecodeLabs\Collections;
 use ArrayAccess;
 use Countable;
 use DecodeLabs\Fluidity\Then;
+use IteratorAggregate;
 use JsonSerializable;
 
 /**
  * @template TKey
  * @template TValue
+ * @template TIterate of mixed|TValue
  *
+ * @extends IteratorAggregate<TKey, TIterate>
  * @extends ArrayProvider<TKey, TValue>
  * @extends ArrayAccess<TKey, TValue>
  */
@@ -26,6 +29,7 @@ interface Collection extends
     JsonSerializable,
     Countable,
     ArrayAccess,
+    IteratorAggregate,
     Then
 {
     public function isEmpty(): bool;
@@ -101,12 +105,12 @@ interface Collection extends
 
 
     /**
-     * @phpstan-return array<int, static<TKey, TValue>>
+     * @phpstan-return array<int, static<TKey, TValue, TIterate>>
      */
     public function chunk(int $size): array;
 
     /**
-     * @phpstan-return array<int, static<TKey, TValue>>
+     * @phpstan-return array<int, static<TKey, TValue, TIterate>>
      */
     public function chunkValues(int $size): array;
 

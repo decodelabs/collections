@@ -13,12 +13,12 @@ use DecodeLabs\Lucid\Provider\MixedContext as SanitizerProvider;
 
 /**
  * @template TValue
- * @extends HashMap<TValue>
+ * @extends MixedMap<TValue, static>
  * @extends ValueProvider<TValue>
  * @extends SanitizerProvider<TValue>
  */
 interface Tree extends
-    HashMap,
+    MixedMap,
     ValueProvider,
     SanitizerProvider
 {
