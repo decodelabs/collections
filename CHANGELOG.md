@@ -1,3 +1,5 @@
+## v0.8.1 (2022-11-23)
+* Ensure all Collection interfaces are Traversable
 * Migrated to use effigy in CI workflow
 * Fixed PHP8.1 testing
 * Updated composer check script
