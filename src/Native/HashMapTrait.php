@@ -11,7 +11,7 @@ namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
-use DecodeLabs\Collections\HashMap;
+use DecodeLabs\Collections\MixedMap;
 
 /**
  * @template TValue
@@ -264,7 +264,7 @@ trait HashMapTrait
      */
     public function flip(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = clone $this;
 
         /** @phpstan-var array<TValue> $items */
         $items = array_flip($output->items); /* @phpstan-ignore-line */
@@ -320,12 +320,11 @@ trait HashMapTrait
     /**
      * Remove $offet + $length items
      *
-     * @phpstan-param static<TValue>|null $removed
      */
     public function removeSlice(
         int $offset,
         int $length = null,
-        ?HashMap &$removed = null
+        ?MixedMap &$removed = null
     ): static {
         $output = static::MUTABLE ? $this : clone $this;
 
@@ -344,13 +343,12 @@ trait HashMapTrait
      * Like removeSlice, but leaves a present behind
      *
      * @phpstan-param iterable<TValue> $replacement
-     * @phpstan-param static<TValue>|null $removed
      */
     public function replaceSlice(
         int $offset,
         int $length = null,
         iterable $replacement,
-        ?HashMap &$removed = null
+        ?MixedMap &$removed = null
     ): static {
         $output = static::MUTABLE ? $this : clone $this;
 

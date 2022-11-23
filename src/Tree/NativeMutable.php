@@ -12,6 +12,8 @@ namespace DecodeLabs\Collections\Tree;
 use ArrayIterator;
 
 use DecodeLabs\Collections\ArrayUtils;
+use DecodeLabs\Collections\HashMap;
+use DecodeLabs\Collections\HashMap\NativeMutable as NativeHashMap;
 use DecodeLabs\Collections\Native\HashMapTrait;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Exceptional;
@@ -23,7 +25,7 @@ use IteratorAggregate;
 /**
  * @template TValue
  * @implements Tree<TValue>
- * @implements IteratorAggregate<int|string, static>
+ * @implements IteratorAggregate<int|string, Tree<TValue>>
  */
 class NativeMutable implements
     IteratorAggregate,
@@ -708,18 +710,15 @@ class NativeMutable implements
     /**
      * Flip keys and values
      *
-     * @return Tree<int|string>
+     * @return HashMap<int|string>
      */
-    public function flip(): Tree
+    public function flip(): HashMap
     {
         $items = array_map(function ($node) {
             return (string)$node->getValue();
         }, $this->items);
 
-        /** @var Tree<int|string> */
-        $node = $this->clear();
-
-        return $node->merge(array_flip($items));
+        return new NativeHashMap(array_flip($items));
     }
 
 

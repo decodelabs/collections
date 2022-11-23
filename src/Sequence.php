@@ -11,7 +11,7 @@ namespace DecodeLabs\Collections;
 
 /**
  * @template TValue
- * @extends Collection<int, TValue>
+ * @extends Collection<int, TValue, TValue>
  */
 interface Sequence extends
     Collection,
