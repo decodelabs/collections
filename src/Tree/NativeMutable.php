@@ -45,12 +45,12 @@ class NativeMutable implements
     public const KEY_SEPARATOR = '.';
 
     /**
-     * @phpstan-var TValue|null
+     * @var TValue|null
      */
     protected mixed $value = null;
 
     /**
-     * @phpstan-var array<int|string, static>
+     * @var array<int|string, static>
      */
     protected array $items = [];
 
@@ -70,7 +70,7 @@ class NativeMutable implements
         }
 
         if (is_iterable($value)) {
-            /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $value */
+            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
             $this->merge($value);
         }
     }
@@ -138,7 +138,7 @@ class NativeMutable implements
         $node = $this->getNode($key);
 
         if (is_iterable($value)) {
-            /** @phpstan-var iterable<int|string, TValue> $value */
+            /** @var iterable<int|string, TValue> $value */
             $node->clear()->merge($value);
         } else {
             $node->setValue($value);
@@ -261,7 +261,7 @@ class NativeMutable implements
     /**
      * Retrieve entry and remove from collection
      *
-     * @phpstan-return TValue|null
+     * @return TValue|null
      */
     public function pull(int|string $key): mixed
     {
@@ -437,7 +437,8 @@ class NativeMutable implements
     /**
      * Set by array access
      *
-     * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @param int|string|null $key
+     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function offsetSet(
         mixed $key,
@@ -446,7 +447,7 @@ class NativeMutable implements
         if ($key === null) {
             $this->items[] = new static(null, $value);
         } elseif (is_iterable($value)) {
-            /** @phpstan-var iterable<int|string, TValue> $value */
+            /** @var iterable<int|string, TValue> $value */
             $this->getNode($key)->merge($value);
         } else {
             $this->getNode($key)->setValue($value);
@@ -479,7 +480,7 @@ class NativeMutable implements
     public function setValue(mixed $value): static
     {
         if (is_iterable($value)) {
-            /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $value */
+            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
             return $this->merge($value);
         }
 
@@ -726,22 +727,22 @@ class NativeMutable implements
     /**
      * Merge all passed collections into one
      *
-     * @phpstan-param iterable<int|string, TValue|iterable<mixed>> ...$arrays
+     * @param iterable<int|string, TValue|iterable<mixed>> ...$arrays
      */
     public function merge(iterable ...$arrays): static
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
-                /** @phpstan-var TValue|null $value */
+                /** @var TValue|null $value */
                 $value = $array->getValue();
                 $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
                     if (isset($this->items[$key])) {
-                        /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $node */
+                        /** @var iterable<int|string, TValue|iterable<mixed>> $node */
                         $this->items[$key]->merge($node);
                     } else {
-                        /** @phpstan-var static $newNode */
+                        /** @var static $newNode */
                         $newNode = clone $node;
                         $this->items[$key] = $newNode;
                     }
@@ -750,7 +751,7 @@ class NativeMutable implements
                 foreach ($array as $key => $value) {
                     if (isset($this->items[$key])) {
                         if (is_iterable($value)) {
-                            /** @phpstan-var iterable<int|string, TValue|iterable<mixed>> $value */
+                            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
                             $this->items[$key]->merge($value);
                         } else {
                             $this->items[$key]->setValue($value);
@@ -781,12 +782,12 @@ class NativeMutable implements
     {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
-                /** @phpstan-var TValue|null $value */
+                /** @var TValue|null $value */
                 $value = $array->getValue();
                 $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
-                    /** @phpstan-var static $newNode */
+                    /** @var static $newNode */
                     $newNode = clone $node;
                     $this->items[$key] = $newNode;
                 }
@@ -824,7 +825,7 @@ class NativeMutable implements
 
 
     /**
-     * @phpstan-return array<int|string, TValue|array<mixed>|null>
+     * @return array<int|string, TValue|array<mixed>|null>
      */
     public function getChildValues(): array
     {
@@ -846,7 +847,7 @@ class NativeMutable implements
     /**
      * Recursive array conversion
      *
-     * @phpstan-return array<int|string, TValue|array<mixed>|null>
+     * @return array<int|string, TValue|array<mixed>|null>
      */
     public function toArray(): array
     {
@@ -875,7 +876,7 @@ class NativeMutable implements
     /**
      * Iterator interface
      *
-     * @phpstan-return Iterator<int|string, static<TValue>>
+     * @return Iterator<int|string, static<TValue>>
      */
     public function getIterator(): Iterator
     {
@@ -926,8 +927,8 @@ class NativeMutable implements
     /**
      * Copy and reinitialise new object
      *
-     * @phpstan-param iterable<int|string, TValue|iterable<mixed>> $newItems
-     * @phpstan-param TValue|null $value
+     * @param iterable<int|string, TValue|iterable<mixed>> $newItems
+     * @param TValue|null $value
      */
     protected static function propagate(
         ?iterable $newItems = [],

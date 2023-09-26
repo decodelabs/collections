@@ -16,7 +16,7 @@ namespace DecodeLabs\Collections;
 interface ArrayProvider
 {
     /**
-     * @phpstan-return array<TKey, TValue>
+     * @return array<TKey, TValue>
      */
     public function toArray(): array;
 }

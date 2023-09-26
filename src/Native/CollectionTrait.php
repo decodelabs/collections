@@ -33,14 +33,14 @@ trait CollectionTrait
     //const MUTABLE = false;
 
     /**
-     * @phpstan-var array<TKey, TValue>
+     * @var array<TKey, TValue>
      */
     protected array $items = [];
 
     /**
      * Direct set items
      *
-     * @phpstan-param iterable<TKey, TValue> $items
+     * @param iterable<TKey, TValue> $items
      */
     public function __construct(iterable $items)
     {
@@ -738,7 +738,7 @@ trait CollectionTrait
     /**
      * Iterator interface
      *
-     * @phpstan-return Iterator<TKey, TValue>
+     * @return Iterator<TKey, TValue>
      */
     public function getIterator(): Iterator
     {
@@ -748,7 +748,7 @@ trait CollectionTrait
     /**
      * Convert to array
      *
-     * @phpstan-return array<TKey, TValue>
+     * @return array<TKey, TValue>
      */
     public function toArray(): array
     {
@@ -770,7 +770,7 @@ trait CollectionTrait
     /**
      * Get dump info
      *
-     * @phpstan-return array<TKey, TValue>
+     * @return array<TKey, TValue>
      */
     public function __debugInfo(): array
     {
@@ -781,7 +781,7 @@ trait CollectionTrait
     /**
      * Copy and reinitialise new object
      *
-     * @phpstan-return static<TKey, TValue>
+     * @return static<TKey, TValue>
      */
     abstract protected static function propagate(iterable $newItems = []): static;
 }

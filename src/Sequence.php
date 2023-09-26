@@ -18,17 +18,17 @@ interface Sequence extends
     Sortable
 {
     /**
-     * @phpstan-return TValue|null
+     * @return TValue|null
      */
     public function get(int $key): mixed;
 
     /**
-     * @phpstan-return TValue|null
+     * @return TValue|null
      */
     public function pull(int $key): mixed;
 
     /**
-     * @phpstan-param TValue $value
+     * @param TValue $value
      */
     public function set(
         int $key,
@@ -36,7 +36,7 @@ interface Sequence extends
     ): static;
 
     /**
-     * @phpstan-param TValue $value
+     * @param TValue $value
      */
     public function put(
         int $key,
@@ -52,7 +52,7 @@ interface Sequence extends
 
 
     /**
-     * @phpstan-param TValue $value
+     * @param TValue $value
      */
     public function findKey(
         mixed $value,
@@ -71,12 +71,12 @@ interface Sequence extends
 
 
     /**
-     * @phpstan-param TValue $value
+     * @param TValue $value
      */
     public function fill(mixed $value): static;
 
     /**
-     * @phpstan-param TValue $value
+     * @param TValue $value
      */
     public static function createFill(
         int $length,
@@ -107,7 +107,7 @@ interface Sequence extends
 
 
     /**
-     * @phpstan-param TValue|null $value
+     * @param TValue|null $value
      */
     public function padLeft(
         int $size,
@@ -115,7 +115,7 @@ interface Sequence extends
     ): static;
 
     /**
-     * @phpstan-param TValue|null $value
+     * @param TValue|null $value
      */
     public function padRight(
         int $size,
@@ -123,7 +123,7 @@ interface Sequence extends
     ): static;
 
     /**
-     * @phpstan-param TValue|null $value
+     * @param TValue|null $value
      */
     public function padBoth(
         int $size,
