@@ -29,7 +29,7 @@ trait SequenceTrait
     /**
      * Direct set items
      *
-     * @phpstan-param iterable<TValue> $items
+     * @param iterable<TValue> $items
      */
     public function __construct(iterable $items)
     {
@@ -568,7 +568,7 @@ trait SequenceTrait
      * Copy and reinitialise new object
      *
      * @template FValue
-     * @phpstan-param iterable<FValue> $newItems
+     * @param iterable<FValue> $newItems
      */
     protected static function propagate(iterable $newItems = []): static
     {

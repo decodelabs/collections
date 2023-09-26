@@ -19,17 +19,17 @@ interface MixedMap extends
     Sortable
 {
     /**
-     * @phpstan-return TValue|null
+     * @return TValue|null
      */
     public function get(int|string $key): mixed;
 
     /**
-     * @phpstan-return TValue|null
+     * @return TValue|null
      */
     public function pull(int|string $key): mixed;
 
     /**
-     * @phpstan-param TValue $value
+     * @param TValue $value
      */
     public function set(
         int|string $key,
@@ -45,7 +45,7 @@ interface MixedMap extends
 
 
     /**
-     * @phpstan-param TValue $value
+     * @param TValue $value
      */
     public function findKey(
         mixed $value,
@@ -81,7 +81,7 @@ interface MixedMap extends
 
 
     /**
-     * @phpstan-param TValue $value
+     * @param TValue $value
      */
     public function fill($value): static;
 

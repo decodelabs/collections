@@ -266,7 +266,7 @@ trait HashMapTrait
     {
         $output = clone $this;
 
-        /** @phpstan-var array<TValue> $items */
+        /** @var array<TValue> $items */
         $items = array_flip($output->items); /* @phpstan-ignore-line */
         $output->items = $items;
 
@@ -342,7 +342,7 @@ trait HashMapTrait
     /**
      * Like removeSlice, but leaves a present behind
      *
-     * @phpstan-param iterable<TValue> $replacement
+     * @param iterable<TValue> $replacement
      */
     public function replaceSlice(
         int $offset,
@@ -406,7 +406,7 @@ trait HashMapTrait
      * Copy and reinitialise new object
      *
      * @template FValue
-     * @phpstan-param iterable<int|string, FValue> $newItems
+     * @param iterable<int|string, FValue> $newItems
      */
     protected static function propagate(iterable $newItems = []): static
     {

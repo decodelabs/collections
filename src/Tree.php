@@ -24,7 +24,7 @@ interface Tree extends
 {
     /**
      * @param iterable<int|string, TValue|iterable<mixed>>|null $items
-     * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function __construct(
         iterable $items = null,
@@ -32,7 +32,7 @@ interface Tree extends
     );
 
     /**
-     * @phpstan-param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function __set(
         int|string $key,
@@ -44,7 +44,7 @@ interface Tree extends
     public function __unset(int|string $key): void;
 
     /**
-     * @phpstan-param TValue|iterable<TValue>|null $value
+     * @param TValue|iterable<TValue>|null $value
      */
     public function setNode(
         int|string $key,
@@ -56,12 +56,12 @@ interface Tree extends
     public function hasAllNodes(int|string ...$keys): bool;
 
     /**
-     * @phpstan-return TValue|null
+     * @return TValue|null
      */
     public function pullValue(): mixed;
 
     /**
-     * @phpstan-param TValue|null $value
+     * @param TValue|null $value
      */
     public function setValue(mixed $value): static;
 
@@ -91,7 +91,7 @@ interface Tree extends
     ): string;
 
     /**
-     * @phpstan-return array<string, TValue|null>
+     * @return array<string, TValue|null>
      */
     public function toDelimitedSet(
         bool $urlEncode = false,
@@ -99,7 +99,7 @@ interface Tree extends
     ): array;
 
     /**
-     * @phpstan-return array<static<TValue>>
+     * @return array<static<TValue>>
      */
     public function getChildren(): array;
 }

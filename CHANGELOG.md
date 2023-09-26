@@ -1,3 +1,6 @@
+## v0.8.2 (2023-09-26)
+* Converted phpstan doc comments to generic
+
 ## v0.8.1 (2022-11-23)
 * Ensure all Collection interfaces are Traversable
 * Migrated to use effigy in CI workflow
