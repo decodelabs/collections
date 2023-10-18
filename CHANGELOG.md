@@ -1,3 +1,6 @@
+## v0.8.3 (2023-10-18)
+* Updated Lucid dependency
+
 ## v0.8.2 (2023-09-26)
 * Converted phpstan doc comments to generic
 
