@@ -25,7 +25,7 @@ use IteratorAggregate;
 /**
  * @template TValue
  * @implements Tree<TValue>
- * @implements IteratorAggregate<int|string, Tree<TValue>>
+ * @implements IteratorAggregate<int|string, static<TValue>>
  */
 class NativeMutable implements
     IteratorAggregate,
