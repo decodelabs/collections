@@ -467,6 +467,10 @@ class NativeMutable implements
      */
     public function offsetExists(mixed $key): bool
     {
+        if (!$this->hasNode($key)) {
+            return false;
+        }
+
         return $this->getNode($key)->hasValue();
     }
 
