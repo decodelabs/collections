@@ -25,7 +25,7 @@ use IteratorAggregate;
 /**
  * @template TValue
  * @implements Tree<TValue>
- * @implements IteratorAggregate<int|string, Tree<TValue>>
+ * @implements IteratorAggregate<int|string, static<TValue>>
  */
 class NativeMutable implements
     IteratorAggregate,
@@ -467,6 +467,10 @@ class NativeMutable implements
      */
     public function offsetExists(mixed $key): bool
     {
+        if (!$this->hasNode($key)) {
+            return false;
+        }
+
         return $this->getNode($key)->hasValue();
     }
 

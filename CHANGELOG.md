@@ -1,3 +1,6 @@
+## v0.8.4 (2023-10-27)
+* Avoid affecting node list in offsetExists in Tree
+
 ## v0.8.3 (2023-10-18)
 * Updated Lucid dependency
 
