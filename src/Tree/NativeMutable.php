@@ -671,7 +671,7 @@ class NativeMutable implements
                 $key = $prefix . '[' . $key . ']';
             }
 
-            $output = array_merge($output, $child->toDelimitedSet($urlEncode, (string)$key));
+            $output += $child->toDelimitedSet($urlEncode, (string)$key);
         }
 
         return $output;
