@@ -1,3 +1,4 @@
+## v0.8.6 (2023-11-01)
 * Fixed numeric keys in array delimited sets
 
 ## v0.8.5 (2023-11-01)
