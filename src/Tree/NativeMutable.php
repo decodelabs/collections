@@ -631,7 +631,7 @@ class NativeMutable implements
         $output = [];
 
         foreach ($this->toDelimitedSet(true) as $key => $value) {
-            $key = rawurlencode($key);
+            $key = rawurlencode((string)$key);
 
             if (!empty($value) || $value === '0' || $value === 0) {
                 $output[] = $key . $valueDelimiter . rawurlencode((string)$value);
