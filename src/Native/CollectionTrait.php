@@ -42,8 +42,9 @@ trait CollectionTrait
      *
      * @param iterable<TKey, TValue> $items
      */
-    public function __construct(iterable $items)
-    {
+    public function __construct(
+        iterable $items
+    ) {
         $this->items = ArrayUtils::iterableToArray($items);
     }
 
@@ -86,8 +87,9 @@ trait CollectionTrait
     /**
      * Get first item, matching filter
      */
-    public function getFirst(callable $filter = null): mixed
-    {
+    public function getFirst(
+        callable $filter = null
+    ): mixed {
         /* @phpstan-ignore-next-line */
         return ArrayUtils::getFirst($this->items, $filter, $this);
     }
@@ -95,8 +97,9 @@ trait CollectionTrait
     /**
      * Get the last item in the list, matching filter
      */
-    public function getLast(callable $filter = null): mixed
-    {
+    public function getLast(
+        callable $filter = null
+    ): mixed {
         /* @phpstan-ignore-next-line */
         return ArrayUtils::getLast($this->items, $filter, $this);
     }
@@ -114,8 +117,9 @@ trait CollectionTrait
     /**
      * Add items to the end
      */
-    public function push(mixed ...$values): static
-    {
+    public function push(
+        mixed ...$values
+    ): static {
         return $this->append(...$values);
     }
 
@@ -134,8 +138,9 @@ trait CollectionTrait
     /**
      * Add items to the start
      */
-    public function unshift(mixed ...$values): static
-    {
+    public function unshift(
+        mixed ...$values
+    ): static {
         return $this->prepend(...$values);
     }
 
@@ -155,8 +160,9 @@ trait CollectionTrait
     /**
      * Add items to the end
      */
-    public function append(mixed ...$values): static
-    {
+    public function append(
+        mixed ...$values
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         array_push($output->items, ...$values);
         return $output;
@@ -165,8 +171,9 @@ trait CollectionTrait
     /**
      * Add items to the start
      */
-    public function prepend(mixed ...$values): static
-    {
+    public function prepend(
+        mixed ...$values
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         array_unshift($output->items, ...$values);
         return $output;
@@ -223,8 +230,9 @@ trait CollectionTrait
     /**
      * Pick a random $number length set of items
      */
-    public function sliceRandom(int $number): static
-    {
+    public function sliceRandom(
+        int $number
+    ): static {
         return $this->propagate(ArrayUtils::sliceRandom($this->items, $number));
     }
 
@@ -234,8 +242,9 @@ trait CollectionTrait
      *
      * @param int<1, max> $size
      */
-    public function chunk(int $size): array
-    {
+    public function chunk(
+        int $size
+    ): array {
         $output = [];
 
         foreach (array_chunk($this->items, $size, true) as $chunk) {
@@ -250,8 +259,9 @@ trait CollectionTrait
      *
      * @param int<1, max> $size
      */
-    public function chunkValues(int $size): array
-    {
+    public function chunkValues(
+        int $size
+    ): array {
         $output = [];
 
         foreach (array_chunk($this->items, $size, false) as $chunk) {
@@ -278,8 +288,9 @@ trait CollectionTrait
     /**
      * Return all items in collection where value or key not in $arrays
      */
-    public function diffAssoc(iterable ...$arrays): static
-    {
+    public function diffAssoc(
+        iterable ...$arrays
+    ): static {
         return $this->propagate(array_diff_assoc(
             $this->items,
             ...ArrayUtils::iterablesToArrays(...$arrays)
@@ -354,8 +365,9 @@ trait CollectionTrait
     /**
      * Return all items in collection where value not in $arrays
      */
-    public function diffValues(iterable ...$arrays): static
-    {
+    public function diffValues(
+        iterable ...$arrays
+    ): static {
         return $this->propagate(array_diff(
             $this->items,
             ...ArrayUtils::iterablesToArrays(...$arrays)
@@ -386,8 +398,9 @@ trait CollectionTrait
     /**
      * Return all items in collection where key not in $arrays
      */
-    public function diffKeys(iterable ...$arrays): static
-    {
+    public function diffKeys(
+        iterable ...$arrays
+    ): static {
         return $this->propagate(array_diff_key(
             $this->items,
             ...ArrayUtils::iterablesToArrays(...$arrays)
@@ -419,8 +432,9 @@ trait CollectionTrait
     /**
      * Return all items in collection where value or key in $arrays
      */
-    public function intersectAssoc(iterable ...$arrays): static
-    {
+    public function intersectAssoc(
+        iterable ...$arrays
+    ): static {
         return $this->propagate(array_intersect_assoc(
             $this->items,
             ...ArrayUtils::iterablesToArrays(...$arrays)
@@ -560,8 +574,9 @@ trait CollectionTrait
     /**
      * Return subset of collection where callback returns true
      */
-    public function filter(callable $callback = null): static
-    {
+    public function filter(
+        callable $callback = null
+    ): static {
         if ($callback) {
             return $this->propagate(array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH));
         } else {
@@ -586,8 +601,9 @@ trait CollectionTrait
     /**
      * Loop through collection to build new collection
      */
-    public function mapSelf(callable $callback): static
-    {
+    public function mapSelf(
+        callable $callback
+    ): static {
         if (
             $callback instanceof Closure &&
             (new ReflectionFunction($callback))->isGenerator()
@@ -625,8 +641,9 @@ trait CollectionTrait
     /**
      * Add all numeric values in collection
      */
-    public function getSum(callable $filter = null): float
-    {
+    public function getSum(
+        callable $filter = null
+    ): float {
         return Coercion::toFloat(
             $this->reduce(function ($result, $item) use ($filter) {
                 if ($filter) {
@@ -645,8 +662,9 @@ trait CollectionTrait
     /**
      * Multiple all numeric values in collection
      */
-    public function getProduct(callable $filter = null): float
-    {
+    public function getProduct(
+        callable $filter = null
+    ): float {
         return Coercion::toFloat(
             $this->reduce(function ($result, $item) use ($filter) {
                 if ($filter) {
@@ -665,8 +683,9 @@ trait CollectionTrait
     /**
      * Get average value of numerics
      */
-    public function getAvg(callable $filter = null): ?float
-    {
+    public function getAvg(
+        callable $filter = null
+    ): ?float {
         if (!$count = count($this->items)) {
             return null;
         }
@@ -711,24 +730,27 @@ trait CollectionTrait
     /**
      * Get by array access
      */
-    public function offsetGet(mixed $key): mixed
-    {
+    public function offsetGet(
+        mixed $key
+    ): mixed {
         return $this->get($key);
     }
 
     /**
      * Check by array access
      */
-    public function offsetExists(mixed $key): bool
-    {
+    public function offsetExists(
+        mixed $key
+    ): bool {
         return $this->has($key);
     }
 
     /**
      * Remove by array access
      */
-    public function offsetUnset(mixed $key): void
-    {
+    public function offsetUnset(
+        mixed $key
+    ): void {
         $this->remove($key);
     }
 
@@ -783,5 +805,7 @@ trait CollectionTrait
      *
      * @return static<TKey, TValue>
      */
-    abstract protected static function propagate(iterable $newItems = []): static;
+    abstract protected static function propagate(
+        iterable $newItems = []
+    ): static;
 }

@@ -36,16 +36,18 @@ trait HashMapTrait
     /**
      * Retrieve a single entry
      */
-    public function get(int|string $key): mixed
-    {
+    public function get(
+        int|string $key
+    ): mixed {
         return $this->items[$key] ?? null;
     }
 
     /**
      * Retrieve entry and remove from collection
      */
-    public function pull(int|string $key): mixed
-    {
+    public function pull(
+        int|string $key
+    ): mixed {
         $output = $this->items[$key] ?? null;
 
         if (static::MUTABLE) {
@@ -70,8 +72,9 @@ trait HashMapTrait
     /**
      * True if any provided keys have a set value (not null)
      */
-    public function has(int|string ...$keys): bool
-    {
+    public function has(
+        int|string ...$keys
+    ): bool {
         foreach ($keys as $key) {
             if (isset($this->items[$key])) {
                 return true;
@@ -84,8 +87,9 @@ trait HashMapTrait
     /**
      * True if all provided keys have a set value (not null)
      */
-    public function hasAll(int|string ...$keys): bool
-    {
+    public function hasAll(
+        int|string ...$keys
+    ): bool {
         foreach ($keys as $key) {
             if (!isset($this->items[$key])) {
                 return false;
@@ -98,8 +102,9 @@ trait HashMapTrait
     /**
      * True if any provided keys are in the collection
      */
-    public function hasKey(int|string ...$keys): bool
-    {
+    public function hasKey(
+        int|string ...$keys
+    ): bool {
         foreach ($keys as $key) {
             if (array_key_exists($key, $this->items)) {
                 return true;
@@ -112,8 +117,9 @@ trait HashMapTrait
     /**
      * True if all provided keys are in the collection
      */
-    public function hasKeys(int|string ...$keys): bool
-    {
+    public function hasKeys(
+        int|string ...$keys
+    ): bool {
         foreach ($keys as $key) {
             if (!array_key_exists($key, $this->items)) {
                 return false;
@@ -126,8 +132,9 @@ trait HashMapTrait
     /**
      * Remove all values associated with $keys
      */
-    public function remove(int|string ...$keys): static
-    {
+    public function remove(
+        int|string ...$keys
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_diff_key($output->items, array_flip($keys));
         return $output;
@@ -136,8 +143,9 @@ trait HashMapTrait
     /**
      * Remove all values not associated with $keys
      */
-    public function keep(int|string ...$keys): static
-    {
+    public function keep(
+        int|string ...$keys
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_intersect_key($output->items, array_flip($keys));
         return $output;
@@ -211,8 +219,9 @@ trait HashMapTrait
     /**
      * Switch key case for all entries
      */
-    public function changeKeyCase(int $case = CASE_LOWER): static
-    {
+    public function changeKeyCase(
+        int $case = CASE_LOWER
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_change_key_case($output->items, $case);
         return $output;
@@ -222,8 +231,9 @@ trait HashMapTrait
     /**
      * Map values of collection to $keys
      */
-    public function combineWithKeys(iterable $keys): static
-    {
+    public function combineWithKeys(
+        iterable $keys
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
 
         if (false !== ($result = array_combine(ArrayUtils::iterableToArray($keys), $output->items))) {
@@ -236,8 +246,9 @@ trait HashMapTrait
     /**
      * Map $values to values of collection as keys
      */
-    public function combineWithValues(iterable $values): static
-    {
+    public function combineWithValues(
+        iterable $values
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
 
         /* @phpstan-ignore-next-line */
@@ -252,8 +263,9 @@ trait HashMapTrait
     /**
      * Replace all values with $value
      */
-    public function fill(mixed $value): static
-    {
+    public function fill(
+        mixed $value
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_fill_keys(array_keys($output->items), $value);
         return $output;
@@ -277,8 +289,9 @@ trait HashMapTrait
     /**
      * Merge all passed collections into one
      */
-    public function merge(iterable ...$arrays): static
-    {
+    public function merge(
+        iterable ...$arrays
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_merge($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
@@ -287,8 +300,9 @@ trait HashMapTrait
     /**
      * Merge EVERYTHING :D
      */
-    public function mergeRecursive(iterable ...$arrays): static
-    {
+    public function mergeRecursive(
+        iterable ...$arrays
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_merge_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
@@ -298,8 +312,9 @@ trait HashMapTrait
     /**
      * Like merge, but replaces.. obvs
      */
-    public function replace(iterable ...$arrays): static
-    {
+    public function replace(
+        iterable ...$arrays
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
@@ -308,8 +323,9 @@ trait HashMapTrait
     /**
      * Replace EVERYTHING :D
      */
-    public function replaceRecursive(iterable ...$arrays): static
-    {
+    public function replaceRecursive(
+        iterable ...$arrays
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
@@ -367,8 +383,9 @@ trait HashMapTrait
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags = SORT_STRING): static
-    {
+    public function unique(
+        int $flags = SORT_STRING
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
         return $output;
@@ -408,8 +425,9 @@ trait HashMapTrait
      * @template FValue
      * @param iterable<int|string, FValue> $newItems
      */
-    protected static function propagate(iterable $newItems = []): static
-    {
+    protected static function propagate(
+        iterable $newItems = []
+    ): static {
         /** @var static $output */
         $output = new self($newItems);
         return $output;

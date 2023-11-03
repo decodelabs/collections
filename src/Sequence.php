@@ -20,12 +20,16 @@ interface Sequence extends
     /**
      * @return TValue|null
      */
-    public function get(int $key): mixed;
+    public function get(
+        int $key
+    ): mixed;
 
     /**
      * @return TValue|null
      */
-    public function pull(int $key): mixed;
+    public function pull(
+        int $key
+    ): mixed;
 
     /**
      * @param TValue $value
@@ -43,12 +47,30 @@ interface Sequence extends
         mixed $value
     ): static;
 
-    public function has(int ...$keys): bool;
-    public function hasAll(int ...$keys): bool;
-    public function hasKey(int ...$keys): bool;
-    public function hasKeys(int ...$keys): bool;
-    public function remove(int ...$keys): static;
-    public function keep(int ...$keys): static;
+    public function has(
+        int ...$keys
+    ): bool;
+
+    public function hasAll(
+        int ...$keys
+    ): bool;
+
+    public function hasKey(
+        int ...$keys
+    ): bool;
+
+    public function hasKeys(
+        int ...$keys
+    ): bool;
+
+    public function remove(
+        int ...$keys
+    ): static;
+
+    public function keep(
+        int ...$keys
+    ): static;
+
 
 
     /**
@@ -73,7 +95,9 @@ interface Sequence extends
     /**
      * @param TValue $value
      */
-    public function fill(mixed $value): static;
+    public function fill(
+        mixed $value
+    ): static;
 
     /**
      * @param TValue $value
@@ -87,23 +111,31 @@ interface Sequence extends
     /**
      * @param iterable<TValue> ...$arrays
      */
-    public function merge(iterable ...$arrays): static;
+    public function merge(
+        iterable ...$arrays
+    ): static;
 
     /**
      * @param iterable<TValue> ...$arrays
      */
-    public function mergeRecursive(iterable ...$arrays): static;
+    public function mergeRecursive(
+        iterable ...$arrays
+    ): static;
 
 
     /**
      * @param iterable<TValue> ...$arrays
      */
-    public function replace(iterable ...$arrays): static;
+    public function replace(
+        iterable ...$arrays
+    ): static;
 
     /**
      * @param iterable<TValue> ...$arrays
      */
-    public function replaceRecursive(iterable ...$arrays): static;
+    public function replaceRecursive(
+        iterable ...$arrays
+    ): static;
 
 
     /**
@@ -152,7 +184,9 @@ interface Sequence extends
     ): static;
 
 
-    public function unique(int $flags = SORT_STRING): static;
+    public function unique(
+        int $flags = SORT_STRING
+    ): static;
 
     public function walk(
         callable $callback,

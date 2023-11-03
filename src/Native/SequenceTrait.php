@@ -31,8 +31,9 @@ trait SequenceTrait
      *
      * @param iterable<TValue> $items
      */
-    public function __construct(iterable $items)
-    {
+    public function __construct(
+        iterable $items
+    ) {
         $this->items = array_values(
             ArrayUtils::iterableToArray($items)
         );
@@ -51,8 +52,9 @@ trait SequenceTrait
     /**
      * Get item by index
      */
-    public function get(int $key): mixed
-    {
+    public function get(
+        int $key
+    ): mixed {
         if ($key < 0) {
             $key += count($this->items);
 
@@ -71,8 +73,9 @@ trait SequenceTrait
     /**
      * Get and remove item by index
      */
-    public function pull(int $key): mixed
-    {
+    public function pull(
+        int $key
+    ): mixed {
         $key = $this->normalizeKey($key);
         $output = $this->items[$key] ?? null;
 
@@ -130,8 +133,9 @@ trait SequenceTrait
     /**
      * True if any provided keys have a set value (not null)
      */
-    public function has(int ...$keys): bool
-    {
+    public function has(
+        int ...$keys
+    ): bool {
         $count = count($this->items);
 
         foreach ($keys as $key) {
@@ -158,8 +162,9 @@ trait SequenceTrait
     /**
      * True if all provided keys have a set value (not null)
      */
-    public function hasAll(int ...$keys): bool
-    {
+    public function hasAll(
+        int ...$keys
+    ): bool {
         $count = count($this->items);
 
         foreach ($keys as $key) {
@@ -186,8 +191,9 @@ trait SequenceTrait
     /**
      * True if any provided keys are in the collection
      */
-    public function hasKey(int ...$keys): bool
-    {
+    public function hasKey(
+        int ...$keys
+    ): bool {
         $count = count($this->items);
 
         foreach ($keys as $key) {
@@ -214,8 +220,9 @@ trait SequenceTrait
     /**
      * True if all provided keys are in the collection
      */
-    public function hasKeys(int ...$keys): bool
-    {
+    public function hasKeys(
+        int ...$keys
+    ): bool {
         $count = count($this->items);
 
         foreach ($keys as $key) {
@@ -242,8 +249,9 @@ trait SequenceTrait
     /**
      * Remove all values associated with $keys
      */
-    public function remove(int ...$keys): static
-    {
+    public function remove(
+        int ...$keys
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
 
         array_walk($keys, function (&$key) {
@@ -257,8 +265,9 @@ trait SequenceTrait
     /**
      * Remove all values not associated with $keys
      */
-    public function keep(int ...$keys): static
-    {
+    public function keep(
+        int ...$keys
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
 
         array_walk($keys, function (&$key) {
@@ -327,8 +336,9 @@ trait SequenceTrait
     /**
      * Replace all values with $value
      */
-    public function fill(mixed $value): static
-    {
+    public function fill(
+        mixed $value
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_fill_keys(array_keys($output->items), $value);
         return $output;
@@ -351,8 +361,9 @@ trait SequenceTrait
     /**
      * Merge all passed collections into one
      */
-    public function merge(iterable ...$arrays): static
-    {
+    public function merge(
+        iterable ...$arrays
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(array_merge($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
         return $output;
@@ -361,8 +372,9 @@ trait SequenceTrait
     /**
      * Merge EVERYTHING :D
      */
-    public function mergeRecursive(iterable ...$arrays): static
-    {
+    public function mergeRecursive(
+        iterable ...$arrays
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(array_merge_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
         return $output;
@@ -372,8 +384,9 @@ trait SequenceTrait
     /**
      * Like merge, but replaces.. obvs
      */
-    public function replace(iterable ...$arrays): static
-    {
+    public function replace(
+        iterable ...$arrays
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(
             array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays))
@@ -384,8 +397,9 @@ trait SequenceTrait
     /**
      * Replace EVERYTHING :D
      */
-    public function replaceRecursive(iterable ...$arrays): static
-    {
+    public function replaceRecursive(
+        iterable ...$arrays
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_values(
             array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays))
@@ -496,8 +510,9 @@ trait SequenceTrait
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags = SORT_STRING): static
-    {
+    public function unique(
+        int $flags = SORT_STRING
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
         return $output;
@@ -545,8 +560,9 @@ trait SequenceTrait
     /**
      * Prepare an index
      */
-    protected function normalizeKey(int $key): int
-    {
+    protected function normalizeKey(
+        int $key
+    ): int {
         if ($key < 0) {
             $key += count($this->items);
 
@@ -570,8 +586,9 @@ trait SequenceTrait
      * @template FValue
      * @param iterable<FValue> $newItems
      */
-    protected static function propagate(iterable $newItems = []): static
-    {
+    protected static function propagate(
+        iterable $newItems = []
+    ): static {
         /** @var static $output */
         $output = new self($newItems);
         return $output;

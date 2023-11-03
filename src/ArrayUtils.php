@@ -124,8 +124,9 @@ class ArrayUtils
      *
      * @param array<string|int, mixed> $array
      */
-    public static function isAssoc(array $array): bool
-    {
+    public static function isAssoc(
+        array $array
+    ): bool {
         $keys = array_keys($array);
         return array_keys($keys) !== $keys;
     }
@@ -190,8 +191,9 @@ class ArrayUtils
      * @param array<TKey, TValue> $array
      * @return TValue
      */
-    public static function getRandom(array $array): mixed
-    {
+    public static function getRandom(
+        array $array
+    ): mixed {
         if (empty($array)) {
             throw Exceptional::Underflow(
                 'Cannot pick random, array is empty'
@@ -236,8 +238,9 @@ class ArrayUtils
      * @param array<TKey, TValue> $array
      * @return array<TKey, TValue>
      */
-    public static function kshuffle(array $array): array
-    {
+    public static function kshuffle(
+        array $array
+    ): array {
         uksort($array, function (): int {
             return rand() > getrandmax() / 2 ?
                 1 : 0;
@@ -285,8 +288,9 @@ class ArrayUtils
      * @param iterable<TKey, TValue> $iterable
      * @return array<TKey, TValue>
      */
-    public static function iterableToArray(iterable $iterable): array
-    {
+    public static function iterableToArray(
+        iterable $iterable
+    ): array {
         if (is_array($iterable)) {
             return $iterable;
         }
@@ -312,8 +316,9 @@ class ArrayUtils
      * @param iterable<TKey, TValue> ...$iterables
      * @return array<array<TKey, TValue>>
      */
-    public static function iterablesToArrays(iterable ...$iterables): array
-    {
+    public static function iterablesToArrays(
+        iterable ...$iterables
+    ): array {
         $output = [];
 
         foreach ($iterables as $i => $iterable) {
@@ -355,8 +360,9 @@ class ArrayUtils
      *
      * @param array<string|int, mixed> $array
      */
-    public static function export(array $array): string
-    {
+    public static function export(
+        array $array
+    ): string {
         return self::exportLevel($array, 1);
     }
 

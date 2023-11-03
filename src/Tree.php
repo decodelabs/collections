@@ -39,9 +39,18 @@ interface Tree extends
         mixed $value
     ): void;
 
-    public function __get(int|string $key): static;
-    public function __isset(int|string $key): bool;
-    public function __unset(int|string $key): void;
+    public function __get(
+        int|string $key
+    ): static;
+
+    public function __isset(
+        int|string $key
+    ): bool;
+
+    public function __unset(
+        int|string $key
+    ): void;
+
 
     /**
      * @param TValue|iterable<TValue>|null $value
@@ -51,9 +60,18 @@ interface Tree extends
         mixed $value
     ): static;
 
-    public function getNode(int|string $key): static;
-    public function hasNode(int|string ...$keys): bool;
-    public function hasAllNodes(int|string ...$keys): bool;
+    public function getNode(
+        int|string $key
+    ): static;
+
+    public function hasNode(
+        int|string ...$keys
+    ): bool;
+
+    public function hasAllNodes(
+        int|string ...$keys
+    ): bool;
+
 
     /**
      * @return TValue|null
@@ -63,7 +81,9 @@ interface Tree extends
     /**
      * @param TValue|null $value
      */
-    public function setValue(mixed $value): static;
+    public function setValue(
+        mixed $value
+    ): static;
 
     public function hasValue(): bool;
     public function hasAnyValue(): bool;

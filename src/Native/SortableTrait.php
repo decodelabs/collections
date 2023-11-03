@@ -16,8 +16,9 @@ trait SortableTrait
     /**
      * Sort values, keep keys
      */
-    public function sort(int $flags = \SORT_REGULAR): static
-    {
+    public function sort(
+        int $flags = \SORT_REGULAR
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         asort($output->items, $flags);
         return $output;
@@ -26,8 +27,9 @@ trait SortableTrait
     /**
      * Reverse sort values, keep keys
      */
-    public function reverseSort(int $flags = \SORT_REGULAR): static
-    {
+    public function reverseSort(
+        int $flags = \SORT_REGULAR
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         arsort($output->items, $flags);
         return $output;
@@ -36,8 +38,9 @@ trait SortableTrait
     /**
      * Sort values using callback, keep keys
      */
-    public function sortBy(callable $callable): static
-    {
+    public function sortBy(
+        callable $callable
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         uasort($output->items, $callable);
         return $output;
@@ -68,8 +71,9 @@ trait SortableTrait
     /**
      * Sort values, ignore keys
      */
-    public function sortValues(int $flags = \SORT_REGULAR): static
-    {
+    public function sortValues(
+        int $flags = \SORT_REGULAR
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         sort($output->items, $flags);
         return $output;
@@ -78,8 +82,9 @@ trait SortableTrait
     /**
      * Reverse sort values, ignore keys
      */
-    public function reverseSortValues(int $flags = \SORT_REGULAR): static
-    {
+    public function reverseSortValues(
+        int $flags = \SORT_REGULAR
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         rsort($output->items, $flags);
         return $output;
@@ -88,8 +93,9 @@ trait SortableTrait
     /**
      * Sort values by callback, ignore keys
      */
-    public function sortValuesBy(callable $callback): static
-    {
+    public function sortValuesBy(
+        callable $callback
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         usort($output->items, $callback);
         return $output;
@@ -99,8 +105,9 @@ trait SortableTrait
     /**
      * Sort values by key
      */
-    public function sortKeys(int $flags = \SORT_REGULAR): static
-    {
+    public function sortKeys(
+        int $flags = \SORT_REGULAR
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         ksort($output->items, $flags);
         return $output;
@@ -109,8 +116,9 @@ trait SortableTrait
     /**
      * Reverse sort values by key
      */
-    public function reverseSortKeys(int $flags = \SORT_REGULAR): static
-    {
+    public function reverseSortKeys(
+        int $flags = \SORT_REGULAR
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         krsort($output->items, $flags);
         return $output;
@@ -119,8 +127,9 @@ trait SortableTrait
     /**
      * Sort values by key using callback
      */
-    public function sortKeysBy(callable $callback): static
-    {
+    public function sortKeysBy(
+        callable $callback
+    ): static {
         $output = static::MUTABLE ? $this : clone $this;
         uksort($output->items, $callback);
         return $output;
