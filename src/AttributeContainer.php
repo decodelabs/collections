@@ -15,13 +15,17 @@ interface AttributeContainer
      * @param array<string, mixed> $attributes
      * @return $this
      */
-    public function setAttributes(array $attributes): static;
+    public function setAttributes(
+        array $attributes
+    ): static;
 
     /**
      * @param array<string, mixed> $attributes
      * @return $this
      */
-    public function replaceAttributes(array $attributes): static;
+    public function replaceAttributes(
+        array $attributes
+    ): static;
 
     /**
      * @return array<string, mixed>
@@ -36,14 +40,25 @@ interface AttributeContainer
         mixed $value
     ): static;
 
-    public function getAttribute(string $key): mixed;
+    public function getAttribute(
+        string $key
+    ): mixed;
 
     /**
      * @return $this
      */
-    public function removeAttribute(string ...$keys): static;
-    public function hasAttribute(string ...$keys): bool;
-    public function hasAttributes(string ...$keys): bool;
+    public function removeAttribute(
+        string ...$keys
+    ): static;
+
+    public function hasAttribute(
+        string ...$keys
+    ): bool;
+
+    public function hasAttributes(
+        string ...$keys
+    ): bool;
+
 
     /**
      * @return $this

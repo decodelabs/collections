@@ -40,18 +40,24 @@ interface Collection extends
     /**
      * @return TValue|null
      */
-    public function getFirst(callable $filter = null): mixed;
+    public function getFirst(
+        callable $filter = null
+    ): mixed;
 
     /**
      * @return TValue|null
      */
-    public function getLast(callable $filter = null): mixed;
+    public function getLast(
+        callable $filter = null
+    ): mixed;
 
 
     /**
      * @param TValue ...$values
      */
-    public function push(mixed ...$values): static;
+    public function push(
+        mixed ...$values
+    ): static;
 
     /**
      * @return TValue|null
@@ -61,7 +67,9 @@ interface Collection extends
     /**
      * @param TValue ...$values
      */
-    public function unshift(mixed ...$values): static;
+    public function unshift(
+        mixed ...$values
+    ): static;
 
     /**
      * @return TValue|null
@@ -71,12 +79,16 @@ interface Collection extends
     /**
      * @param TValue ...$values
      */
-    public function append(mixed ...$values): static;
+    public function append(
+        mixed ...$values
+    ): static;
 
     /**
      * @param TValue ...$values
      */
-    public function prepend(mixed ...$values): static;
+    public function prepend(
+        mixed ...$values
+    ): static;
 
     public function getRandom(): mixed;
 
@@ -101,18 +113,24 @@ interface Collection extends
         int $length = null
     ): static;
 
-    public function sliceRandom(int $number): static;
+    public function sliceRandom(
+        int $number
+    ): static;
 
 
     /**
      * @return array<int, static<TKey, TValue, TIterate>>
      */
-    public function chunk(int $size): array;
+    public function chunk(
+        int $size
+    ): array;
 
     /**
      * @return array<int, static<TKey, TValue, TIterate>>
      */
-    public function chunkValues(int $size): array;
+    public function chunkValues(
+        int $size
+    ): array;
 
     /**
      * @return array<TKey, int>
@@ -123,7 +141,9 @@ interface Collection extends
     /**
      * @param iterable<TKey, TValue> ...$arrays
      */
-    public function diffAssoc(iterable ...$arrays): static; // array_diff_assoc
+    public function diffAssoc(
+        iterable ...$arrays
+    ): static; // array_diff_assoc
 
     /**
      * @param iterable<TKey, TValue> ...$arrays
@@ -153,7 +173,9 @@ interface Collection extends
     /**
      * @param iterable<TKey, TValue> ...$arrays
      */
-    public function diffValues(iterable ...$arrays): static; // array_diff
+    public function diffValues(
+        iterable ...$arrays
+    ): static; // array_diff
 
     /**
      * @param iterable<TKey, TValue> ...$arrays
@@ -166,7 +188,9 @@ interface Collection extends
     /**
      * @param iterable<TKey, TValue> ...$arrays
      */
-    public function diffKeys(iterable ...$arrays): static; // array_diff_key
+    public function diffKeys(
+        iterable ...$arrays
+    ): static; // array_diff_key
 
     /**
      * @param iterable<TKey, TValue> ...$arrays
@@ -180,7 +204,9 @@ interface Collection extends
     /**
      * @param iterable<TKey, TValue> ...$arrays
      */
-    public function intersectAssoc(iterable ...$arrays): static; // array_intersect_assoc
+    public function intersectAssoc(
+        iterable ...$arrays
+    ): static; // array_intersect_assoc
 
     /**
      * @param iterable<TKey, TValue> ...$arrays
@@ -210,7 +236,9 @@ interface Collection extends
     /**
      * @param iterable<TKey, TValue> ...$arrays
      */
-    public function intersectValues(iterable ...$arrays): static; // array_intersect
+    public function intersectValues(
+        iterable ...$arrays
+    ): static; // array_intersect
 
     /**
      * @param iterable<TKey, TValue> ...$arrays
@@ -223,7 +251,9 @@ interface Collection extends
     /**
      * @param iterable<TKey, TValue> ...$arrays
      */
-    public function intersectKeys(iterable ...$arrays): static; // array_intersect_key
+    public function intersectKeys(
+        iterable ...$arrays
+    ): static; // array_intersect_key
 
     /**
      * @param iterable<TKey, TValue> ...$arrays
@@ -234,7 +264,10 @@ interface Collection extends
     ): static; // array_intersect_ukey
 
 
-    public function filter(callable $callback = null): static;
+    public function filter(
+        callable $callback = null
+    ): static;
+
 
     /**
      * @param iterable<string|int, mixed> ...$arrays
@@ -244,7 +277,9 @@ interface Collection extends
         iterable ...$arrays
     ): static;
 
-    public function mapSelf(callable $callback): static;
+    public function mapSelf(
+        callable $callback
+    ): static;
 
     public function reduce(
         callable $callback,
@@ -252,9 +287,18 @@ interface Collection extends
     ): mixed;
 
 
-    public function getSum(callable $filter = null): float;
-    public function getProduct(callable $filter = null): float;
-    public function getAvg(callable $filter = null): ?float;
+    public function getSum(
+        callable $filter = null
+    ): float;
+
+    public function getProduct(
+        callable $filter = null
+    ): float;
+
+    public function getAvg(
+        callable $filter = null
+    ): ?float;
+
 
 
     /**

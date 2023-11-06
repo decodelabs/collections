@@ -101,8 +101,9 @@ class NativeMutable implements
     /**
      * Get node
      */
-    public function __get(int|string $key): static
-    {
+    public function __get(
+        int|string $key
+    ): static {
         if (!array_key_exists($key, $this->items)) {
             $this->items[$key] = new static();
         }
@@ -113,16 +114,18 @@ class NativeMutable implements
     /**
      * Check for node
      */
-    public function __isset(int|string $key): bool
-    {
+    public function __isset(
+        int|string $key
+    ): bool {
         return array_key_exists($key, $this->items);
     }
 
     /**
      * Remove node
      */
-    public function __unset(int|string $key): void
-    {
+    public function __unset(
+        int|string $key
+    ): void {
         unset($this->items[$key]);
     }
 
@@ -150,8 +153,9 @@ class NativeMutable implements
     /**
      * Get node by dot access
      */
-    public function getNode(int|string $key): static
-    {
+    public function getNode(
+        int|string $key
+    ): static {
         if (empty(static::KEY_SEPARATOR)) {
             return $this->__get($key);
         }
@@ -169,8 +173,9 @@ class NativeMutable implements
     /**
      * True if any provided keys exist as a node
      */
-    public function hasNode(int|string ...$keys): bool
-    {
+    public function hasNode(
+        int|string ...$keys
+    ): bool {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
                 if (isset($this->items[$key])) {
@@ -200,8 +205,9 @@ class NativeMutable implements
     /**
      * True if all provided keys exist as a node
      */
-    public function hasAllNodes(int|string ...$keys): bool
-    {
+    public function hasAllNodes(
+        int|string ...$keys
+    ): bool {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
                 if (!isset($this->items[$key])) {
@@ -232,8 +238,9 @@ class NativeMutable implements
      *
      * @return array<int|string>
      */
-    protected function splitNodeKey(int|string $key): array
-    {
+    protected function splitNodeKey(
+        int|string $key
+    ): array {
         $parts = false;
 
         if (is_string($key)) {
@@ -253,8 +260,9 @@ class NativeMutable implements
     /**
      * Get value
      */
-    public function get(int|string $key): mixed
-    {
+    public function get(
+        int|string $key
+    ): mixed {
         return $this->getNode($key)->getValue();
     }
 
@@ -263,8 +271,9 @@ class NativeMutable implements
      *
      * @return TValue|null
      */
-    public function pull(int|string $key): mixed
-    {
+    public function pull(
+        int|string $key
+    ): mixed {
         $node = $this->getNode($key);
         $output = $node->pullValue();
 
@@ -289,8 +298,9 @@ class NativeMutable implements
     /**
      * True if any provided keys have a set value (not null)
      */
-    public function has(int|string ...$keys): bool
-    {
+    public function has(
+        int|string ...$keys
+    ): bool {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
                 if (
@@ -325,8 +335,9 @@ class NativeMutable implements
     /**
      * True if all provided keys have a set value (not null)
      */
-    public function hasAll(int|string ...$keys): bool
-    {
+    public function hasAll(
+        int|string ...$keys
+    ): bool {
         if (empty(static::KEY_SEPARATOR)) {
             foreach ($keys as $key) {
                 if (!(
@@ -457,16 +468,18 @@ class NativeMutable implements
     /**
      * Get by array access
      */
-    public function offsetGet(mixed $key): mixed
-    {
+    public function offsetGet(
+        mixed $key
+    ): mixed {
         return $this->getNode($key)->getValue();
     }
 
     /**
      * Check by array access
      */
-    public function offsetExists(mixed $key): bool
-    {
+    public function offsetExists(
+        mixed $key
+    ): bool {
         if (!$this->hasNode($key)) {
             return false;
         }
@@ -481,8 +494,9 @@ class NativeMutable implements
     /**
      * Set container value
      */
-    public function setValue(mixed $value): static
-    {
+    public function setValue(
+        mixed $value
+    ): static {
         if (is_iterable($value)) {
             /** @var iterable<int|string, TValue|iterable<mixed>> $value */
             return $this->merge($value);
@@ -583,7 +597,7 @@ class NativeMutable implements
     /**
      * From query string
      *
-     * @return Tree<string>
+     * @return Tree<string|bool>
      */
     public static function fromDelimitedString(
         string $string,
@@ -597,21 +611,26 @@ class NativeMutable implements
             throw Exceptional::UnexpectedValue('Cannot parse delimited string with empty delimiter');
         }
 
-        /** @var static<string> */
+        /** @var static<string|bool> */
         $output = new static();
         $parts = (array)explode($setDelimiter, $string);
 
         foreach ($parts as $part) {
             $valueParts = (array)explode($valueDelimiter, trim((string)$part), 2);
             $key = str_replace(['[', ']'], ['.', ''], urldecode((string)array_shift($valueParts)));
-            $value = array_shift($valueParts);
 
-            if (empty($value)) {
-                $value = null;
-            }
+            if (count($valueParts) === 0) {
+                $value = true;
+            } else {
+                $value = array_shift($valueParts);
 
-            if ($value !== null) {
-                $value = urldecode($value);
+                if (empty($value)) {
+                    $value = null;
+                }
+
+                if ($value !== null) {
+                    $value = urldecode($value);
+                }
             }
 
             $output->setNode($key, $value);
@@ -633,7 +652,14 @@ class NativeMutable implements
         foreach ($this->toDelimitedSet(true) as $key => $value) {
             $key = rawurlencode((string)$key);
 
-            if (!empty($value) || $value === '0' || $value === 0) {
+            if (
+                $value !== true &&
+                (
+                    !empty($value) ||
+                    $value === '0' ||
+                    $value === 0
+                )
+            ) {
                 $output[] = $key . $valueDelimiter . rawurlencode((string)$value);
             } else {
                 $output[] = $key;
@@ -681,8 +707,9 @@ class NativeMutable implements
     /**
      * Map $values to values of collection as keys
      */
-    public function combineWithValues(iterable $values): static
-    {
+    public function combineWithValues(
+        iterable $values
+    ): static {
         $items = array_filter(
             array_map(function ($node) {
                 return $node->getValue();
@@ -705,8 +732,9 @@ class NativeMutable implements
     /**
      * Replace all values with $value
      */
-    public function fill(mixed $value): static
-    {
+    public function fill(
+        mixed $value
+    ): static {
         $result = array_fill_keys(array_keys($this->items), $value);
         return $this->clear()->merge($result);
     }
@@ -733,8 +761,9 @@ class NativeMutable implements
      *
      * @param iterable<int|string, TValue|iterable<mixed>> ...$arrays
      */
-    public function merge(iterable ...$arrays): static
-    {
+    public function merge(
+        iterable ...$arrays
+    ): static {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
                 /** @var TValue|null $value */
@@ -773,8 +802,9 @@ class NativeMutable implements
     /**
      * Merge EVERYTHING :D
      */
-    public function mergeRecursive(iterable ...$arrays): static
-    {
+    public function mergeRecursive(
+        iterable ...$arrays
+    ): static {
         return $this->merge(...$arrays);
     }
 
@@ -782,8 +812,9 @@ class NativeMutable implements
     /**
      * Like merge, but replaces.. obvs
      */
-    public function replace(iterable ...$arrays): static
-    {
+    public function replace(
+        iterable ...$arrays
+    ): static {
         foreach ($arrays as $array) {
             if ($array instanceof Tree) {
                 /** @var TValue|null $value */
@@ -808,8 +839,9 @@ class NativeMutable implements
     /**
      * Alias of replace
      */
-    public function replaceRecursive(iterable ...$arrays): static
-    {
+    public function replaceRecursive(
+        iterable ...$arrays
+    ): static {
         return $this->replace(...$arrays);
     }
 
@@ -817,8 +849,9 @@ class NativeMutable implements
     /**
      * Remove duplicates from collection
      */
-    public function unique(int $flags = SORT_STRING): static
-    {
+    public function unique(
+        int $flags = SORT_STRING
+    ): static {
         $items = array_map(function ($node) {
             return (string)$node->getValue();
         }, $this->items);

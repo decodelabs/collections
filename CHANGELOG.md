@@ -1,3 +1,6 @@
+## v0.8.7 (2023-11-06)
+* Parse empty delimited string params as true
+
 ## v0.8.6 (2023-11-01)
 * Fixed numeric keys in array delimited sets
 

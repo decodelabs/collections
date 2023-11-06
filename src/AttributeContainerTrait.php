@@ -19,8 +19,9 @@ trait AttributeContainerTrait
     /**
      * Add attributes with map
      */
-    public function setAttributes(array $attributes): static
-    {
+    public function setAttributes(
+        array $attributes
+    ): static {
         foreach ($attributes as $key => $value) {
             $this->setAttribute($key, $value);
         }
@@ -31,8 +32,9 @@ trait AttributeContainerTrait
     /**
      * Replace all attributes with new map
      */
-    public function replaceAttributes(array $attributes): static
-    {
+    public function replaceAttributes(
+        array $attributes
+    ): static {
         return $this->clearAttributes()->setAttributes($attributes);
     }
 
@@ -58,16 +60,18 @@ trait AttributeContainerTrait
     /**
      * Retrieve attribute value if set
      */
-    public function getAttribute(string $key): mixed
-    {
+    public function getAttribute(
+        string $key
+    ): mixed {
         return $this->attributes[$key] ?? null;
     }
 
     /**
      * Remove single attribute
      */
-    public function removeAttribute(string ...$keys): static
-    {
+    public function removeAttribute(
+        string ...$keys
+    ): static {
         foreach ($keys as $key) {
             unset($this->attributes[$key]);
         }
@@ -78,8 +82,9 @@ trait AttributeContainerTrait
     /**
      *  Have any of these attributes been set?
      */
-    public function hasAttribute(string ...$keys): bool
-    {
+    public function hasAttribute(
+        string ...$keys
+    ): bool {
         foreach ($keys as $key) {
             if (isset($this->attributes[$key])) {
                 return true;
@@ -92,8 +97,9 @@ trait AttributeContainerTrait
     /**
      *  Have all of these attributes been set?
      */
-    public function hasAttributes(string ...$keys): bool
-    {
+    public function hasAttributes(
+        string ...$keys
+    ): bool {
         foreach ($keys as $key) {
             if (!isset($this->attributes[$key])) {
                 return false;
