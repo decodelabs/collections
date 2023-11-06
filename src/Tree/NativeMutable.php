@@ -597,7 +597,7 @@ class NativeMutable implements
     /**
      * From query string
      *
-     * @return Tree<string>
+     * @return Tree<string|bool>
      */
     public static function fromDelimitedString(
         string $string,
@@ -611,21 +611,26 @@ class NativeMutable implements
             throw Exceptional::UnexpectedValue('Cannot parse delimited string with empty delimiter');
         }
 
-        /** @var static<string> */
+        /** @var static<string|bool> */
         $output = new static();
         $parts = (array)explode($setDelimiter, $string);
 
         foreach ($parts as $part) {
             $valueParts = (array)explode($valueDelimiter, trim((string)$part), 2);
             $key = str_replace(['[', ']'], ['.', ''], urldecode((string)array_shift($valueParts)));
-            $value = array_shift($valueParts);
 
-            if (empty($value)) {
-                $value = null;
-            }
+            if (count($valueParts) === 0) {
+                $value = true;
+            } else {
+                $value = array_shift($valueParts);
 
-            if ($value !== null) {
-                $value = urldecode($value);
+                if (empty($value)) {
+                    $value = null;
+                }
+
+                if ($value !== null) {
+                    $value = urldecode($value);
+                }
             }
 
             $output->setNode($key, $value);
@@ -647,7 +652,14 @@ class NativeMutable implements
         foreach ($this->toDelimitedSet(true) as $key => $value) {
             $key = rawurlencode((string)$key);
 
-            if (!empty($value) || $value === '0' || $value === 0) {
+            if (
+                $value !== true &&
+                (
+                    !empty($value) ||
+                    $value === '0' ||
+                    $value === 0
+                )
+            ) {
                 $output[] = $key . $valueDelimiter . rawurlencode((string)$value);
             } else {
                 $output[] = $key;
