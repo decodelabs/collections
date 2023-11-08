@@ -615,7 +615,7 @@ class NativeMutable implements
         $output = new static();
         $string = trim($string);
 
-        if(empty($string)) {
+        if (empty($string)) {
             return $output;
         }
 
