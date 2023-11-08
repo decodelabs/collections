@@ -1,3 +1,5 @@
+* Check for empty string in Tree::fromDelimitedString()
+
 ## v0.8.7 (2023-11-06)
 * Parse empty delimited string params as true
 

@@ -613,6 +613,12 @@ class NativeMutable implements
 
         /** @var static<string|bool> */
         $output = new static();
+        $string = trim($string);
+
+        if(empty($string)) {
+            return $output;
+        }
+
         $parts = (array)explode($setDelimiter, $string);
 
         foreach ($parts as $part) {
