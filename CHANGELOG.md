@@ -1,3 +1,4 @@
+## v0.9.0 (2024-08-21)
 * Converted consts to protected PascalCaes
 * Made PHP8.1 minimum version
 
