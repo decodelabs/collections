@@ -14,7 +14,7 @@
         "decodelabs/coercion": "^0.2",
         "decodelabs/exceptional": "^0.4",
         "decodelabs/fluidity": "^0.3",
-        "decodelabs/lucid-support": "^0.3"
+        "decodelabs/lucid-support": "^0.4"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.6"
