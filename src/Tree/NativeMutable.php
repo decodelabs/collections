@@ -41,8 +41,8 @@ class NativeMutable implements
      */
     use SanitizerProviderTrait;
 
-    public const MUTABLE = true;
-    public const KEY_SEPARATOR = '.';
+    protected const Mutable = true;
+    protected const KeySeparator = '.';
 
     /**
      * @var TValue|null
@@ -156,7 +156,7 @@ class NativeMutable implements
     public function getNode(
         int|string $key
     ): static {
-        if (empty(static::KEY_SEPARATOR)) {
+        if (empty(static::KeySeparator)) {
             return $this->__get($key);
         }
 
@@ -176,7 +176,7 @@ class NativeMutable implements
     public function hasNode(
         int|string ...$keys
     ): bool {
-        if (empty(static::KEY_SEPARATOR)) {
+        if (empty(static::KeySeparator)) {
             foreach ($keys as $key) {
                 if (isset($this->items[$key])) {
                     return true;
@@ -208,7 +208,7 @@ class NativeMutable implements
     public function hasAllNodes(
         int|string ...$keys
     ): bool {
-        if (empty(static::KEY_SEPARATOR)) {
+        if (empty(static::KeySeparator)) {
             foreach ($keys as $key) {
                 if (!isset($this->items[$key])) {
                     return false;
@@ -244,7 +244,7 @@ class NativeMutable implements
         $parts = false;
 
         if (is_string($key)) {
-            $parts = explode(static::KEY_SEPARATOR, $key);
+            $parts = explode(static::KeySeparator, $key);
         }
 
         if ($parts === false) {
@@ -301,7 +301,7 @@ class NativeMutable implements
     public function has(
         int|string ...$keys
     ): bool {
-        if (empty(static::KEY_SEPARATOR)) {
+        if (empty(static::KeySeparator)) {
             foreach ($keys as $key) {
                 if (
                     isset($this->items[$key]) &&
@@ -338,7 +338,7 @@ class NativeMutable implements
     public function hasAll(
         int|string ...$keys
     ): bool {
-        if (empty(static::KEY_SEPARATOR)) {
+        if (empty(static::KeySeparator)) {
             foreach ($keys as $key) {
                 if (!(
                     isset($this->items[$key]) &&
@@ -615,7 +615,7 @@ class NativeMutable implements
         $output = new static();
         $string = trim($string);
 
-        if(empty($string)) {
+        if (empty($string)) {
             return $output;
         }
 

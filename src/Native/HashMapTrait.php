@@ -50,7 +50,7 @@ trait HashMapTrait
     ): mixed {
         $output = $this->items[$key] ?? null;
 
-        if (static::MUTABLE) {
+        if (static::Mutable) {
             unset($this->items[$key]);
         }
 
@@ -64,7 +64,7 @@ trait HashMapTrait
         int|string $key,
         mixed $value
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items[$key] = $value;
         return $output;
     }
@@ -135,7 +135,7 @@ trait HashMapTrait
     public function remove(
         int|string ...$keys
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_diff_key($output->items, array_flip($keys));
         return $output;
     }
@@ -146,7 +146,7 @@ trait HashMapTrait
     public function keep(
         int|string ...$keys
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_intersect_key($output->items, array_flip($keys));
         return $output;
     }
@@ -172,7 +172,7 @@ trait HashMapTrait
      */
     public function clear(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = [];
         return $output;
     }
@@ -182,7 +182,7 @@ trait HashMapTrait
      */
     public function clearKeys(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_values($output->items);
         return $output;
     }
@@ -195,7 +195,7 @@ trait HashMapTrait
         bool $unique = false,
         bool $removeNull = false
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         /* @phpstan-ignore-next-line */
         $output->items = ArrayUtils::collapse($output->items, true, $unique, $removeNull);
         return $output;
@@ -208,7 +208,7 @@ trait HashMapTrait
         bool $unique = false,
         bool $removeNull = false
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         /* @phpstan-ignore-next-line */
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
         return $output;
@@ -222,7 +222,7 @@ trait HashMapTrait
     public function changeKeyCase(
         int $case = CASE_LOWER
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_change_key_case($output->items, $case);
         return $output;
     }
@@ -234,7 +234,7 @@ trait HashMapTrait
     public function combineWithKeys(
         iterable $keys
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
 
         if (false !== ($result = array_combine(ArrayUtils::iterableToArray($keys), $output->items))) {
             $output->items = $result;
@@ -249,7 +249,7 @@ trait HashMapTrait
     public function combineWithValues(
         iterable $values
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
 
         /* @phpstan-ignore-next-line */
         if (false !== ($result = array_combine($output->items, ArrayUtils::iterableToArray($values)))) {
@@ -266,7 +266,7 @@ trait HashMapTrait
     public function fill(
         mixed $value
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_fill_keys(array_keys($output->items), $value);
         return $output;
     }
@@ -292,7 +292,7 @@ trait HashMapTrait
     public function merge(
         iterable ...$arrays
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_merge($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
     }
@@ -303,7 +303,7 @@ trait HashMapTrait
     public function mergeRecursive(
         iterable ...$arrays
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_merge_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
     }
@@ -315,7 +315,7 @@ trait HashMapTrait
     public function replace(
         iterable ...$arrays
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
     }
@@ -326,7 +326,7 @@ trait HashMapTrait
     public function replaceRecursive(
         iterable ...$arrays
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays));
         return $output;
     }
@@ -342,7 +342,7 @@ trait HashMapTrait
         int $length = null,
         ?MixedMap &$removed = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
 
         if ($length === null) {
             $length = count($output->items);
@@ -366,7 +366,7 @@ trait HashMapTrait
         iterable $replacement,
         ?MixedMap &$removed = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
 
         if ($length === null) {
             $length = count($output->items);
@@ -386,7 +386,7 @@ trait HashMapTrait
     public function unique(
         int $flags = SORT_STRING
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
         return $output;
     }
@@ -399,7 +399,7 @@ trait HashMapTrait
         callable $callback,
         mixed $data = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         array_walk($output->items, $callback, $data);
         return $output;
     }
@@ -411,7 +411,7 @@ trait HashMapTrait
         callable $callback,
         mixed $data = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
         return $output;
     }

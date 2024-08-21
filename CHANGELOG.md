@@ -1,3 +1,7 @@
+## v0.9.0 (2024-08-21)
+* Converted consts to protected PascalCaes
+* Made PHP8.1 minimum version
+
 ## v0.8.8 (2023-11-08)
 * Check for empty string in Tree::fromDelimitedString()
 

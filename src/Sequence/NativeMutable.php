@@ -28,5 +28,5 @@ class NativeMutable implements
      */
     use SequenceTrait;
 
-    public const MUTABLE = true;
+    protected const Mutable = true;
 }
