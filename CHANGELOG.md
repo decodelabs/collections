@@ -1,3 +1,4 @@
+## v0.9.1 (2024-08-21)
 * Updated Lucid dependency
 
 ## v0.9.0 (2024-08-21)
