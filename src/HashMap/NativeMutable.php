@@ -28,5 +28,5 @@ class NativeMutable implements
      */
     use HashMapTrait;
 
-    public const MUTABLE = true;
+    protected const Mutable = true;
 }

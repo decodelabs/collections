@@ -30,7 +30,7 @@ trait CollectionTrait
 {
     use ThenTrait;
 
-    //const MUTABLE = false;
+    //protected const Mutable = false;
 
     /**
      * @var array<TKey, TValue>
@@ -54,7 +54,7 @@ trait CollectionTrait
      */
     public function isMutable(): bool
     {
-        return static::MUTABLE;
+        return static::Mutable;
     }
 
     /**
@@ -128,7 +128,7 @@ trait CollectionTrait
      */
     public function pop(): mixed
     {
-        if (static::MUTABLE) {
+        if (static::Mutable) {
             return array_pop($this->items);
         } else {
             return $this->getLast();
@@ -149,7 +149,7 @@ trait CollectionTrait
      */
     public function shift(): mixed
     {
-        if (static::MUTABLE) {
+        if (static::Mutable) {
             return array_shift($this->items);
         } else {
             return $this->getFirst();
@@ -163,7 +163,7 @@ trait CollectionTrait
     public function append(
         mixed ...$values
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         array_push($output->items, ...$values);
         return $output;
     }
@@ -174,7 +174,7 @@ trait CollectionTrait
     public function prepend(
         mixed ...$values
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         array_unshift($output->items, ...$values);
         return $output;
     }

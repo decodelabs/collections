@@ -19,7 +19,7 @@ trait SortableTrait
     public function sort(
         int $flags = \SORT_REGULAR
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         asort($output->items, $flags);
         return $output;
     }
@@ -30,7 +30,7 @@ trait SortableTrait
     public function reverseSort(
         int $flags = \SORT_REGULAR
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         arsort($output->items, $flags);
         return $output;
     }
@@ -41,7 +41,7 @@ trait SortableTrait
     public function sortBy(
         callable $callable
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         uasort($output->items, $callable);
         return $output;
     }
@@ -52,7 +52,7 @@ trait SortableTrait
      */
     public function sortNatural(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         natsort($output->items);
         return $output;
     }
@@ -62,7 +62,7 @@ trait SortableTrait
      */
     public function sortCaseNatural(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         natcasesort($output->items);
         return $output;
     }
@@ -74,7 +74,7 @@ trait SortableTrait
     public function sortValues(
         int $flags = \SORT_REGULAR
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         sort($output->items, $flags);
         return $output;
     }
@@ -85,7 +85,7 @@ trait SortableTrait
     public function reverseSortValues(
         int $flags = \SORT_REGULAR
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         rsort($output->items, $flags);
         return $output;
     }
@@ -96,7 +96,7 @@ trait SortableTrait
     public function sortValuesBy(
         callable $callback
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         usort($output->items, $callback);
         return $output;
     }
@@ -108,7 +108,7 @@ trait SortableTrait
     public function sortKeys(
         int $flags = \SORT_REGULAR
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         ksort($output->items, $flags);
         return $output;
     }
@@ -119,7 +119,7 @@ trait SortableTrait
     public function reverseSortKeys(
         int $flags = \SORT_REGULAR
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         krsort($output->items, $flags);
         return $output;
     }
@@ -130,7 +130,7 @@ trait SortableTrait
     public function sortKeysBy(
         callable $callback
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         uksort($output->items, $callback);
         return $output;
     }
@@ -141,7 +141,7 @@ trait SortableTrait
      */
     public function reverse(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_reverse($output->items, true);
         return $output;
     }
@@ -151,7 +151,7 @@ trait SortableTrait
      */
     public function reverseValues(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_reverse($output->items, false);
         return $output;
     }
@@ -161,7 +161,7 @@ trait SortableTrait
      */
     public function shuffle(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = ArrayUtils::kshuffle($output->items);
         return $output;
     }
@@ -171,7 +171,7 @@ trait SortableTrait
      */
     public function shuffleValues(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         shuffle($output->items);
         return $output;
     }

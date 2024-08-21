@@ -12,7 +12,6 @@ namespace DecodeLabs\Collections\Native;
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\Sequence;
-
 use DecodeLabs\Exceptional;
 
 /**
@@ -79,7 +78,7 @@ trait SequenceTrait
         $key = $this->normalizeKey($key);
         $output = $this->items[$key] ?? null;
 
-        if (static::MUTABLE) {
+        if (static::Mutable) {
             unset($this->items[$key]);
             $this->items = array_values($this->items);
         }
@@ -94,7 +93,7 @@ trait SequenceTrait
         int $key,
         mixed $value
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $count = count($output->items);
         $key = min($this->normalizeKey($key), $count);
 
@@ -109,7 +108,7 @@ trait SequenceTrait
         int $key,
         mixed $value
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $count = count($output->items);
         $key = $this->normalizeKey($key);
 
@@ -252,7 +251,7 @@ trait SequenceTrait
     public function remove(
         int ...$keys
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
 
         array_walk($keys, function (&$key) {
             $key = $this->normalizeKey($key);
@@ -268,7 +267,7 @@ trait SequenceTrait
     public function keep(
         int ...$keys
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
 
         array_walk($keys, function (&$key) {
             $key = $this->normalizeKey($key);
@@ -301,7 +300,7 @@ trait SequenceTrait
      */
     public function clear(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = [];
         return $output;
     }
@@ -311,7 +310,7 @@ trait SequenceTrait
      */
     public function clearKeys(): static
     {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_values($output->items);
         return $output;
     }
@@ -325,7 +324,7 @@ trait SequenceTrait
         bool $unique = false,
         bool $removeNull = false
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
         return $output;
     }
@@ -339,7 +338,7 @@ trait SequenceTrait
     public function fill(
         mixed $value
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_fill_keys(array_keys($output->items), $value);
         return $output;
     }
@@ -364,7 +363,7 @@ trait SequenceTrait
     public function merge(
         iterable ...$arrays
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_values(array_merge($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
         return $output;
     }
@@ -375,7 +374,7 @@ trait SequenceTrait
     public function mergeRecursive(
         iterable ...$arrays
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_values(array_merge_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays)));
         return $output;
     }
@@ -387,7 +386,7 @@ trait SequenceTrait
     public function replace(
         iterable ...$arrays
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_values(
             array_replace($output->items, ...ArrayUtils::iterablesToArrays(...$arrays))
         );
@@ -400,7 +399,7 @@ trait SequenceTrait
     public function replaceRecursive(
         iterable ...$arrays
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_values(
             array_replace_recursive($output->items, ...ArrayUtils::iterablesToArrays(...$arrays))
         );
@@ -416,7 +415,7 @@ trait SequenceTrait
         int $size,
         mixed $value = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_pad($output->items, 0 - abs($size), $value);
         return $output;
     }
@@ -428,7 +427,7 @@ trait SequenceTrait
         int $size,
         mixed $value = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_pad($output->items, abs($size), $value);
         return $output;
     }
@@ -440,7 +439,7 @@ trait SequenceTrait
         int $size,
         mixed $value = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $length = $output->count();
 
         if (($size = abs($size)) < $length) {
@@ -466,7 +465,7 @@ trait SequenceTrait
         int $length = null,
         Sequence &$removed = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $count = count($output->items);
         $offset = $this->normalizeKey($offset);
 
@@ -490,7 +489,7 @@ trait SequenceTrait
         iterable $replacement,
         Sequence &$removed = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $count = count($output->items);
         $offset = $this->normalizeKey($offset);
 
@@ -513,7 +512,7 @@ trait SequenceTrait
     public function unique(
         int $flags = SORT_STRING
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         $output->items = array_unique($output->items, $flags);
         return $output;
     }
@@ -526,7 +525,7 @@ trait SequenceTrait
         callable $callback,
         mixed $data = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         array_walk($output->items, $callback, $data);
         return $output;
     }
@@ -538,7 +537,7 @@ trait SequenceTrait
         callable $callback,
         mixed $data = null
     ): static {
-        $output = static::MUTABLE ? $this : clone $this;
+        $output = static::Mutable ? $this : clone $this;
         array_walk_recursive($output->items, $callback, $data);
         return $output;
     }
