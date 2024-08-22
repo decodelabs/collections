@@ -10,7 +10,11 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections\Native;
 
 use DecodeLabs\Collections\ArrayUtils;
+use DecodeLabs\Collections\Sortable;
 
+/**
+ * @phpstan-require-implements Sortable
+ */
 trait SortableTrait
 {
     /**

@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections\Tree;
 
 use ArrayIterator;
-
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\HashMap;
 use DecodeLabs\Collections\HashMap\NativeMutable as NativeHashMap;
@@ -18,7 +17,6 @@ use DecodeLabs\Collections\Native\HashMapTrait;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Lucid\Provider\MixedContextTrait as SanitizerProviderTrait;
-
 use Iterator;
 use IteratorAggregate;
 

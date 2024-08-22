@@ -15,6 +15,7 @@ use DecodeLabs\Collections\MixedMap;
 
 /**
  * @template TValue
+ * @phpstan-require-implements MixedMap<TValue,TValue>
  */
 trait HashMapTrait
 {

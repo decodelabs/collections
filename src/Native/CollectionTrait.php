@@ -11,20 +11,19 @@ namespace DecodeLabs\Collections\Native;
 
 use ArrayIterator;
 use Closure;
-
 use DecodeLabs\Coercion;
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
 use DecodeLabs\Collections\Sequence;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Fluidity\ThenTrait;
-
 use Iterator;
 use ReflectionFunction;
 
 /**
  * @template TKey
  * @template TValue
+ * @phpstan-require-implements Collection<TKey, TValue>
  */
 trait CollectionTrait
 {

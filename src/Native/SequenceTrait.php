@@ -16,6 +16,7 @@ use DecodeLabs\Exceptional;
 
 /**
  * @template TValue
+ * @phpstan-require-implements Sequence<TValue>
  */
 trait SequenceTrait
 {
