@@ -340,7 +340,7 @@ trait HashMapTrait
      */
     public function removeSlice(
         int $offset,
-        int $length = null,
+        ?int $length = null,
         ?MixedMap &$removed = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
@@ -363,7 +363,7 @@ trait HashMapTrait
      */
     public function replaceSlice(
         int $offset,
-        int $length = null,
+        ?int $length,
         iterable $replacement,
         ?MixedMap &$removed = null
     ): static {
@@ -431,6 +431,8 @@ trait HashMapTrait
     ): static {
         /** @var static $output */
         $output = new self($newItems);
+
+        // @phpstan-ignore-next-line
         return $output;
     }
 }

@@ -1,3 +1,5 @@
+* Fixed implicit nullable arguments
+* Fixed PHP issues
 * Added @phpstan-require-implements constraints
 
 ## v0.9.1 (2024-08-21)

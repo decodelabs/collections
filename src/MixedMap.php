@@ -156,7 +156,7 @@ interface MixedMap extends
      */
     public function removeSlice(
         int $offset,
-        int $length = null,
+        ?int $length = null,
         MixedMap &$removed = null
     ): static;
 
@@ -166,7 +166,7 @@ interface MixedMap extends
      */
     public function replaceSlice(
         int $offset,
-        int $length = null,
+        ?int $length,
         iterable $replacement,
         ?MixedMap &$removed = null
     ): static;

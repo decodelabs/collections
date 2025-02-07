@@ -27,7 +27,7 @@ interface Tree extends
      * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
      */
     public function __construct(
-        iterable $items = null,
+        ?iterable $items = null,
         mixed $value = null
     );
 
@@ -111,11 +111,11 @@ interface Tree extends
     ): string;
 
     /**
-     * @return array<string, TValue|null>
+     * @return array<string,TValue|null>
      */
     public function toDelimitedSet(
         bool $urlEncode = false,
-        string $prefix = null
+        ?string $prefix = null
     ): array;
 
     /**
