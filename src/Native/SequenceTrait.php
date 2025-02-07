@@ -465,7 +465,7 @@ trait SequenceTrait
     public function removeSlice(
         int $offset,
         ?int $length = null,
-        Sequence &$removed = null
+        ?Sequence &$removed = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
         $count = count($output->items);
@@ -489,7 +489,7 @@ trait SequenceTrait
         int $offset,
         ?int $length,
         iterable $replacement,
-        Sequence &$removed = null
+        ?Sequence &$removed = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
         $count = count($output->items);
