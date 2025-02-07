@@ -11,8 +11,9 @@ namespace DecodeLabs\Collections;
 
 use DecodeLabs\Coercion;
 use DecodeLabs\Exceptional;
-
 use Generator;
+use JsonSerializable;
+use Traversable;
 
 class ArrayUtils
 {
@@ -143,8 +144,8 @@ class ArrayUtils
      */
     public static function getFirst(
         iterable $data,
-        callable $filter = null,
-        object $callbackTarget = null
+        ?callable $filter = null,
+        ?object $callbackTarget = null
     ): mixed {
         foreach ($data as $key => $item) {
             if ($filter !== null && !$filter($item, $key, $callbackTarget)) {
@@ -167,8 +168,8 @@ class ArrayUtils
      */
     public static function getLast(
         iterable $data,
-        callable $filter = null,
-        object $callbackTarget = null
+        ?callable $filter = null,
+        ?object $callbackTarget = null
     ): mixed {
         $array = self::iterableToArray($data);
 
@@ -295,14 +296,14 @@ class ArrayUtils
             return $iterable;
         }
 
-        if ($iterable instanceof \JsonSerializable) {
+        if ($iterable instanceof JsonSerializable) {
             return $iterable->jsonSerialize();
         }
 
-        if (!$iterable instanceof \Traversable) {
-            $iterable = function () use ($iterable) {
+        if (!$iterable instanceof Traversable) {
+            $iterable = (function () use ($iterable) {
                 yield from $iterable;
-            };
+            })();
         }
 
         return iterator_to_array($iterable);
@@ -400,7 +401,10 @@ class ArrayUtils
                 $output .= 'null';
             } elseif (is_array($val)) {
                 $output .= self::exportLevel($val, $level + 1);
-            } elseif (is_int($val) || is_float($val)) {
+            } elseif (
+                is_int($val) ||
+                is_float($val)
+            ) {
                 $output .= $val;
             } elseif (is_bool($val)) {
                 if ($val) {

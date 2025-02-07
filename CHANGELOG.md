@@ -1,3 +1,8 @@
+## v0.9.2 (2025-02-07)
+* Fixed implicit nullable arguments
+* Fixed PHP issues
+* Added @phpstan-require-implements constraints
+
 ## v0.9.1 (2024-08-21)
 * Updated Lucid dependency
 

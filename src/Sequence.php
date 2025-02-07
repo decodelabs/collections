@@ -168,7 +168,7 @@ interface Sequence extends
      */
     public function removeSlice(
         int $offset,
-        int $length = null,
+        ?int $length = null,
         ?Sequence &$removed = null
     ): static;
 
@@ -178,7 +178,7 @@ interface Sequence extends
      */
     public function replaceSlice(
         int $offset,
-        int $length = null,
+        ?int $length,
         iterable $replacement,
         ?Sequence &$removed = null
     ): static;

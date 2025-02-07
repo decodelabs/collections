@@ -16,6 +16,7 @@ use DecodeLabs\Exceptional;
 
 /**
  * @template TValue
+ * @phpstan-require-implements Sequence<TValue>
  */
 trait SequenceTrait
 {
@@ -346,12 +347,13 @@ trait SequenceTrait
     /**
      * Create a new sequence with numeric range
      *
-     * @param int<0, max> $length
+     * @param int<0,max> $length
      */
     public static function createFill(
         int $length,
         mixed $value
     ): static {
+        // @phpstan-ignore-next-line
         return static::propagate(array_fill(0, $length, $value));
     }
 
@@ -462,7 +464,7 @@ trait SequenceTrait
      */
     public function removeSlice(
         int $offset,
-        int $length = null,
+        ?int $length = null,
         Sequence &$removed = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
@@ -485,7 +487,7 @@ trait SequenceTrait
      */
     public function replaceSlice(
         int $offset,
-        int $length = null,
+        ?int $length,
         iterable $replacement,
         Sequence &$removed = null
     ): static {
@@ -552,6 +554,7 @@ trait SequenceTrait
         int $end,
         int $step = 1
     ): static {
+        // @phpstan-ignore-next-line
         return static::propagate(range($start, $end, $step));
     }
 
@@ -590,6 +593,8 @@ trait SequenceTrait
     ): static {
         /** @var static $output */
         $output = new self($newItems);
+
+        // @phpstan-ignore-next-line
         return $output;
     }
 }

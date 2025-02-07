@@ -41,14 +41,14 @@ interface Collection extends
      * @return TValue|null
      */
     public function getFirst(
-        callable $filter = null
+        ?callable $filter = null
     ): mixed;
 
     /**
      * @return TValue|null
      */
     public function getLast(
-        callable $filter = null
+        ?callable $filter = null
     ): mixed;
 
 
@@ -110,7 +110,7 @@ interface Collection extends
 
     public function slice(
         int $offset,
-        int $length = null
+        ?int $length = null
     ): static;
 
     public function sliceRandom(
@@ -265,7 +265,7 @@ interface Collection extends
 
 
     public function filter(
-        callable $callback = null
+        ?callable $callback = null
     ): static;
 
 
@@ -288,15 +288,15 @@ interface Collection extends
 
 
     public function getSum(
-        callable $filter = null
+        ?callable $filter = null
     ): float;
 
     public function getProduct(
-        callable $filter = null
+        ?callable $filter = null
     ): float;
 
     public function getAvg(
-        callable $filter = null
+        ?callable $filter = null
     ): ?float;
 
 
@@ -306,6 +306,6 @@ interface Collection extends
      */
     public function pluck(
         string $valueKey,
-        string $indexKey = null
+        ?string $indexKey = null
     ): array;
 }

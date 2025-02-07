@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections\Tree;
 
 use ArrayIterator;
-
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\HashMap;
 use DecodeLabs\Collections\HashMap\NativeMutable as NativeHashMap;
@@ -18,7 +17,6 @@ use DecodeLabs\Collections\Native\HashMapTrait;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Lucid\Provider\MixedContextTrait as SanitizerProviderTrait;
-
 use Iterator;
 use IteratorAggregate;
 
@@ -58,7 +56,7 @@ class NativeMutable implements
      * Value based construct
      */
     public function __construct(
-        iterable $items = null,
+        ?iterable $items = null,
         mixed $value = null
     ) {
         if (!is_iterable($value)) {
@@ -680,7 +678,7 @@ class NativeMutable implements
      */
     public function toDelimitedSet(
         bool $urlEncode = false,
-        string $prefix = null
+        ?string $prefix = null
     ): array {
         $output = [];
 
@@ -912,6 +910,7 @@ class NativeMutable implements
      */
     public function getChildren(): array
     {
+        // @phpstan-ignore-next-line
         return $this->items;
     }
 
@@ -919,10 +918,11 @@ class NativeMutable implements
     /**
      * Iterator interface
      *
-     * @return Iterator<int|string, static<TValue>>
+     * @return Iterator<int|string,static<TValue>>
      */
     public function getIterator(): Iterator
     {
+        // @phpstan-ignore-next-line
         return new ArrayIterator($this->items);
     }
 
@@ -970,13 +970,14 @@ class NativeMutable implements
     /**
      * Copy and reinitialise new object
      *
-     * @param iterable<int|string, TValue|iterable<mixed>> $newItems
+     * @param iterable<int|string,TValue|iterable<mixed>> $newItems
      * @param TValue|null $value
      */
     protected static function propagate(
         ?iterable $newItems = [],
         mixed $value = null
     ): static {
+        // @phpstan-ignore-next-line
         return new static($newItems, $value);
     }
 }
