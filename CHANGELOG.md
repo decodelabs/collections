@@ -1,3 +1,6 @@
+## v0.9.3 (2025-02-07)
+* Fixed missed implicit nullable arguments
+
 ## v0.9.2 (2025-02-07)
 * Fixed implicit nullable arguments
 * Fixed PHP issues

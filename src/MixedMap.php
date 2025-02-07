@@ -157,7 +157,7 @@ interface MixedMap extends
     public function removeSlice(
         int $offset,
         ?int $length = null,
-        MixedMap &$removed = null
+        ?MixedMap &$removed = null
     ): static;
 
     /**
