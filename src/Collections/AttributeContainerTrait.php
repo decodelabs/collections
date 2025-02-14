@@ -11,16 +11,20 @@ namespace DecodeLabs\Collections;
 
 /**
  * @phpstan-require-implements AttributeContainer
+ * @template TValue
  */
 trait AttributeContainerTrait
 {
     /**
-     * @var array<string, mixed>
+     * @var array<string,TValue>
      */
     protected array $attributes = [];
 
     /**
      * Add attributes with map
+     *
+     * @param array<string,TValue> $attributes
+     * @return $this
      */
     public function setAttributes(
         array $attributes
@@ -34,15 +38,21 @@ trait AttributeContainerTrait
 
     /**
      * Replace all attributes with new map
+     *
+     * @param array<string,TValue> $attributes
      */
     public function replaceAttributes(
         array $attributes
     ): static {
-        return $this->clearAttributes()->setAttributes($attributes);
+        $this->clearAttributes();
+        $this->setAttributes($attributes);
+        return $this;
     }
 
     /**
      * Get map of current attributes
+     *
+     * @return array<string,TValue>
      */
     public function getAttributes(): array
     {
@@ -51,6 +61,8 @@ trait AttributeContainerTrait
 
     /**
      * Replace single value
+     *
+     * @param TValue $value
      */
     public function setAttribute(
         string $key,
@@ -62,6 +74,8 @@ trait AttributeContainerTrait
 
     /**
      * Retrieve attribute value if set
+     *
+     * @return ?TValue
      */
     public function getAttribute(
         string $key
@@ -71,6 +85,8 @@ trait AttributeContainerTrait
 
     /**
      * Remove single attribute
+     *
+     * @return $this
      */
     public function removeAttribute(
         string ...$keys
@@ -114,6 +130,8 @@ trait AttributeContainerTrait
 
     /**
      * Remove all attributes
+     *
+     * @return $this
      */
     public function clearAttributes(): static
     {

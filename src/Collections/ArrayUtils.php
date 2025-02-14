@@ -20,8 +20,9 @@ class ArrayUtils
     /**
      * Collapse multi-dimensional collections to flat array
      *
-     * @param iterable<string|int, mixed> $data
-     * @return array<string|int, mixed>
+     * @template TValue
+     * @param iterable<string|int,TValue|iterable<string|int,TValue>> $data
+     * @return array<string|int,TValue>
      */
     public static function collapse(
         iterable $data,
@@ -33,7 +34,10 @@ class ArrayUtils
         $sort = SORT_STRING;
 
         foreach ($data as $key => $value) {
-            if ($value === null && $removeNull) {
+            if (
+                $value === null &&
+                $removeNull
+            ) {
                 continue;
             }
 
@@ -48,14 +52,23 @@ class ArrayUtils
             }
 
             if (
-                (!$isIterable || $isContainer) &&
-                (!$removeNull || $value !== null)
+                (
+                    !$isIterable ||
+                    $isContainer
+                ) &&
+                (
+                    !$removeNull ||
+                    $value !== null
+                )
             ) {
                 if (is_object($value)) {
                     $sort = SORT_REGULAR;
                 }
 
-                if ($keepKeys && is_string($key)) {
+                if (
+                    $keepKeys &&
+                    is_string($key)
+                ) {
                     $output[$key] = $value;
                 } else {
                     $output[] = $value;
@@ -66,10 +79,12 @@ class ArrayUtils
                 $isIterable &&
                 $children !== null
             ) {
+                /** @var array<int|string,mixed> $children */
                 $output = array_merge($output, self::collapse(
-                    $children,
-                    $unique,
-                    $removeNull
+                    data: $children,
+                    keepKeys: $keepKeys,
+                    unique: $unique,
+                    removeNull: $removeNull
                 ));
             }
         }
@@ -85,8 +100,9 @@ class ArrayUtils
     /**
      * Generator, scanning all non-container nodes
      *
-     * @param iterable<string|int, mixed> $data
-     * @return Generator<string|int, mixed>
+     * @template TValue
+     * @param iterable<string|int,TValue|iterable<string|int,TValue>> $data
+     * @return Generator<string|int,TValue>
      */
     public static function scanValues(
         iterable $data,
@@ -104,8 +120,14 @@ class ArrayUtils
             }
 
             if (
-                (!$isIterable || $isContainer) &&
-                (!$removeNull || $value !== null)
+                (
+                    !$isIterable ||
+                    $isContainer
+                ) &&
+                (
+                    !$removeNull ||
+                    $value !== null
+                )
             ) {
                 yield $key => $value;
             }
@@ -114,24 +136,14 @@ class ArrayUtils
                 $isIterable &&
                 $children !== null
             ) {
-                yield from self::scanValues($children, $removeNull);
+                /** @var array<int|string,mixed> $children */
+                yield from self::scanValues(
+                    $children,
+                    $removeNull
+                );
             }
         }
     }
-
-
-    /**
-     * Check array is associative
-     *
-     * @param array<string|int, mixed> $array
-     */
-    public static function isAssoc(
-        array $array
-    ): bool {
-        $keys = array_keys($array);
-        return array_keys($keys) !== $keys;
-    }
-
 
 
     /**
@@ -139,7 +151,7 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param iterable<TKey, TValue> $data
+     * @param iterable<TKey,TValue> $data
      * @return TValue|null
      */
     public static function getFirst(
@@ -148,7 +160,10 @@ class ArrayUtils
         ?object $callbackTarget = null
     ): mixed {
         foreach ($data as $key => $item) {
-            if ($filter !== null && !$filter($item, $key, $callbackTarget)) {
+            if (
+                $filter !== null &&
+                !$filter($item, $key, $callbackTarget)
+            ) {
                 continue;
             }
 
@@ -163,7 +178,7 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param iterable<TKey, TValue> $data
+     * @param iterable<TKey,TValue> $data
      * @return TValue|null
      */
     public static function getLast(
@@ -189,7 +204,7 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param array<TKey, TValue> $array
+     * @param array<TKey,TValue> $array
      * @return TValue
      */
     public static function getRandom(
@@ -197,7 +212,7 @@ class ArrayUtils
     ): mixed {
         if (empty($array)) {
             throw Exceptional::Underflow(
-                'Cannot pick random, array is empty'
+                message: 'Cannot pick random, array is empty'
             );
         }
 
@@ -209,8 +224,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param array<TKey, TValue> $array
-     * @return array<TKey, TValue>
+     * @param array<TKey,TValue> $array
+     * @return array<TKey,TValue>
      */
     public static function sliceRandom(
         array $array,
@@ -224,11 +239,16 @@ class ArrayUtils
 
         if ($number > $count) {
             throw Exceptional::Underflow(
-                'Cannot random slice ' . $number . ' items, only ' . $count . ' items in array'
+                message: 'Cannot random slice ' . $number . ' items, only ' . $count . ' items in array'
             );
         }
 
-        return array_intersect_key($array, array_flip((array)array_rand($array, $number)));
+        return array_intersect_key(
+            $array,
+            array_flip(
+                (array)array_rand($array, $number)
+            )
+        );
     }
 
     /**
@@ -236,18 +256,15 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param array<TKey, TValue> $array
-     * @return array<TKey, TValue>
+     * @param array<TKey,TValue> $array
      */
     public static function kshuffle(
-        array $array
-    ): array {
+        array &$array
+    ): void {
         uksort($array, function (): int {
             return rand() > getrandmax() / 2 ?
                 1 : 0;
         });
-
-        return $array;
     }
 
     /**
@@ -255,9 +272,9 @@ class ArrayUtils
      *
      * @template TKey of int|string
      * @template TValue
-     * @param array<TKey, TValue> $array
+     * @param array<TKey,TValue> $array
      * @param array<TKey> $keys
-     * @return array<TKey, TValue>
+     * @return array<TKey,TValue>
      */
     public static function intersectKeys(
         array $array,
@@ -271,8 +288,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param array<TKey, TValue> $array
-     * @return array<TKey, TValue>
+     * @param array<TKey,TValue> $array
+     * @return array<TKey,TValue>
      */
     public static function filter(
         array $array,
@@ -286,8 +303,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param iterable<TKey, TValue> $iterable
-     * @return array<TKey, TValue>
+     * @param iterable<TKey,TValue> $iterable
+     * @return array<TKey,TValue>
      */
     public static function iterableToArray(
         iterable $iterable
@@ -297,16 +314,14 @@ class ArrayUtils
         }
 
         if ($iterable instanceof JsonSerializable) {
-            return $iterable->jsonSerialize();
+            /** @var array<TKey,TValue> $output */
+            $output = $iterable->jsonSerialize();
+            return $output;
         }
 
-        if (!$iterable instanceof Traversable) {
-            $iterable = (function () use ($iterable) {
-                yield from $iterable;
-            })();
-        }
-
-        return iterator_to_array($iterable);
+        /** @var array<TKey,TValue> $output */
+        $output = iterator_to_array($iterable);
+        return $output;
     }
 
     /**
@@ -314,8 +329,8 @@ class ArrayUtils
      *
      * @template TKey
      * @template TValue
-     * @param iterable<TKey, TValue> ...$iterables
-     * @return array<array<TKey, TValue>>
+     * @param iterable<TKey,TValue> ...$iterables
+     * @return array<array<TKey,TValue>>
      */
     public static function iterablesToArrays(
         iterable ...$iterables
@@ -330,9 +345,39 @@ class ArrayUtils
     }
 
     /**
+     * Create arg list for positional array functions
+     *
+     * @template TKey
+     * @template TValue
+     * @param array<iterable<TKey,TValue>> $iterables
+     * @return array<mixed>
+     */
+    public static function mapArrayArgs(
+        iterable $iterables,
+        ?callable $valueCallback = null,
+        ?callable $keyCallback = null
+    ): array {
+        $arrays = self::iterablesToArrays(...$iterables);
+
+        if(empty($arrays)) {
+            $arrays[] = [];
+        }
+
+        if($valueCallback) {
+            $arrays[] = $valueCallback;
+        }
+
+        if($keyCallback) {
+            $arrays[] = $keyCallback;
+        }
+
+        return $arrays;
+    }
+
+    /**
      * Multi dimensional in_array
      *
-     * @param array<string|int, mixed> $array
+     * @param array<string|int,mixed> $array
      */
     public static function inArrayRecursive(
         mixed $value,
@@ -397,7 +442,10 @@ class ArrayUtils
                 $output .= '\'' . addslashes((string)$key) . '\' => ';
             }
 
-            if (is_object($val) || is_null($val)) {
+            if (
+                is_object($val) ||
+                is_null($val)
+            ) {
                 $output .= 'null';
             } elseif (is_array($val)) {
                 $output .= self::exportLevel($val, $level + 1);

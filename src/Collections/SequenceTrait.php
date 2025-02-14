@@ -7,21 +7,21 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Collections\Native;
+namespace DecodeLabs\Collections;
 
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
-use DecodeLabs\Collections\Sequence;
+use DecodeLabs\Collections\SequenceInterface;
 use DecodeLabs\Exceptional;
 
 /**
  * @template TValue
- * @phpstan-require-implements Sequence<TValue>
+ * @phpstan-require-implements SequenceInterface<TValue>
  */
 trait SequenceTrait
 {
     /**
-     * @use CollectionTrait<int, TValue>
+     * @use CollectionTrait<int,TValue>
      */
     use CollectionTrait;
     use SortableTrait;
@@ -60,9 +60,8 @@ trait SequenceTrait
 
             if ($key < 0) {
                 throw Exceptional::OutOfBounds(
-                    'Index ' . $key . ' is not accessible',
-                    null,
-                    $this
+                    message: 'Index ' . $key . ' is not accessible',
+                    data: $this
                 );
             }
         }
@@ -144,9 +143,8 @@ trait SequenceTrait
 
                 if ($key < 0) {
                     throw Exceptional::OutOfBounds(
-                        'Index ' . $key . ' is not accessible',
-                        null,
-                        $this
+                        message: 'Index ' . $key . ' is not accessible',
+                        data: $this
                     );
                 }
             }
@@ -173,9 +171,8 @@ trait SequenceTrait
 
                 if ($key < 0) {
                     throw Exceptional::OutOfBounds(
-                        'Index ' . $key . ' is not accessible',
-                        null,
-                        $this
+                        message: 'Index ' . $key . ' is not accessible',
+                        data: $this
                     );
                 }
             }
@@ -202,9 +199,8 @@ trait SequenceTrait
 
                 if ($key < 0) {
                     throw Exceptional::OutOfBounds(
-                        'Index ' . $key . ' is not accessible',
-                        null,
-                        $this
+                        message: 'Index ' . $key . ' is not accessible',
+                        data: $this
                     );
                 }
             }
@@ -231,9 +227,8 @@ trait SequenceTrait
 
                 if ($key < 0) {
                     throw Exceptional::OutOfBounds(
-                        'Index ' . $key . ' is not accessible',
-                        null,
-                        $this
+                        message: 'Index ' . $key . ' is not accessible',
+                        data: $this
                     );
                 }
             }
@@ -353,7 +348,6 @@ trait SequenceTrait
         int $length,
         mixed $value
     ): static {
-        // @phpstan-ignore-next-line
         return static::propagate(array_fill(0, $length, $value));
     }
 
@@ -461,11 +455,13 @@ trait SequenceTrait
 
     /**
      * Remove $offet + $length items
+     *
+     * @param-out static<TValue> $removed
      */
     public function removeSlice(
         int $offset,
         ?int $length = null,
-        ?Sequence &$removed = null
+        ?SequenceInterface &$removed = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
         $count = count($output->items);
@@ -475,6 +471,7 @@ trait SequenceTrait
             $length = $count;
         }
 
+        // @phpstan-ignore-next-line PHPStan bug
         $removed = $this->propagate(
             array_splice($output->items, $offset, $length)
         );
@@ -484,12 +481,14 @@ trait SequenceTrait
 
     /**
      * Like removeSlice, but leaves a present behind
+     *
+     * @param-out static<TValue> $removed
      */
     public function replaceSlice(
         int $offset,
         ?int $length,
         iterable $replacement,
-        ?Sequence &$removed = null
+        ?SequenceInterface &$removed = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
         $count = count($output->items);
@@ -499,6 +498,7 @@ trait SequenceTrait
             $length = $count;
         }
 
+        // @phpstan-ignore-next-line PHPStan bug
         $removed = $this->propagate(
             array_splice($output->items, $offset, $length, array_values(ArrayUtils::iterableToArray($replacement)))
         );
@@ -554,7 +554,6 @@ trait SequenceTrait
         int $end,
         int $step = 1
     ): static {
-        // @phpstan-ignore-next-line
         return static::propagate(range($start, $end, $step));
     }
 
@@ -570,9 +569,8 @@ trait SequenceTrait
 
             if ($key < 0) {
                 throw Exceptional::OutOfBounds(
-                    'Index ' . $key . ' is not accessible',
-                    null,
-                    $this
+                    message: 'Index ' . $key . ' is not accessible',
+                    data: $this
                 );
             }
         }
@@ -594,7 +592,6 @@ trait SequenceTrait
         /** @var static $output */
         $output = new self($newItems);
 
-        // @phpstan-ignore-next-line
         return $output;
     }
 }

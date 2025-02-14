@@ -11,9 +11,9 @@ namespace DecodeLabs\Collections;
 
 /**
  * @template TValue
- * @extends Collection<int, TValue, TValue>
+ * @extends Collection<int,TValue>
  */
-interface Sequence extends
+interface SequenceInterface extends
     Collection,
     Sortable
 {
@@ -169,7 +169,7 @@ interface Sequence extends
     public function removeSlice(
         int $offset,
         ?int $length = null,
-        ?Sequence &$removed = null
+        ?SequenceInterface &$removed = null
     ): static;
 
     /**
@@ -180,7 +180,7 @@ interface Sequence extends
         int $offset,
         ?int $length,
         iterable $replacement,
-        ?Sequence &$removed = null
+        ?SequenceInterface &$removed = null
     ): static;
 
 

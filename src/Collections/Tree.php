@@ -7,14 +7,10 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Collections\Tree;
+namespace DecodeLabs\Collections;
 
 use ArrayIterator;
-use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\HashMap;
-use DecodeLabs\Collections\HashMap\NativeMutable as NativeHashMap;
-use DecodeLabs\Collections\Native\HashMapTrait;
-use DecodeLabs\Collections\Tree;
+use DecodeLabs\Coercion;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Lucid\Provider\MixedContextTrait as SanitizerProviderTrait;
 use Iterator;
@@ -22,33 +18,37 @@ use IteratorAggregate;
 
 /**
  * @template TValue
- * @implements Tree<TValue>
- * @implements IteratorAggregate<int|string, static<TValue>>
+ * @template TKey of int|string = int|string
+ * @implements TreeInterface<TValue,TKey>
+ * @implements IteratorAggregate<TKey,static<TValue>>
+ * @phpstan-import-type ChildList from TreeInterface
  */
-class NativeMutable implements
+class Tree implements
     IteratorAggregate,
-    Tree
+    TreeInterface
 {
     /**
-     * @use HashMapTrait<TValue>
+     * @use DictionaryTrait<TValue>
      */
-    use HashMapTrait;
+    use DictionaryTrait;
 
     /**
      * @use SanitizerProviderTrait<TValue>
      */
     use SanitizerProviderTrait;
 
-    protected const Mutable = true;
-    protected const KeySeparator = '.';
+    protected const bool Mutable = true;
+
+    /** @var non-empty-string */
+    protected const string KeySeparator = '.';
 
     /**
-     * @var TValue|null
+     * @var ?TValue
      */
     protected mixed $value = null;
 
     /**
-     * @var array<int|string, static>
+     * @var array<TKey,static>
      */
     protected array $items = [];
 
@@ -68,7 +68,7 @@ class NativeMutable implements
         }
 
         if (is_iterable($value)) {
-            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
+            // @phpstan-ignore-next-line PHPStan bug
             $this->merge($value);
         }
     }
@@ -88,6 +88,8 @@ class NativeMutable implements
 
     /**
      * Set node value
+     *
+     * @param TKey $key
      */
     public function __set(
         int|string $key,
@@ -98,6 +100,8 @@ class NativeMutable implements
 
     /**
      * Get node
+     *
+     * @param TKey $key
      */
     public function __get(
         int|string $key
@@ -111,6 +115,8 @@ class NativeMutable implements
 
     /**
      * Check for node
+     *
+     * @param TKey $key
      */
     public function __isset(
         int|string $key
@@ -120,6 +126,8 @@ class NativeMutable implements
 
     /**
      * Remove node
+     *
+     * @param TKey $key
      */
     public function __unset(
         int|string $key
@@ -131,6 +139,9 @@ class NativeMutable implements
 
     /**
      * Set value by dot access
+     *
+     * @param TKey $key
+     * @param TValue|iterable<TKey,TValue|iterable<TKey,static>>|null $value
      */
     public function setNode(
         int|string $key,
@@ -139,7 +150,7 @@ class NativeMutable implements
         $node = $this->getNode($key);
 
         if (is_iterable($value)) {
-            /** @var iterable<int|string, TValue> $value */
+            /** @var iterable<TKey,TValue> $value */
             $node->clear()->merge($value);
         } else {
             $node->setValue($value);
@@ -150,6 +161,8 @@ class NativeMutable implements
 
     /**
      * Get node by dot access
+     *
+     * @param TKey $key
      */
     public function getNode(
         int|string $key
@@ -170,6 +183,8 @@ class NativeMutable implements
 
     /**
      * True if any provided keys exist as a node
+     *
+     * @param TKey ...$keys
      */
     public function hasNode(
         int|string ...$keys
@@ -202,6 +217,8 @@ class NativeMutable implements
 
     /**
      * True if all provided keys exist as a node
+     *
+     * @param TKey ...$keys
      */
     public function hasAllNodes(
         int|string ...$keys
@@ -234,32 +251,48 @@ class NativeMutable implements
     /**
      * Split node key string
      *
-     * @return array<int|string>
+     * @param TKey $key
+     * @return list<TKey>
      */
     protected function splitNodeKey(
         int|string $key
     ): array {
-        $parts = false;
-
         if (is_string($key)) {
-            $parts = explode(static::KeySeparator, $key);
+            // @phpstan-ignore-next-line
+            return explode(static::KeySeparator, $key);
+        } else {
+            return [$key];
         }
-
-        if ($parts === false) {
-            $parts = [$key];
-        }
-
-        return $parts;
     }
 
+
+    /**
+     * Get first item, matching filter
+     */
+    public function getFirst(
+        ?callable $filter = null
+    ): mixed {
+        return ArrayUtils::getFirst($this->items, $filter, $this)?->getValue();
+    }
+
+    /**
+     * Get the last item in the list, matching filter
+     */
+    public function getLast(
+        ?callable $filter = null
+    ): mixed {
+        return ArrayUtils::getLast($this->items, $filter, $this)?->getValue();
+    }
 
 
 
     /**
      * Get value
+     *
+     * @param TKey $key
      */
     public function get(
-        int|string $key
+        mixed $key
     ): mixed {
         return $this->getNode($key)->getValue();
     }
@@ -267,10 +300,11 @@ class NativeMutable implements
     /**
      * Retrieve entry and remove from collection
      *
+     * @param TKey $key
      * @return TValue|null
      */
     public function pull(
-        int|string $key
+        mixed $key
     ): mixed {
         $node = $this->getNode($key);
         $output = $node->pullValue();
@@ -284,9 +318,11 @@ class NativeMutable implements
 
     /**
      * Set value on node
+     *
+     * @param TKey $key
      */
     public function set(
-        int|string $key,
+        mixed $key,
         mixed $value
     ): static {
         $this->getNode($key)->setValue($value);
@@ -295,9 +331,11 @@ class NativeMutable implements
 
     /**
      * True if any provided keys have a set value (not null)
+     *
+     * @param TKey ...$keys
      */
     public function has(
-        int|string ...$keys
+        mixed ...$keys
     ): bool {
         if (empty(static::KeySeparator)) {
             foreach ($keys as $key) {
@@ -332,9 +370,11 @@ class NativeMutable implements
 
     /**
      * True if all provided keys have a set value (not null)
+     *
+     * @param TKey ...$keys
      */
     public function hasAll(
-        int|string ...$keys
+        mixed ...$keys
     ): bool {
         if (empty(static::KeySeparator)) {
             foreach ($keys as $key) {
@@ -370,6 +410,8 @@ class NativeMutable implements
 
     /**
      * Pull first item
+     *
+     * @return ?TValue
      */
     public function pop(): mixed
     {
@@ -384,6 +426,8 @@ class NativeMutable implements
 
     /**
      * Pull last item
+     *
+     * @return ?TValue
      */
     public function shift(): mixed
     {
@@ -405,7 +449,10 @@ class NativeMutable implements
         foreach ($this->items as $key => $node) {
             $node->removeEmpty();
 
-            if ($node->isEmpty() && !$node->hasValue()) {
+            if (
+                $node->isEmpty() &&
+                !$node->hasValue()
+            ) {
                 unset($this->items[$key]);
             }
         }
@@ -415,14 +462,16 @@ class NativeMutable implements
 
     /**
      * Lookup a key by value
+     *
+     * @return ?TKey
      */
     public function findKey(
         mixed $value,
         bool $strict = false
-    ): ?string {
+    ): mixed {
         foreach ($this->items as $key => $node) {
             if ($node->isValue($value, $strict)) {
-                return (string)$key;
+                return $key;
             }
         }
 
@@ -442,21 +491,21 @@ class NativeMutable implements
 
 
 
-
     /**
      * Set by array access
      *
-     * @param int|string|null $key
-     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @param ?TKey $key
+     * @param TValue|iterable<TKey,TValue|iterable<TKey,static>>|null $value
      */
     public function offsetSet(
         mixed $key,
         mixed $value
     ): void {
         if ($key === null) {
+            // @phpstan-ignore-next-line
             $this->items[] = new static(null, $value);
         } elseif (is_iterable($value)) {
-            /** @var iterable<int|string, TValue> $value */
+            /** @var iterable<TKey,TValue> $value */
             $this->getNode($key)->merge($value);
         } else {
             $this->getNode($key)->setValue($value);
@@ -465,6 +514,8 @@ class NativeMutable implements
 
     /**
      * Get by array access
+     *
+     * @param TKey $key
      */
     public function offsetGet(
         mixed $key
@@ -474,6 +525,8 @@ class NativeMutable implements
 
     /**
      * Check by array access
+     *
+     * @param TKey $key
      */
     public function offsetExists(
         mixed $key
@@ -491,12 +544,17 @@ class NativeMutable implements
 
     /**
      * Set container value
+     *
+     * @param ?TValue $value
      */
     public function setValue(
         mixed $value
     ): static {
         if (is_iterable($value)) {
-            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
+            /**
+             * @var ChildList $value
+             * @phpstan-ignore-next-line PHPStan bug
+             */
             return $this->merge($value);
         }
 
@@ -565,20 +623,45 @@ class NativeMutable implements
 
     /**
      * Return indexed sum list - filters non scalar first
+     *
+     * @return MapInterface<TValue,int>
      */
-    public function countValues(): array
+    public function countValues(): MapInterface
     {
-        return array_count_values(
+        $output = array_count_values(
             array_map(function ($value) {
                 $value = $value->getValue();
 
-                if (is_string($value) || is_int($value)) {
+                if (
+                    is_string($value) ||
+                    is_int($value)
+                ) {
                     return $value;
                 } else {
                     return null;
                 }
             }, $this->items)
         );
+
+        /** @var MapInterface<TValue,int> */
+        $output = new Dictionary($output);
+        return $output;
+    }
+
+
+    /**
+     * Return subset of collection where callback returns true
+     */
+    public function filter(
+        ?callable $callback = null
+    ): static {
+        if ($callback) {
+            $output = array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH);
+        } else {
+            $output = array_filter($this->items, fn($node) => (bool)$node->getValue());
+        }
+
+        return $this->propagate($output);
     }
 
 
@@ -588,28 +671,29 @@ class NativeMutable implements
      */
     public function __toString(): string
     {
-        return (string)$this->value;
+        return Coercion::toString($this->value);
     }
 
 
     /**
      * From query string
      *
-     * @return Tree<string|bool>
+     * @return TreeInterface<string|bool>
      */
     public static function fromDelimitedString(
         string $string,
         string $setDelimiter = '&',
         string $valueDelimiter = '='
-    ): Tree {
+    ): TreeInterface {
         if (
             $setDelimiter === '' ||
             $valueDelimiter === ''
         ) {
-            throw Exceptional::UnexpectedValue('Cannot parse delimited string with empty delimiter');
+            throw Exceptional::UnexpectedValue(
+                message: 'Cannot parse delimited string with empty delimiter'
+            );
         }
 
-        /** @var static<string|bool> */
         $output = new static();
         $string = trim($string);
 
@@ -664,7 +748,9 @@ class NativeMutable implements
                     $value === 0
                 )
             ) {
-                $output[] = $key . $valueDelimiter . rawurlencode((string)$value);
+                $output[] = $key . $valueDelimiter . rawurlencode(
+                    Coercion::toString($value)
+                );
             } else {
                 $output[] = $key;
             }
@@ -716,16 +802,27 @@ class NativeMutable implements
     ): static {
         $items = array_filter(
             array_map(function ($node) {
-                return $node->getValue();
+                $output = $node->getValue();
+
+                if(is_int($output)) {
+                    return $output;
+                } else {
+                    return Coercion::toStringOrNull($output);
+                }
             }, $this->items),
             function ($value) {
                 return $value !== null;
             }
         );
 
-        /* @phpstan-ignore-next-line */
-        if (false !== ($result = array_combine($items, ArrayUtils::iterableToArray($values)))) {
-            $this->clear()->merge($result);
+        /** @var array<int|string> $items */
+        $result = array_combine($items, ArrayUtils::iterableToArray($values));
+
+        // @phpstan-ignore-next-line PHPStan bug
+        if($result === false) {
+            throw Exceptional::InvalidArgument(
+                'Key count does not match value count'
+            );
         }
 
         return $this;
@@ -747,23 +844,28 @@ class NativeMutable implements
     /**
      * Flip keys and values
      *
-     * @return HashMap<int|string>
+     * @return DictionaryInterface<TKey>
      */
-    public function flip(): HashMap
+    public function flip(): DictionaryInterface
     {
         $items = array_map(function ($node) {
-            return (string)$node->getValue();
+            $output = $node->getValue();
+
+            if(is_int($output)) {
+                return $output;
+            } else {
+                return Coercion::toStringOrNull($output);
+            }
         }, $this->items);
 
-        return new NativeHashMap(array_flip($items));
+        // @phpstan-ignore-next-line PHPStan bug
+        return new Dictionary(array_flip($items));
     }
 
 
 
     /**
      * Merge all passed collections into one
-     *
-     * @param iterable<int|string, TValue|iterable<mixed>> ...$arrays
      */
     public function merge(
         iterable ...$arrays
@@ -776,19 +878,17 @@ class NativeMutable implements
 
                 foreach ($array->getChildren() as $key => $node) {
                     if (isset($this->items[$key])) {
-                        /** @var iterable<int|string, TValue|iterable<mixed>> $node */
                         $this->items[$key]->merge($node);
                     } else {
-                        /** @var static $newNode */
-                        $newNode = clone $node;
-                        $this->items[$key] = $newNode;
+                        // @phpstan-ignore-next-line PHPStan bug
+                        $this->items[$key] = new static($node);
                     }
                 }
             } else {
                 foreach ($array as $key => $value) {
                     if (isset($this->items[$key])) {
                         if (is_iterable($value)) {
-                            /** @var iterable<int|string, TValue|iterable<mixed>> $value */
+                            // @phpstan-ignore-next-line PHPStan bug
                             $this->items[$key]->merge($value);
                         } else {
                             $this->items[$key]->setValue($value);
@@ -826,9 +926,8 @@ class NativeMutable implements
                 $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
-                    /** @var static $newNode */
-                    $newNode = clone $node;
-                    $this->items[$key] = $newNode;
+                    // @phpstan-ignore-next-line PHPStan bug
+                    $this->items[$key] = new static($node);
                 }
             } else {
                 foreach ($array as $key => $value) {
@@ -857,7 +956,7 @@ class NativeMutable implements
         int $flags = SORT_STRING
     ): static {
         $items = array_map(function ($node) {
-            return (string)$node->getValue();
+            return Coercion::toString($node->getValue());
         }, $this->items);
 
         $items = array_unique($items, $flags);
@@ -866,7 +965,7 @@ class NativeMutable implements
 
 
     /**
-     * @return array<int|string, TValue|array<mixed>|null>
+     * @return array<TKey,TValue|array<mixed>|null>
      */
     public function getChildValues(): array
     {
@@ -888,7 +987,7 @@ class NativeMutable implements
     /**
      * Recursive array conversion
      *
-     * @return array<int|string, TValue|array<mixed>|null>
+     * @return array<TKey,TValue|array<mixed>|null>
      */
     public function toArray(): array
     {
@@ -910,19 +1009,77 @@ class NativeMutable implements
      */
     public function getChildren(): array
     {
-        // @phpstan-ignore-next-line
         return $this->items;
     }
+
+
+
+
+
+    /**
+     * Sort values, keep keys
+     */
+    public function sort(
+        int $flags = \SORT_REGULAR
+    ): static {
+        uasort($this->items, function($a, $b) {
+            return $a->value <=> $b->value;
+        });
+
+        return $this;
+    }
+
+    /**
+     * Reverse sort values, keep keys
+     */
+    public function reverseSort(
+        int $flags = \SORT_REGULAR
+    ): static {
+        uasort($this->items, function($a, $b) {
+            return $b->value <=> $a->value;
+        });
+
+        return $this;
+    }
+
+    /**
+     * Sort values, ignore keys
+     */
+    public function sortValues(
+        int $flags = \SORT_REGULAR
+    ): static {
+        usort($this->items, function($a, $b) {
+            return $a->value <=> $b->value;
+        });
+
+        return $this;
+    }
+
+    /**
+     * Reverse sort values, ignore keys
+     */
+    public function reverseSortValues(
+        int $flags = \SORT_REGULAR
+    ): static {
+        usort($this->items, function($a, $b) {
+            return $b->value <=> $a->value;
+        });
+
+        return $this;
+    }
+
+
+
+
 
 
     /**
      * Iterator interface
      *
-     * @return Iterator<int|string,static<TValue>>
+     * @return ArrayIterator<TKey,static>
      */
-    public function getIterator(): Iterator
+    public function getIterator(): ArrayIterator
     {
-        // @phpstan-ignore-next-line
         return new ArrayIterator($this->items);
     }
 
@@ -931,14 +1088,14 @@ class NativeMutable implements
     /**
      * Get dump info
      *
-     * @return array<int|string, mixed>
+     * @return array<mixed>
      */
     public function __debugInfo(): array
     {
         $output = [];
 
         foreach ($this->items as $key => $child) {
-            if ($child instanceof self && empty($child->items)) {
+            if (empty($child->items)) {
                 $output[$key] = $child->value;
             } else {
                 $output[$key] = $child;
@@ -970,14 +1127,14 @@ class NativeMutable implements
     /**
      * Copy and reinitialise new object
      *
-     * @param iterable<int|string,TValue|iterable<mixed>> $newItems
+     * @param iterable<TKey,TValue|iterable<mixed>> $newItems
      * @param TValue|null $value
      */
     protected static function propagate(
         ?iterable $newItems = [],
         mixed $value = null
     ): static {
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         return new static($newItems, $value);
     }
 }

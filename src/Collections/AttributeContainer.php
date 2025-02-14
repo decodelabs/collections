@@ -9,10 +9,13 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Collections;
 
+/**
+ * @template TValue
+ */
 interface AttributeContainer
 {
     /**
-     * @param array<string, mixed> $attributes
+     * @param array<string,TValue> $attributes
      * @return $this
      */
     public function setAttributes(
@@ -20,7 +23,7 @@ interface AttributeContainer
     ): static;
 
     /**
-     * @param array<string, mixed> $attributes
+     * @param array<string,TValue> $attributes
      * @return $this
      */
     public function replaceAttributes(
@@ -28,11 +31,12 @@ interface AttributeContainer
     ): static;
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,TValue>
      */
     public function getAttributes(): array;
 
     /**
+     * @param TValue $value
      * @return $this
      */
     public function setAttribute(
@@ -40,6 +44,9 @@ interface AttributeContainer
         mixed $value
     ): static;
 
+    /**
+     * @return ?TValue
+     */
     public function getAttribute(
         string $key
     ): mixed;

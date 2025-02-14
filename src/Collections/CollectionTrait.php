@@ -7,32 +7,35 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Collections\Native;
+namespace DecodeLabs\Collections;
 
 use ArrayIterator;
 use Closure;
 use DecodeLabs\Coercion;
 use DecodeLabs\Collections\ArrayUtils;
 use DecodeLabs\Collections\Collection;
-use DecodeLabs\Collections\Sequence;
+use DecodeLabs\Collections\Dictionary;
+use DecodeLabs\Collections\SequenceInterface;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Fluidity\ThenTrait;
+use Generator;
 use Iterator;
 use ReflectionFunction;
 
 /**
  * @template TKey
  * @template TValue
- * @phpstan-require-implements Collection<TKey, TValue>
+ * @template TIterate = TValue
+ * @phpstan-require-implements Collection<TKey,TValue,TIterate>
  */
 trait CollectionTrait
 {
     use ThenTrait;
 
-    //protected const Mutable = false;
+    //protected const bool Mutable = false;
 
     /**
-     * @var array<TKey, TValue>
+     * @var array<TKey,TValue>
      */
     protected array $items = [];
 
@@ -89,7 +92,6 @@ trait CollectionTrait
     public function getFirst(
         ?callable $filter = null
     ): mixed {
-        /* @phpstan-ignore-next-line */
         return ArrayUtils::getFirst($this->items, $filter, $this);
     }
 
@@ -99,7 +101,6 @@ trait CollectionTrait
     public function getLast(
         ?callable $filter = null
     ): mixed {
-        /* @phpstan-ignore-next-line */
         return ArrayUtils::getLast($this->items, $filter, $this);
     }
 
@@ -218,13 +219,14 @@ trait CollectionTrait
         int $offset,
         ?int $length = null
     ): static {
-        // @phpstan-ignore-next-line
-        return $this->propagate(array_slice(
-            $this->items,
-            $offset,
-            $length,
-            true
-        ));
+        $output = array_slice(
+            array: $this->items,
+            offset: $offset,
+            length: $length,
+            preserve_keys: true
+        );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -233,58 +235,80 @@ trait CollectionTrait
     public function sliceRandom(
         int $number
     ): static {
-        // @phpstan-ignore-next-line
-        return $this->propagate(ArrayUtils::sliceRandom($this->items, $number));
+        $output = ArrayUtils::sliceRandom(
+            array: $this->items,
+            number: $number
+        );
+
+        /**
+         * Ignore required for Tree
+         * @phpstan-ignore-next-line
+         */
+        return $this->propagate($output);
     }
 
 
     /**
      * Split the current items into $size length chunks, maintain keys
      *
-     * @param int<1, max> $size
+     * @param int<1,max> $size
      */
     public function chunk(
         int $size
     ): array {
         $output = [];
 
-        foreach (array_chunk($this->items, $size, true) as $chunk) {
+        foreach (array_chunk(
+            array: $this->items,
+            length: $size,
+            preserve_keys: true
+        ) as $chunk) {
             $output[] = $this->propagate($chunk);
         }
 
-        // @phpstan-ignore-next-line
         return $output;
     }
 
     /**
      * Split the current items into $size length chunks, ignore keys
      *
-     * @param int<1, max> $size
+     * @param int<1,max> $size
      */
     public function chunkValues(
         int $size
     ): array {
         $output = [];
 
-        foreach (array_chunk($this->items, $size, false) as $chunk) {
+        foreach (array_chunk(
+            array: $this->items,
+            length: $size,
+            preserve_keys: false
+        ) as $chunk) {
             $output[] = $this->propagate($chunk);
         }
 
-        // @phpstan-ignore-next-line
         return $output;
     }
 
 
     /**
      * Return indexed sum list - filters non scalar first
+     *
+     * @return MapInterface<TValue,int>
      */
-    public function countValues(): array
+    public function countValues(): MapInterface
     {
-        return array_count_values(
+        $output = array_count_values(
             array_filter($this->items, function ($value) {
-                return is_string($value) || is_int($value);
+                return
+                    is_string($value) ||
+                    is_int($value);
             })
         );
+
+        /** @var MapInterface<TValue,int> */
+        $output = new Dictionary($output);
+        return $output;
     }
 
 
@@ -294,11 +318,15 @@ trait CollectionTrait
     public function diffAssoc(
         iterable ...$arrays
     ): static {
-        // @phpstan-ignore-next-line
-        return $this->propagate(array_diff_assoc(
+        $output = array_diff_assoc(
             $this->items,
-            ...ArrayUtils::iterablesToArrays(...$arrays)
-        ));
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays
+            )
+        );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -308,19 +336,16 @@ trait CollectionTrait
         callable $keyCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $keyCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_diff_uassoc($this->items, ...$args)
+        $output = array_diff_uassoc(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                keyCallback: $keyCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -330,19 +355,16 @@ trait CollectionTrait
         callable $valueCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $valueCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_udiff_assoc($this->items, ...$args)
+        $output = array_udiff_assoc(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                valueCallback: $valueCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -353,20 +375,17 @@ trait CollectionTrait
         callable $keyCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $valueCallback;
-        $args[] = $keyCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_udiff_uassoc($this->items, ...$args)
+        $output = array_udiff_uassoc(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                valueCallback: $valueCallback,
+                keyCallback: $keyCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -375,11 +394,15 @@ trait CollectionTrait
     public function diffValues(
         iterable ...$arrays
     ): static {
-        // @phpstan-ignore-next-line
-        return $this->propagate(array_diff(
+        $output = array_diff(
             $this->items,
-            ...ArrayUtils::iterablesToArrays(...$arrays)
-        ));
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays
+            )
+        );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -389,19 +412,16 @@ trait CollectionTrait
         callable $valueCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $valueCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_udiff($this->items, ...$args)
+        $output = array_udiff(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                valueCallback: $valueCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -410,11 +430,15 @@ trait CollectionTrait
     public function diffKeys(
         iterable ...$arrays
     ): static {
-        // @phpstan-ignore-next-line
-        return $this->propagate(array_diff_key(
+        $output = array_diff_key(
             $this->items,
-            ...ArrayUtils::iterablesToArrays(...$arrays)
-        ));
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays
+            )
+        );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -424,19 +448,16 @@ trait CollectionTrait
         callable $keyCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $keyCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_diff_ukey($this->items, ...$args)
+        $output = array_diff_ukey(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                keyCallback: $keyCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
 
@@ -446,11 +467,15 @@ trait CollectionTrait
     public function intersectAssoc(
         iterable ...$arrays
     ): static {
-        // @phpstan-ignore-next-line
-        return $this->propagate(array_intersect_assoc(
+        $output = array_intersect_assoc(
             $this->items,
-            ...ArrayUtils::iterablesToArrays(...$arrays)
-        ));
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays
+            )
+        );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -460,19 +485,16 @@ trait CollectionTrait
         callable $keyCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $keyCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_intersect_uassoc($this->items, ...$args)
+        $output = array_intersect_uassoc(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                keyCallback: $keyCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -482,19 +504,16 @@ trait CollectionTrait
         callable $valueCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $valueCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_uintersect_assoc($this->items, ...$args)
+        $output = array_uintersect_assoc(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                valueCallback: $valueCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -505,32 +524,34 @@ trait CollectionTrait
         callable $keyCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $valueCallback;
-        $args[] = $keyCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_uintersect_uassoc($this->items, ...$args)
+        $output = array_uintersect_uassoc(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                valueCallback: $valueCallback,
+                keyCallback: $keyCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
     /**
      * Return all items in collection where value in $arrays
      */
-    public function intersectValues(iterable ...$arrays): static
-    {
-        // @phpstan-ignore-next-line
-        return $this->propagate(array_intersect(
+    public function intersectValues(
+        iterable ...$arrays
+    ): static {
+        $output = array_intersect(
             $this->items,
-            ...ArrayUtils::iterablesToArrays(...$arrays)
-        ));
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays
+            )
+        );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -540,31 +561,33 @@ trait CollectionTrait
         callable $valueCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $valueCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_uintersect($this->items, ...$args)
+        $output = array_uintersect(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                valueCallback: $valueCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
     /**
      * Return all items in collection where key in $arrays
      */
-    public function intersectKeys(iterable ...$arrays): static
-    {
-        // @phpstan-ignore-next-line
-        return $this->propagate(array_intersect_key(
+    public function intersectKeys(
+        iterable ...$arrays
+    ): static {
+        $output = array_intersect_key(
             $this->items,
-            ...ArrayUtils::iterablesToArrays(...$arrays)
-        ));
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays
+            )
+        );
+
+        return $this->propagate($output);
     }
 
     /**
@@ -574,19 +597,16 @@ trait CollectionTrait
         callable $keyCallback,
         iterable ...$arrays
     ): static {
-        $args = ArrayUtils::iterablesToArrays(...$arrays);
-
-        if (!isset($args[0])) {
-            $args[0] = [];
-        }
-
-        $args[] = $keyCallback;
-
-        // @phpstan-ignore-next-line
-        return $this->propagate(
-            /** @phpstan-ignore-next-line */
-            array_intersect_ukey($this->items, ...$args)
+        $output = array_intersect_ukey(
+            $this->items,
+            // @phpstan-ignore-next-line
+            ...ArrayUtils::mapArrayArgs(
+                iterables: $arrays,
+                keyCallback: $keyCallback
+            )
         );
+
+        return $this->propagate($output);
     }
 
 
@@ -597,12 +617,12 @@ trait CollectionTrait
         ?callable $callback = null
     ): static {
         if ($callback) {
-            // @phpstan-ignore-next-line
-            return $this->propagate(array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH));
+            $output = array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH);
         } else {
-            // @phpstan-ignore-next-line
-            return $this->propagate(array_filter($this->items));
+            $output = array_filter($this->items);
         }
+
+        return $this->propagate($output);
     }
 
     /**
@@ -612,7 +632,6 @@ trait CollectionTrait
         callable $callback,
         iterable ...$arrays
     ): static {
-        // @phpstan-ignore-next-line
         return $this->propagate(array_map(
             $callback,
             $this->items,
@@ -626,27 +645,35 @@ trait CollectionTrait
     public function mapSelf(
         callable $callback
     ): static {
-        if (
-            $callback instanceof Closure &&
-            (new ReflectionFunction($callback))->isGenerator()
-        ) {
+        $callback = Closure::fromCallable($callback);
+
+        if (new ReflectionFunction($callback)->isGenerator()) {
             $output = [];
 
             foreach ($this->items as $key => $value) {
-                $output = array_merge($output, iterator_to_array($callback($value, $key)));
+                /**
+                 * @var TKey $key
+                 * @var Generator $iterable
+                 * @phpstan-ignore-next-line
+                 */
+                $iterable = $callback($value, $key);
+                $output = array_merge($output, iterator_to_array($iterable));
             }
+
 
             // @phpstan-ignore-next-line
             return $this->propagate($output);
         } else {
             $keys = array_keys($this->items);
+            /** @var Closure(TValue,int|string):mixed $callback */
             $items = array_map($callback, $this->items, $keys);
 
             if (count($keys) !== count($items)) {
-                throw Exceptional::UnexpectedValue('Combine failed - key count does not match item count');
+                throw Exceptional::UnexpectedValue(
+                    message: 'Combine failed - key count does not match item count'
+                );
             }
 
-            // @phpstan-ignore-next-line
             return $this->propagate((array)array_combine($keys, $items));
         }
     }
@@ -669,7 +696,7 @@ trait CollectionTrait
         ?callable $filter = null
     ): float {
         return Coercion::toFloat(
-            $this->reduce(function ($result, $item) use ($filter) {
+            $this->reduce(function (float $result, $item) use ($filter) {
                 if ($filter) {
                     $item = $filter($item);
                 }
@@ -678,7 +705,7 @@ trait CollectionTrait
                     return $result;
                 }
 
-                return $result + $item;
+                return $result + (float)$item;
             }, 0)
         );
     }
@@ -690,7 +717,7 @@ trait CollectionTrait
         ?callable $filter = null
     ): float {
         return Coercion::toFloat(
-            $this->reduce(function ($result, $item) use ($filter) {
+            $this->reduce(function (float $result, $item) use ($filter) {
                 if ($filter) {
                     $item = $filter($item);
                 }
@@ -699,7 +726,7 @@ trait CollectionTrait
                     return $result;
                 }
 
-                return $result * $item;
+                return $result * (float)$item;
             }, 1)
         );
     }
@@ -725,7 +752,9 @@ trait CollectionTrait
         string $valueKey,
         ?string $indexKey = null
     ): array {
-        return array_column($this->items, $valueKey, $indexKey);
+        return array_values(
+            array_column($this->items, $valueKey, $indexKey)
+        );
     }
 
 
@@ -734,17 +763,27 @@ trait CollectionTrait
 
     /**
      * Set by array access
+     *
+     * @param TValue $value
      */
     public function offsetSet(
         mixed $key,
         mixed $value
     ): void {
+        if(!static::Mutable) {
+            throw Exceptional::DomainException(
+                message: 'Cannot modify immutable collection'
+            );
+        }
+
         if ($key === null) {
-            if ($this instanceof Sequence) {
+            if ($this instanceof SequenceInterface) {
                 $this->push($value);
                 return;
             } else {
-                throw Exceptional::UnexpectedValue('Cannot push to HashMaps');
+                throw Exceptional::UnexpectedValue(
+                    message: 'Cannot push to Maps'
+                );
             }
         }
 
@@ -753,6 +792,8 @@ trait CollectionTrait
 
     /**
      * Get by array access
+     *
+     * @return ?TValue
      */
     public function offsetGet(
         mixed $key
@@ -775,6 +816,7 @@ trait CollectionTrait
     public function offsetUnset(
         mixed $key
     ): void {
+        // @phpstan-ignore-next-line PHPStan bug
         $this->remove($key);
     }
 
@@ -784,7 +826,7 @@ trait CollectionTrait
     /**
      * Iterator interface
      *
-     * @return Iterator<TKey, TValue>
+     * @return Iterator<TKey,TValue>
      */
     public function getIterator(): Iterator
     {
@@ -826,8 +868,6 @@ trait CollectionTrait
 
     /**
      * Copy and reinitialise new object
-     *
-     * @return static<TKey,TValue>
      */
     abstract protected static function propagate(
         iterable $newItems = []

@@ -18,11 +18,11 @@ use JsonSerializable;
 /**
  * @template TKey
  * @template TValue
- * @template TIterate of mixed|TValue
+ * @template TIterate = TValue
  *
- * @extends IteratorAggregate<TKey, TIterate>
- * @extends ArrayProvider<TKey, TValue>
- * @extends ArrayAccess<TKey, TValue>
+ * @extends IteratorAggregate<TKey,TIterate>
+ * @extends ArrayProvider<TKey,TValue>
+ * @extends ArrayAccess<TKey,TValue>
  */
 interface Collection extends
     ArrayProvider,
@@ -38,14 +38,14 @@ interface Collection extends
     public function copy(): static;
 
     /**
-     * @return TValue|null
+     * @return ?TValue
      */
     public function getFirst(
         ?callable $filter = null
     ): mixed;
 
     /**
-     * @return TValue|null
+     * @return ?TValue
      */
     public function getLast(
         ?callable $filter = null
@@ -60,7 +60,7 @@ interface Collection extends
     ): static;
 
     /**
-     * @return TValue|null
+     * @return ?TValue
      */
     public function pop(): mixed;
 
@@ -72,7 +72,7 @@ interface Collection extends
     ): static;
 
     /**
-     * @return TValue|null
+     * @return ?TValue
      */
     public function shift(): mixed;
 
@@ -93,7 +93,7 @@ interface Collection extends
     public function getRandom(): mixed;
 
     /**
-     * @return array<TKey>
+     * @return list<TKey>
      */
     public function getKeys(): array;
 
@@ -119,34 +119,34 @@ interface Collection extends
 
 
     /**
-     * @return array<int, static<TKey, TValue, TIterate>>
+     * @return array<int,static>
      */
     public function chunk(
         int $size
     ): array;
 
     /**
-     * @return array<int, static<TKey, TValue, TIterate>>
+     * @return array<int,static>
      */
     public function chunkValues(
         int $size
     ): array;
 
     /**
-     * @return array<TKey, int>
+     * @return MapInterface<TValue,int>
      */
-    public function countValues(): array;
+    public function countValues(): MapInterface;
 
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function diffAssoc(
         iterable ...$arrays
     ): static; // array_diff_assoc
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function diffAssocBy(
         callable $keyCallback,
@@ -154,7 +154,7 @@ interface Collection extends
     ): static; // array_diff_uassoc
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function diffAssocByValue(
         callable $valueCallback,
@@ -162,7 +162,7 @@ interface Collection extends
     ): static; // array_udiff_assoc
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function diffAssocAll(
         callable $valueCallback,
@@ -171,14 +171,14 @@ interface Collection extends
     ): static; // array_udiff_uassoc
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function diffValues(
         iterable ...$arrays
     ): static; // array_diff
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function diffValuesBy(
         callable $valueCallback,
@@ -186,14 +186,14 @@ interface Collection extends
     ): static; // array_udiff
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function diffKeys(
         iterable ...$arrays
     ): static; // array_diff_key
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function diffKeysBy(
         callable $keyCallback,
@@ -202,14 +202,14 @@ interface Collection extends
 
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function intersectAssoc(
         iterable ...$arrays
     ): static; // array_intersect_assoc
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function intersectAssocBy(
         callable $keyCallback,
@@ -217,7 +217,7 @@ interface Collection extends
     ): static; // array_intersect_uassoc
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function intersectAssocByValue(
         callable $valueCallback,
@@ -225,7 +225,7 @@ interface Collection extends
     ): static; // array_uintersect_assoc
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function intersectAssocAll(
         callable $valueCallback,
@@ -234,14 +234,14 @@ interface Collection extends
     ): static; // array_uintersect_uassoc
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function intersectValues(
         iterable ...$arrays
     ): static; // array_intersect
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function intersectValuesBy(
         callable $valueCallback,
@@ -249,14 +249,14 @@ interface Collection extends
     ): static; // array_uintersect
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function intersectKeys(
         iterable ...$arrays
     ): static; // array_intersect_key
 
     /**
-     * @param iterable<TKey, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function intersectKeysBy(
         callable $keyCallback,
@@ -270,17 +270,25 @@ interface Collection extends
 
 
     /**
-     * @param iterable<string|int, mixed> ...$arrays
+     * @param iterable<string|int,mixed> ...$arrays
      */
     public function map(
         callable $callback,
         iterable ...$arrays
     ): static;
 
+    /**
+     * @param callable(TValue,TKey):mixed $callback
+     */
     public function mapSelf(
         callable $callback
     ): static;
 
+    /**
+     * @template TCarry
+     * @param callable(TCarry,TIterate):TCarry $callback
+     * @param TCarry $initial
+     */
     public function reduce(
         callable $callback,
         mixed $initial = null
@@ -302,7 +310,7 @@ interface Collection extends
 
 
     /**
-     * @return array<mixed>
+     * @return list<mixed>
      */
     public function pluck(
         string $valueKey,
