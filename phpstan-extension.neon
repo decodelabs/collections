@@ -1,0 +1,5 @@
+services:
+    -
+        class: DecodeLabs\PHPStan\Collections\TreeReflectionExtension
+        tags:
+            - phpstan.broker.propertiesClassReflectionExtension

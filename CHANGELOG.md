@@ -1,4 +1,11 @@
+## v0.10.0 (2025-02-14)
+* Restructured interfaces
+* Simplified class structure
+* Upgraded PHPStan to v2
+* Tidied boolean logic
+* Fixed Exceptional syntax
 * Added PHP8.4 to CI workflow
+* Made PHP8.4 minimum version
 
 ## v0.9.3 (2025-02-07)
 * Fixed missed implicit nullable arguments

@@ -11,8 +11,9 @@ namespace DecodeLabs\Collections;
 
 /**
  * @template TValue
- * @extends MixedMap<TValue, TValue>
+ * @template TKey of int|string = int|string
+ * @extends MapInterface<TKey,TValue,TValue>
  */
-interface HashMap extends MixedMap
+interface DictionaryInterface extends MapInterface
 {
 }

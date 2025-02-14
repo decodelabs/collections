@@ -13,18 +13,20 @@ use DecodeLabs\Lucid\Provider\MixedContext as SanitizerProvider;
 
 /**
  * @template TValue
- * @extends MixedMap<TValue, static>
+ * @template TKey of int|string = int|string
+ * @extends MapInterface<TKey,TValue,static>
  * @extends ValueProvider<TValue>
  * @extends SanitizerProvider<TValue>
+ * @phpstan-type ChildList = iterable<TKey,TValue|iterable<TKey,TValue|iterable<mixed>>>
  */
-interface Tree extends
-    MixedMap,
+interface TreeInterface extends
+    MapInterface,
     ValueProvider,
     SanitizerProvider
 {
     /**
-     * @param iterable<int|string, TValue|iterable<mixed>>|null $items
-     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @param ChildList|null $items
+     * @param TValue|ChildList|null $value
      */
     public function __construct(
         ?iterable $items = null,
@@ -32,21 +34,31 @@ interface Tree extends
     );
 
     /**
-     * @param TValue|iterable<int|string, TValue|iterable<mixed>>|null $value
+     * @param TKey $key
+     * @param TValue|ChildList|null $value
      */
     public function __set(
         int|string $key,
         mixed $value
     ): void;
 
+    /**
+     * @param TKey $key
+     */
     public function __get(
         int|string $key
     ): static;
 
+    /**
+     * @param TKey $key
+     */
     public function __isset(
         int|string $key
     ): bool;
 
+    /**
+     * @param TKey $key
+     */
     public function __unset(
         int|string $key
     ): void;
@@ -60,26 +72,35 @@ interface Tree extends
         mixed $value
     ): static;
 
+    /**
+     * @param TKey $key
+     */
     public function getNode(
         int|string $key
     ): static;
 
+    /**
+     * @param TKey ...$keys
+     */
     public function hasNode(
         int|string ...$keys
     ): bool;
 
+    /**
+     * @param TKey ...$keys
+     */
     public function hasAllNodes(
         int|string ...$keys
     ): bool;
 
 
     /**
-     * @return TValue|null
+     * @return ?TValue
      */
     public function pullValue(): mixed;
 
     /**
-     * @param TValue|null $value
+     * @param ?TValue $value
      */
     public function setValue(
         mixed $value
@@ -97,13 +118,28 @@ interface Tree extends
 
 
     /**
-     * @return Tree<string>
+     * @param ChildList ...$arrays
+     */
+    public function merge(
+        iterable ...$arrays
+    ): static;
+
+    /**
+     * @param ChildList ...$arrays
+     */
+    public function mergeRecursive(
+        iterable ...$arrays
+    ): static;
+
+
+    /**
+     * @return TreeInterface<string>
      */
     public static function fromDelimitedString(
         string $string,
         string $setDelimiter = '&',
         string $valueDelimiter = '='
-    ): Tree;
+    ): TreeInterface;
 
     public function toDelimitedString(
         string $setDelimiter = '&',
@@ -111,7 +147,7 @@ interface Tree extends
     ): string;
 
     /**
-     * @return array<string,TValue|null>
+     * @return array<string,?TValue>
      */
     public function toDelimitedSet(
         bool $urlEncode = false,
@@ -119,7 +155,7 @@ interface Tree extends
     ): array;
 
     /**
-     * @return array<static<TValue>>
+     * @return array<TKey,static>
      */
     public function getChildren(): array;
 }

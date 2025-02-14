@@ -7,47 +7,52 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Collections\Native;
+namespace DecodeLabs\Collections;
 
-use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\Collection;
-use DecodeLabs\Collections\MixedMap;
+use DecodeLabs\Exceptional;
 
 /**
  * @template TValue
- * @phpstan-require-implements MixedMap<TValue,TValue>
+ * @template TKey of int|string = int|string
+ * @phpstan-require-implements MapInterface<TKey,TValue>
  */
-trait HashMapTrait
+trait DictionaryTrait
 {
     /**
-     * @use CollectionTrait<int|string, TValue>
+     * @use CollectionTrait<TKey,TValue,TValue>
      */
     use CollectionTrait;
     use SortableTrait;
 
     /**
      * Get all keys in array, enforce string formatting
+     *
+     * @return list<TKey>
      */
     public function getKeys(): array
     {
-        return array_map('strval', array_keys($this->items));
+        return array_keys($this->items);
     }
 
 
     /**
      * Retrieve a single entry
+     *
+     * @param TKey $key
      */
     public function get(
-        int|string $key
+        mixed $key
     ): mixed {
         return $this->items[$key] ?? null;
     }
 
     /**
      * Retrieve entry and remove from collection
+     *
+     * @param TKey $key
      */
     public function pull(
-        int|string $key
+        mixed $key
     ): mixed {
         $output = $this->items[$key] ?? null;
 
@@ -60,9 +65,11 @@ trait HashMapTrait
 
     /**
      * Direct set a value
+     *
+     * @param TKey $key
      */
     public function set(
-        int|string $key,
+        mixed $key,
         mixed $value
     ): static {
         $output = static::Mutable ? $this : clone $this;
@@ -72,9 +79,11 @@ trait HashMapTrait
 
     /**
      * True if any provided keys have a set value (not null)
+     *
+     * @param TKey ...$keys
      */
     public function has(
-        int|string ...$keys
+        mixed ...$keys
     ): bool {
         foreach ($keys as $key) {
             if (isset($this->items[$key])) {
@@ -87,9 +96,11 @@ trait HashMapTrait
 
     /**
      * True if all provided keys have a set value (not null)
+     *
+     * @param TKey ...$keys
      */
     public function hasAll(
-        int|string ...$keys
+        mixed ...$keys
     ): bool {
         foreach ($keys as $key) {
             if (!isset($this->items[$key])) {
@@ -102,9 +113,11 @@ trait HashMapTrait
 
     /**
      * True if any provided keys are in the collection
+     *
+     * @param TKey ...$keys
      */
     public function hasKey(
-        int|string ...$keys
+        mixed ...$keys
     ): bool {
         foreach ($keys as $key) {
             if (array_key_exists($key, $this->items)) {
@@ -117,9 +130,11 @@ trait HashMapTrait
 
     /**
      * True if all provided keys are in the collection
+     *
+     * @param TKey ...$keys
      */
     public function hasKeys(
-        int|string ...$keys
+        mixed ...$keys
     ): bool {
         foreach ($keys as $key) {
             if (!array_key_exists($key, $this->items)) {
@@ -132,9 +147,11 @@ trait HashMapTrait
 
     /**
      * Remove all values associated with $keys
+     *
+     * @param TKey ...$keys
      */
     public function remove(
-        int|string ...$keys
+        mixed ...$keys
     ): static {
         $output = static::Mutable ? $this : clone $this;
         $output->items = array_diff_key($output->items, array_flip($keys));
@@ -143,9 +160,11 @@ trait HashMapTrait
 
     /**
      * Remove all values not associated with $keys
+     *
+     * @param TKey ...$keys
      */
     public function keep(
-        int|string ...$keys
+        mixed ...$keys
     ): static {
         $output = static::Mutable ? $this : clone $this;
         $output->items = array_intersect_key($output->items, array_flip($keys));
@@ -155,11 +174,13 @@ trait HashMapTrait
 
     /**
      * Lookup a key by value
+     *
+     * @return ?TKey
      */
     public function findKey(
         mixed $value,
         bool $strict = false
-    ): int|string|null {
+    ): mixed {
         if (false === ($key = array_search($value, $this->items, $strict))) {
             return null;
         }
@@ -197,7 +218,7 @@ trait HashMapTrait
         bool $removeNull = false
     ): static {
         $output = static::Mutable ? $this : clone $this;
-        /* @phpstan-ignore-next-line */
+        // @phpstan-ignore-next-line PHPStan bug
         $output->items = ArrayUtils::collapse($output->items, true, $unique, $removeNull);
         return $output;
     }
@@ -210,7 +231,7 @@ trait HashMapTrait
         bool $removeNull = false
     ): static {
         $output = static::Mutable ? $this : clone $this;
-        /* @phpstan-ignore-next-line */
+        // @phpstan-ignore-next-line PHPStan bug
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
         return $output;
     }
@@ -231,30 +252,46 @@ trait HashMapTrait
 
     /**
      * Map values of collection to $keys
+     *
+     * @param iterable<TKey> $keys
      */
     public function combineWithKeys(
         iterable $keys
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        $result = array_combine(ArrayUtils::iterableToArray($keys), $output->items);
 
-        if (false !== ($result = array_combine(ArrayUtils::iterableToArray($keys), $output->items))) {
-            $output->items = $result;
+        // @phpstan-ignore-next-line PHPStan bug
+        if($result === false) {
+            throw Exceptional::InvalidArgument(
+                'Key count does not match value count'
+            );
         }
 
+        // @phpstan-ignore-next-line PHPStan bug
+        $output->items = $result;
         return $output;
     }
 
     /**
      * Map $values to values of collection as keys
+     *
+     * @param iterable<TValue> $values
      */
     public function combineWithValues(
         iterable $values
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        $result = array_combine(
+            array_filter($output->items, fn($value) => is_string($value) || is_int($value)),
+            ArrayUtils::iterableToArray($values)
+        );
 
-        /* @phpstan-ignore-next-line */
-        if (false !== ($result = array_combine($output->items, ArrayUtils::iterableToArray($values)))) {
-            $output->items = $result;
+        // @phpstan-ignore-next-line PHPStan bug
+        if($result === false) {
+            throw Exceptional::InvalidArgument(
+                'Key count does not match value count'
+            );
         }
 
         return $output;
@@ -263,6 +300,8 @@ trait HashMapTrait
 
     /**
      * Replace all values with $value
+     *
+     * @param TValue $value
      */
     public function fill(
         mixed $value
@@ -275,12 +314,15 @@ trait HashMapTrait
     /**
      * Flip keys and values
      */
-    public function flip(): static
+    public function flip(): MapInterface
     {
         $output = clone $this;
 
         /** @var array<TValue> $items */
-        $items = array_flip($output->items); /* @phpstan-ignore-line */
+        $items = array_flip(
+            array_filter($output->items, fn($value) => is_string($value) || is_int($value))
+        );
+
         $output->items = $items;
 
         return $output;
@@ -289,6 +331,8 @@ trait HashMapTrait
 
     /**
      * Merge all passed collections into one
+     *
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function merge(
         iterable ...$arrays
@@ -300,6 +344,8 @@ trait HashMapTrait
 
     /**
      * Merge EVERYTHING :D
+     *
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function mergeRecursive(
         iterable ...$arrays
@@ -312,6 +358,8 @@ trait HashMapTrait
 
     /**
      * Like merge, but replaces.. obvs
+     *
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function replace(
         iterable ...$arrays
@@ -323,6 +371,8 @@ trait HashMapTrait
 
     /**
      * Replace EVERYTHING :D
+     *
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function replaceRecursive(
         iterable ...$arrays
@@ -337,11 +387,12 @@ trait HashMapTrait
     /**
      * Remove $offet + $length items
      *
+     * @param-out MapInterface<TKey,TValue> $removed
      */
     public function removeSlice(
         int $offset,
         ?int $length = null,
-        ?MixedMap &$removed = null
+        ?MapInterface &$removed = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
 
@@ -359,13 +410,14 @@ trait HashMapTrait
     /**
      * Like removeSlice, but leaves a present behind
      *
-     * @param iterable<TValue> $replacement
+     * @param iterable<TKey,TValue> $replacement
+     * @param-out MapInterface<TKey,TValue> $removed
      */
     public function replaceSlice(
         int $offset,
         ?int $length,
         iterable $replacement,
-        ?MixedMap &$removed = null
+        ?MapInterface &$removed = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
 
@@ -432,7 +484,6 @@ trait HashMapTrait
         /** @var static $output */
         $output = new self($newItems);
 
-        // @phpstan-ignore-next-line
         return $output;
     }
 }

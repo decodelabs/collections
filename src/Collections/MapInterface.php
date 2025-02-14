@@ -10,69 +10,93 @@ declare(strict_types=1);
 namespace DecodeLabs\Collections;
 
 /**
+ * @template TKey
  * @template TValue
- * @template TIterate
- * @extends Collection<int|string, TValue, TIterate>
+ * @template TIterate = TValue
+ * @template TFlipIterate = TKey
+ * @extends Collection<TKey,TValue,TIterate>
  */
-interface MixedMap extends
+interface MapInterface extends
     Collection,
     Sortable
 {
     /**
+     * @param TKey $key
      * @return TValue|null
      */
     public function get(
-        int|string $key
+        mixed $key
     ): mixed;
 
     /**
+     * @param TKey $key
      * @return TValue|null
      */
     public function pull(
-        int|string $key
+        mixed $key
     ): mixed;
 
     /**
+     * @param TKey $key
      * @param TValue $value
      */
     public function set(
-        int|string $key,
+        mixed $key,
         mixed $value
     ): static;
 
+    /**
+     * @param TKey ...$keys
+     */
     public function has(
-        int|string ...$keys
+        mixed ...$keys
     ): bool;
 
+    /**
+     * @param TKey ...$keys
+     */
     public function hasAll(
-        int|string ...$keys
+        mixed ...$keys
     ): bool;
 
+    /**
+     * @param TKey ...$keys
+     */
     public function hasKey(
-        int|string ...$keys
+        mixed ...$keys
     ): bool;
 
+    /**
+     * @param TKey ...$keys
+     */
     public function hasKeys(
-        int|string ...$keys
+        mixed ...$keys
     ): bool;
 
+    /**
+     * @param TKey ...$keys
+     */
     public function remove(
-        int|string ...$keys
+        mixed ...$keys
     ): static;
 
+    /**
+     * @param TKey ...$keys
+     */
     public function keep(
-        int|string ...$keys
+        mixed ...$keys
     ): static;
 
 
 
     /**
      * @param TValue $value
+     * @return ?TKey
      */
     public function findKey(
         mixed $value,
         bool $strict = false
-    ): int|string|null;
+    ): mixed;
 
     public function clear(): static;
     public function clearKeys(): static;
@@ -94,7 +118,7 @@ interface MixedMap extends
 
 
     /**
-     * @param iterable<string> $keys
+     * @param iterable<TKey> $keys
      */
     public function combineWithKeys(
         iterable $keys
@@ -112,24 +136,24 @@ interface MixedMap extends
      * @param TValue $value
      */
     public function fill(
-        $value
+        mixed $value
     ): static;
 
     /**
-     * @return HashMap<int|string>
+     * @return MapInterface<TValue,TKey,TFlipIterate>
      */
-    public function flip(): HashMap;
+    public function flip(): MapInterface;
 
 
     /**
-     * @param iterable<int|string, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function merge(
         iterable ...$arrays
     ): static;
 
     /**
-     * @param iterable<int|string, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function mergeRecursive(
         iterable ...$arrays
@@ -137,14 +161,14 @@ interface MixedMap extends
 
 
     /**
-     * @param iterable<int|string, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function replace(
         iterable ...$arrays
     ): static;
 
     /**
-     * @param iterable<int|string, TValue> ...$arrays
+     * @param iterable<TKey,TValue> ...$arrays
      */
     public function replaceRecursive(
         iterable ...$arrays
@@ -152,23 +176,23 @@ interface MixedMap extends
 
 
     /**
-     * @param static<TValue, TIterate>|null $removed
+     * @param static<TKey,TValue,TIterate>|null $removed
      */
     public function removeSlice(
         int $offset,
         ?int $length = null,
-        ?MixedMap &$removed = null
+        ?MapInterface &$removed = null
     ): static;
 
     /**
-     * @param iterable<int|string, TValue> $replacement
-     * @param static<TValue, TIterate>|null $removed
+     * @param iterable<TKey,TValue> $replacement
+     * @param ?static<TKey,TValue,TIterate> $removed
      */
     public function replaceSlice(
         int $offset,
         ?int $length,
         iterable $replacement,
-        ?MixedMap &$removed = null
+        ?MapInterface &$removed = null
     ): static;
 
     public function unique(
