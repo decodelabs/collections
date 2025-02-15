@@ -21,6 +21,11 @@ class AnalyzeTree
         $tree = new Tree();
 
         $tree->test = 'hello';
+        //$tree['test'] + 1;
+
         $tree->set('test2', 'world');
+
+        $tree->inner->test3 = 'foo';
+        //$tree->inner['test3'] + 1;
     }
 }

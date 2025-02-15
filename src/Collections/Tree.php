@@ -20,7 +20,7 @@ use IteratorAggregate;
  * @template TValue
  * @template TKey of int|string = int|string
  * @implements TreeInterface<TValue,TKey>
- * @implements IteratorAggregate<TKey,static<TValue>>
+ * @implements IteratorAggregate<TKey,static>
  * @phpstan-import-type ChildList from TreeInterface
  */
 class Tree implements
@@ -102,6 +102,7 @@ class Tree implements
      * Get node
      *
      * @param TKey $key
+     * @return static
      */
     public function __get(
         int|string $key
@@ -564,6 +565,8 @@ class Tree implements
 
     /**
      * Get container value
+     *
+     * @return ?TValue
      */
     public function getValue(): mixed
     {

@@ -35,7 +35,7 @@ class TreeReflectionExtension implements PropertiesClassReflectionExtension
     ): PropertyReflectionInterface {
         return new PropertyReflection(
             $classReflection,
-            new ObjectType($classReflection->getName()),
+            $classReflection->getMethod('__get', new OutOfClassScope())->getVariants()[0]->getReturnType(),
             $classReflection->getMethod('__set', new OutOfClassScope())->getVariants()[0]->getParameters()[1]->getType()
         );
     }
