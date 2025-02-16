@@ -1,3 +1,6 @@
+## v0.10.2 (2025-02-15)
+* Fixed fromDelimitedString() return type
+
 ## v0.10.1 (2025-02-15)
 * Fixed nested type propagation in PHPStan
 

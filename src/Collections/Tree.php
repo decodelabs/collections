@@ -681,13 +681,13 @@ class Tree implements
     /**
      * From query string
      *
-     * @return TreeInterface<string|bool>
+     * @return self<string|bool>
      */
     public static function fromDelimitedString(
         string $string,
         string $setDelimiter = '&',
         string $valueDelimiter = '='
-    ): TreeInterface {
+    ): self {
         if (
             $setDelimiter === '' ||
             $valueDelimiter === ''
