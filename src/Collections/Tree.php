@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Collections;
 
+use ArrayAccess;
 use ArrayIterator;
 use DecodeLabs\Coercion;
 use DecodeLabs\Exceptional;
@@ -20,10 +21,12 @@ use IteratorAggregate;
  * @template TValue
  * @template TKey of int|string = int|string
  * @implements TreeInterface<TValue,TKey>
+ * @implements ArrayAccess<TKey,?TValue>
  * @implements IteratorAggregate<TKey,static>
  * @phpstan-import-type ChildList from TreeInterface
  */
 class Tree implements
+    ArrayAccess,
     IteratorAggregate,
     TreeInterface
 {
