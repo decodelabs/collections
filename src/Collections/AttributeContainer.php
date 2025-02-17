@@ -11,11 +11,12 @@ namespace DecodeLabs\Collections;
 
 /**
  * @template TValue
+ * @template TInput = TValue
  */
 interface AttributeContainer
 {
     /**
-     * @param array<string,TValue> $attributes
+     * @param array<string,TInput> $attributes
      * @return $this
      */
     public function setAttributes(
@@ -23,7 +24,7 @@ interface AttributeContainer
     ): static;
 
     /**
-     * @param array<string,TValue> $attributes
+     * @param array<string,TInput> $attributes
      * @return $this
      */
     public function replaceAttributes(
@@ -36,7 +37,7 @@ interface AttributeContainer
     public function getAttributes(): array;
 
     /**
-     * @param TValue $value
+     * @param TInput $value
      * @return $this
      */
     public function setAttribute(

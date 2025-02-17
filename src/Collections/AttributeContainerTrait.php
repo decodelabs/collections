@@ -12,6 +12,7 @@ namespace DecodeLabs\Collections;
 /**
  * @phpstan-require-implements AttributeContainer
  * @template TValue
+ * @template TInput = TValue
  */
 trait AttributeContainerTrait
 {
@@ -23,7 +24,7 @@ trait AttributeContainerTrait
     /**
      * Add attributes with map
      *
-     * @param array<string,TValue> $attributes
+     * @param array<string,TInput> $attributes
      * @return $this
      */
     public function setAttributes(
@@ -39,7 +40,7 @@ trait AttributeContainerTrait
     /**
      * Replace all attributes with new map
      *
-     * @param array<string,TValue> $attributes
+     * @param array<string,TInput> $attributes
      */
     public function replaceAttributes(
         array $attributes
@@ -62,12 +63,13 @@ trait AttributeContainerTrait
     /**
      * Replace single value
      *
-     * @param TValue $value
+     * @param TInput $value
      */
     public function setAttribute(
         string $key,
         mixed $value
     ): static {
+        // @phpstan-ignore-next-line PHPStan bug
         $this->attributes[$key] = $value;
         return $this;
     }

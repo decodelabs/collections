@@ -1,3 +1,6 @@
+## v0.10.3 (2025-02-16)
+* Added input type override to AttributeContainer
+
 ## v0.10.2 (2025-02-15)
 * Fixed fromDelimitedString() return type
 
