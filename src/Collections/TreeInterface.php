@@ -12,12 +12,11 @@ namespace DecodeLabs\Collections;
 use DecodeLabs\Lucid\Provider\MixedContext as SanitizerProvider;
 
 /**
- * @template TValue
- * @template TKey of int|string = int|string
- * @extends MapInterface<TKey,TValue,static>
+ * @template TValue of string|bool|int|float|resource|object
+ * @phpstan-type ChildList = iterable<int|string,TValue|iterable<int|string,TValue|iterable<mixed>>>
+ * @extends MapInterface<int|string,TValue,static>
  * @extends ValueProvider<TValue>
  * @extends SanitizerProvider<TValue>
- * @phpstan-type ChildList = iterable<TKey,TValue|iterable<TKey,TValue|iterable<mixed>>>
  */
 interface TreeInterface extends
     MapInterface,
@@ -34,7 +33,7 @@ interface TreeInterface extends
     );
 
     /**
-     * @param TKey $key
+     * @param int|string $key
      * @param TValue|ChildList|null $value
      */
     public function __set(
@@ -43,21 +42,21 @@ interface TreeInterface extends
     ): void;
 
     /**
-     * @param TKey $key
+     * @param int|string $key
      */
     public function __get(
         int|string $key
     ): static;
 
     /**
-     * @param TKey $key
+     * @param int|string $key
      */
     public function __isset(
         int|string $key
     ): bool;
 
     /**
-     * @param TKey $key
+     * @param int|string $key
      */
     public function __unset(
         int|string $key
@@ -73,21 +72,21 @@ interface TreeInterface extends
     ): static;
 
     /**
-     * @param TKey $key
+     * @param int|string $key
      */
     public function getNode(
         int|string $key
     ): static;
 
     /**
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function hasNode(
         int|string ...$keys
     ): bool;
 
     /**
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function hasAllNodes(
         int|string ...$keys
@@ -155,7 +154,7 @@ interface TreeInterface extends
     ): array;
 
     /**
-     * @return array<TKey,static>
+     * @return array<int|string,static>
      */
     public function getChildren(): array;
 }

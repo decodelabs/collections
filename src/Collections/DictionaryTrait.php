@@ -13,13 +13,12 @@ use DecodeLabs\Exceptional;
 
 /**
  * @template TValue
- * @template TKey of int|string = int|string
- * @phpstan-require-implements MapInterface<TKey,TValue>
+ * @phpstan-require-implements MapInterface<int|string,TValue>
  */
 trait DictionaryTrait
 {
     /**
-     * @use CollectionTrait<TKey,TValue,TValue>
+     * @use CollectionTrait<int|string,TValue,TValue>
      */
     use CollectionTrait;
     use SortableTrait;
@@ -27,7 +26,7 @@ trait DictionaryTrait
     /**
      * Get all keys in array, enforce string formatting
      *
-     * @return list<TKey>
+     * @return list<int|string>
      */
     public function getKeys(): array
     {
@@ -38,7 +37,7 @@ trait DictionaryTrait
     /**
      * Retrieve a single entry
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function get(
         mixed $key
@@ -49,7 +48,7 @@ trait DictionaryTrait
     /**
      * Retrieve entry and remove from collection
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function pull(
         mixed $key
@@ -66,7 +65,7 @@ trait DictionaryTrait
     /**
      * Direct set a value
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function set(
         mixed $key,
@@ -80,7 +79,7 @@ trait DictionaryTrait
     /**
      * True if any provided keys have a set value (not null)
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function has(
         mixed ...$keys
@@ -97,7 +96,7 @@ trait DictionaryTrait
     /**
      * True if all provided keys have a set value (not null)
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function hasAll(
         mixed ...$keys
@@ -114,7 +113,7 @@ trait DictionaryTrait
     /**
      * True if any provided keys are in the collection
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function hasKey(
         mixed ...$keys
@@ -131,7 +130,7 @@ trait DictionaryTrait
     /**
      * True if all provided keys are in the collection
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function hasKeys(
         mixed ...$keys
@@ -148,7 +147,7 @@ trait DictionaryTrait
     /**
      * Remove all values associated with $keys
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function remove(
         mixed ...$keys
@@ -161,7 +160,7 @@ trait DictionaryTrait
     /**
      * Remove all values not associated with $keys
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function keep(
         mixed ...$keys
@@ -175,7 +174,7 @@ trait DictionaryTrait
     /**
      * Lookup a key by value
      *
-     * @return ?TKey
+     * @return int|string|null
      */
     public function findKey(
         mixed $value,
@@ -253,7 +252,7 @@ trait DictionaryTrait
     /**
      * Map values of collection to $keys
      *
-     * @param iterable<TKey> $keys
+     * @param iterable<int|string> $keys
      */
     public function combineWithKeys(
         iterable $keys
@@ -332,7 +331,7 @@ trait DictionaryTrait
     /**
      * Merge all passed collections into one
      *
-     * @param iterable<TKey,TValue> ...$arrays
+     * @param iterable<int|string,TValue> ...$arrays
      */
     public function merge(
         iterable ...$arrays
@@ -345,7 +344,7 @@ trait DictionaryTrait
     /**
      * Merge EVERYTHING :D
      *
-     * @param iterable<TKey,TValue> ...$arrays
+     * @param iterable<int|string,TValue> ...$arrays
      */
     public function mergeRecursive(
         iterable ...$arrays
@@ -359,7 +358,7 @@ trait DictionaryTrait
     /**
      * Like merge, but replaces.. obvs
      *
-     * @param iterable<TKey,TValue> ...$arrays
+     * @param iterable<int|string,TValue> ...$arrays
      */
     public function replace(
         iterable ...$arrays
@@ -372,7 +371,7 @@ trait DictionaryTrait
     /**
      * Replace EVERYTHING :D
      *
-     * @param iterable<TKey,TValue> ...$arrays
+     * @param iterable<int|string,TValue> ...$arrays
      */
     public function replaceRecursive(
         iterable ...$arrays
@@ -387,7 +386,7 @@ trait DictionaryTrait
     /**
      * Remove $offet + $length items
      *
-     * @param-out MapInterface<TKey,TValue> $removed
+     * @param-out MapInterface<int|string,TValue> $removed
      */
     public function removeSlice(
         int $offset,
@@ -410,8 +409,8 @@ trait DictionaryTrait
     /**
      * Like removeSlice, but leaves a present behind
      *
-     * @param iterable<TKey,TValue> $replacement
-     * @param-out MapInterface<TKey,TValue> $removed
+     * @param iterable<int|string,TValue> $replacement
+     * @param-out MapInterface<int|string,TValue> $removed
      */
     public function replaceSlice(
         int $offset,

@@ -632,6 +632,7 @@ trait CollectionTrait
         callable $callback,
         iterable ...$arrays
     ): static {
+        // @phpstan-ignore-next-line PHPStan bug
         return $this->propagate(array_map(
             $callback,
             $this->items,
@@ -674,6 +675,7 @@ trait CollectionTrait
                 );
             }
 
+            // @phpstan-ignore-next-line
             return $this->propagate((array)array_combine($keys, $items));
         }
     }
