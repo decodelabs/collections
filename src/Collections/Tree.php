@@ -18,12 +18,11 @@ use Iterator;
 use IteratorAggregate;
 
 /**
- * @template TValue
- * @template TKey of int|string = int|string
- * @implements TreeInterface<TValue,TKey>
- * @implements ArrayAccess<TKey,?TValue>
- * @implements IteratorAggregate<TKey,static>
  * @phpstan-import-type ChildList from TreeInterface
+ * @template TValue of string|bool|int|float|resource|object
+ * @implements TreeInterface<TValue>
+ * @implements ArrayAccess<int|string,?TValue>
+ * @implements IteratorAggregate<int|string,static>
  */
 class Tree implements
     ArrayAccess,
@@ -51,7 +50,7 @@ class Tree implements
     protected mixed $value = null;
 
     /**
-     * @var array<TKey,static>
+     * @var array<int|string,static>
      */
     protected array $items = [];
 
@@ -92,7 +91,7 @@ class Tree implements
     /**
      * Set node value
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function __set(
         int|string $key,
@@ -104,7 +103,7 @@ class Tree implements
     /**
      * Get node
      *
-     * @param TKey $key
+     * @param int|string $key
      * @return static
      */
     public function __get(
@@ -120,7 +119,7 @@ class Tree implements
     /**
      * Check for node
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function __isset(
         int|string $key
@@ -131,7 +130,7 @@ class Tree implements
     /**
      * Remove node
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function __unset(
         int|string $key
@@ -144,8 +143,8 @@ class Tree implements
     /**
      * Set value by dot access
      *
-     * @param TKey $key
-     * @param TValue|iterable<TKey,TValue|iterable<TKey,static>>|null $value
+     * @param int|string $key
+     * @param TValue|iterable<int|string,TValue|iterable<int|string,static>>|null $value
      */
     public function setNode(
         int|string $key,
@@ -154,7 +153,7 @@ class Tree implements
         $node = $this->getNode($key);
 
         if (is_iterable($value)) {
-            /** @var iterable<TKey,TValue> $value */
+            /** @var iterable<int|string,TValue> $value */
             $node->clear()->merge($value);
         } else {
             $node->setValue($value);
@@ -166,7 +165,7 @@ class Tree implements
     /**
      * Get node by dot access
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function getNode(
         int|string $key
@@ -188,7 +187,7 @@ class Tree implements
     /**
      * True if any provided keys exist as a node
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function hasNode(
         int|string ...$keys
@@ -222,7 +221,7 @@ class Tree implements
     /**
      * True if all provided keys exist as a node
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function hasAllNodes(
         int|string ...$keys
@@ -255,14 +254,13 @@ class Tree implements
     /**
      * Split node key string
      *
-     * @param TKey $key
-     * @return list<TKey>
+     * @param int|string $key
+     * @return list<int|string>
      */
     protected function splitNodeKey(
         int|string $key
     ): array {
         if (is_string($key)) {
-            // @phpstan-ignore-next-line
             return explode(static::KeySeparator, $key);
         } else {
             return [$key];
@@ -293,7 +291,7 @@ class Tree implements
     /**
      * Get value
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function get(
         mixed $key
@@ -304,7 +302,7 @@ class Tree implements
     /**
      * Retrieve entry and remove from collection
      *
-     * @param TKey $key
+     * @param int|string $key
      * @return TValue|null
      */
     public function pull(
@@ -323,7 +321,7 @@ class Tree implements
     /**
      * Set value on node
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function set(
         mixed $key,
@@ -336,7 +334,7 @@ class Tree implements
     /**
      * True if any provided keys have a set value (not null)
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function has(
         mixed ...$keys
@@ -375,7 +373,7 @@ class Tree implements
     /**
      * True if all provided keys have a set value (not null)
      *
-     * @param TKey ...$keys
+     * @param int|string ...$keys
      */
     public function hasAll(
         mixed ...$keys
@@ -467,7 +465,7 @@ class Tree implements
     /**
      * Lookup a key by value
      *
-     * @return ?TKey
+     * @return int|string|null
      */
     public function findKey(
         mixed $value,
@@ -498,18 +496,17 @@ class Tree implements
     /**
      * Set by array access
      *
-     * @param ?TKey $key
-     * @param TValue|iterable<TKey,TValue|iterable<TKey,static>>|null $value
+     * @param int|string|null $key
+     * @param TValue|iterable<int|string,TValue|iterable<int|string,static>>|null $value
      */
     public function offsetSet(
         mixed $key,
         mixed $value
     ): void {
         if ($key === null) {
-            // @phpstan-ignore-next-line
             $this->items[] = new static(null, $value);
         } elseif (is_iterable($value)) {
-            /** @var iterable<TKey,TValue> $value */
+            /** @var iterable<int|string,TValue> $value */
             $this->getNode($key)->merge($value);
         } else {
             $this->getNode($key)->setValue($value);
@@ -519,7 +516,7 @@ class Tree implements
     /**
      * Get by array access
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function offsetGet(
         mixed $key
@@ -530,7 +527,7 @@ class Tree implements
     /**
      * Check by array access
      *
-     * @param TKey $key
+     * @param int|string $key
      */
     public function offsetExists(
         mixed $key
@@ -850,22 +847,25 @@ class Tree implements
     /**
      * Flip keys and values
      *
-     * @return DictionaryInterface<TKey>
+     * @return MapInterface<int|string,int|string,int|string,int|string>
+     * @phpstan-ignore-next-line
      */
-    public function flip(): DictionaryInterface
+    public function flip(): MapInterface
     {
+        /** @var array<int|string,int|string> $items */
         $items = array_map(function ($node) {
             $output = $node->getValue();
 
             if(is_int($output)) {
                 return $output;
             } else {
-                return Coercion::toStringOrNull($output);
+                return Coercion::forceString($output);
             }
         }, $this->items);
 
-        // @phpstan-ignore-next-line PHPStan bug
-        return new Dictionary(array_flip($items));
+        /** @var MapInterface<int|string,int|string,int|string,int|string> */
+        $output = new Dictionary(array_flip($items));
+        return $output;
     }
 
 
@@ -886,7 +886,6 @@ class Tree implements
                     if (isset($this->items[$key])) {
                         $this->items[$key]->merge($node);
                     } else {
-                        // @phpstan-ignore-next-line PHPStan bug
                         $this->items[$key] = new static($node);
                     }
                 }
@@ -900,6 +899,7 @@ class Tree implements
                             $this->items[$key]->setValue($value);
                         }
                     } else {
+                        // @phpstan-ignore-next-line PHPStan bug
                         $this->items[$key] = new static(null, $value);
                     }
                 }
@@ -932,7 +932,6 @@ class Tree implements
                 $this->value = $value;
 
                 foreach ($array->getChildren() as $key => $node) {
-                    // @phpstan-ignore-next-line PHPStan bug
                     $this->items[$key] = new static($node);
                 }
             } else {
@@ -971,7 +970,7 @@ class Tree implements
 
 
     /**
-     * @return array<TKey,TValue|array<mixed>|null>
+     * @return array<int|string,TValue|array<mixed>|null>
      */
     public function getChildValues(): array
     {
@@ -993,7 +992,7 @@ class Tree implements
     /**
      * Recursive array conversion
      *
-     * @return array<TKey,TValue|array<mixed>|null>
+     * @return array<int|string,TValue|array<mixed>|null>
      */
     public function toArray(): array
     {
@@ -1082,7 +1081,7 @@ class Tree implements
     /**
      * Iterator interface
      *
-     * @return ArrayIterator<TKey,static>
+     * @return ArrayIterator<int|string,static>
      */
     public function getIterator(): ArrayIterator
     {
@@ -1133,7 +1132,7 @@ class Tree implements
     /**
      * Copy and reinitialise new object
      *
-     * @param iterable<TKey,TValue|iterable<mixed>> $newItems
+     * @param iterable<int|string,TValue|iterable<mixed>> $newItems
      * @param TValue|null $value
      */
     protected static function propagate(

@@ -1,3 +1,7 @@
+## v0.10.5 (2025-02-17)
+* Removed option Dictionary / Tree key type
+* Replaced Tree type template references
+
 ## v0.10.4 (2025-02-16)
 * Moved ArrayAccess to implementations only
 

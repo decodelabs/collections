@@ -14,10 +14,9 @@ use IteratorAggregate;
 
 /**
  * @template TValue
- * @template TKey of int|string = int|string
  * @implements DictionaryInterface<TValue>
- * @implements ArrayAccess<TKey,TValue>
- * @implements IteratorAggregate<TKey,TValue>
+ * @implements ArrayAccess<int|string,TValue>
+ * @implements IteratorAggregate<int|string,TValue>
  */
 class Dictionary implements
     ArrayAccess,

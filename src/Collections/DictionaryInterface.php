@@ -11,8 +11,7 @@ namespace DecodeLabs\Collections;
 
 /**
  * @template TValue
- * @template TKey of int|string = int|string
- * @extends MapInterface<TKey,TValue,TValue>
+ * @extends MapInterface<int|string,TValue,TValue>
  */
 interface DictionaryInterface extends MapInterface
 {
