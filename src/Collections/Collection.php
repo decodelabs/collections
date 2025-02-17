@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Collections;
 
-use ArrayAccess;
 use Countable;
 use DecodeLabs\Fluidity\Then;
 use IteratorAggregate;
@@ -22,13 +21,11 @@ use JsonSerializable;
  *
  * @extends IteratorAggregate<TKey,TIterate>
  * @extends ArrayProvider<TKey,TValue>
- * @extends ArrayAccess<TKey,TValue>
  */
 interface Collection extends
     ArrayProvider,
     JsonSerializable,
     Countable,
-    ArrayAccess,
     IteratorAggregate,
     Then
 {

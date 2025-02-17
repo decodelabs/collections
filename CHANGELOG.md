@@ -1,3 +1,6 @@
+## v0.10.4 (2025-02-16)
+* Moved ArrayAccess to implementations only
+
 ## v0.10.3 (2025-02-16)
 * Added input type override to AttributeContainer
 
