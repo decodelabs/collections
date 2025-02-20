@@ -1,3 +1,6 @@
+## v0.10.6 (2025-02-20)
+* Upgraded Coercion dependency
+
 ## v0.10.5 (2025-02-17)
 * Removed option Dictionary / Tree key type
 * Replaced Tree type template references
