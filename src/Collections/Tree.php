@@ -674,7 +674,7 @@ class Tree implements
      */
     public function __toString(): string
     {
-        return Coercion::toString($this->value);
+        return Coercion::asString($this->value);
     }
 
 
@@ -752,7 +752,7 @@ class Tree implements
                 )
             ) {
                 $output[] = $key . $valueDelimiter . rawurlencode(
-                    Coercion::toString($value)
+                    Coercion::asString($value)
                 );
             } else {
                 $output[] = $key;
@@ -810,7 +810,7 @@ class Tree implements
                 if(is_int($output)) {
                     return $output;
                 } else {
-                    return Coercion::toStringOrNull($output);
+                    return Coercion::tryString($output);
                 }
             }, $this->items),
             function ($value) {
@@ -859,7 +859,7 @@ class Tree implements
             if(is_int($output)) {
                 return $output;
             } else {
-                return Coercion::forceString($output);
+                return Coercion::toString($output);
             }
         }, $this->items);
 
@@ -961,7 +961,7 @@ class Tree implements
         int $flags = SORT_STRING
     ): static {
         $items = array_map(function ($node) {
-            return Coercion::toString($node->getValue());
+            return Coercion::asString($node->getValue());
         }, $this->items);
 
         $items = array_unique($items, $flags);

@@ -697,7 +697,7 @@ trait CollectionTrait
     public function getSum(
         ?callable $filter = null
     ): float {
-        return Coercion::toFloat(
+        return Coercion::asFloat(
             $this->reduce(function (float $result, $item) use ($filter) {
                 if ($filter) {
                     $item = $filter($item);
@@ -718,7 +718,7 @@ trait CollectionTrait
     public function getProduct(
         ?callable $filter = null
     ): float {
-        return Coercion::toFloat(
+        return Coercion::asFloat(
             $this->reduce(function (float $result, $item) use ($filter) {
                 if ($filter) {
                     $item = $filter($item);

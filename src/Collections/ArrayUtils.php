@@ -461,7 +461,7 @@ class ArrayUtils
                     $output .= 'false';
                 }
             } else {
-                $output .= '\'' . addslashes(Coercion::toString($val)) . '\'';
+                $output .= '\'' . addslashes(Coercion::asString($val)) . '\'';
             }
 
             if ($count > $i) {
