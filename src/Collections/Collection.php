@@ -275,7 +275,7 @@ interface Collection extends
     ): static;
 
     /**
-     * @param callable(TValue,TKey):mixed $callback
+     * @param callable(TIterate,TKey):mixed $callback
      */
     public function mapSelf(
         callable $callback
