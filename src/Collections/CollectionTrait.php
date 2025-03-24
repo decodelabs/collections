@@ -666,7 +666,6 @@ trait CollectionTrait
             return $this->propagate($output);
         } else {
             $keys = array_keys($this->items);
-            /** @var Closure(TValue,int|string):mixed $callback */
             $items = array_map($callback, $this->items, $keys);
 
             if (count($keys) !== count($items)) {

@@ -1,3 +1,6 @@
+## v0.10.7 (2025-03-24)
+* Fixed PHPStan interface issues
+
 ## v0.10.6 (2025-02-20)
 * Upgraded Coercion dependency
 
