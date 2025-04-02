@@ -1,3 +1,6 @@
+## v0.11.1 (2025-04-02)
+* Added attribute key normalizer
+
 ## v0.11.0 (2025-04-02)
 * Support named arguments for attributes
 
