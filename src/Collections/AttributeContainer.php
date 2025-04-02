@@ -16,19 +16,23 @@ namespace DecodeLabs\Collections;
 interface AttributeContainer
 {
     /**
-     * @param array<string,TInput> $attributes
+     * @param iterable<string,TInput> $attributes
+     * @param TInput ...$attributeList
      * @return $this
      */
     public function setAttributes(
-        array $attributes
+        iterable $attributes = [],
+        mixed ...$attributeList
     ): static;
 
     /**
-     * @param array<string,TInput> $attributes
+     * @param iterable<string,TInput> $attributes
+     * @param TInput ...$attributeList
      * @return $this
      */
     public function replaceAttributes(
-        array $attributes
+        iterable $attributes = [],
+        mixed ...$attributeList
     ): static;
 
     /**

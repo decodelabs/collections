@@ -1,3 +1,6 @@
+## v0.11.0 (2025-04-02)
+* Support named arguments for attributes
+
 ## v0.10.7 (2025-03-24)
 * Fixed PHPStan interface issues
 
