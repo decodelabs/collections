@@ -32,7 +32,11 @@ trait AttributeContainerTrait
         iterable $attributes = [],
         mixed ...$attributeList
     ): static {
-        foreach ($attributes + $attributeList as $key => $value) {
+        foreach ($attributes as $key => $value) {
+            $this->setAttribute((string)$key, $value);
+        }
+
+        foreach ($attributeList as $key => $value) {
             $this->setAttribute((string)$key, $value);
         }
 
