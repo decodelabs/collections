@@ -24,14 +24,16 @@ trait AttributeContainerTrait
     /**
      * Add attributes with map
      *
-     * @param array<string,TInput> $attributes
+     * @param iterable<string,TInput> $attributes
+     * @param TInput ...$attributeList
      * @return $this
      */
     public function setAttributes(
-        array $attributes
+        iterable $attributes = [],
+        mixed ...$attributeList
     ): static {
-        foreach ($attributes as $key => $value) {
-            $this->setAttribute($key, $value);
+        foreach ($attributes + $attributeList as $key => $value) {
+            $this->setAttribute((string)$key, $value);
         }
 
         return $this;
@@ -40,13 +42,15 @@ trait AttributeContainerTrait
     /**
      * Replace all attributes with new map
      *
-     * @param array<string,TInput> $attributes
+     * @param iterable<string,TInput> $attributes
+     * @param TInput ...$attributeList
      */
     public function replaceAttributes(
-        array $attributes
+        iterable $attributes = [],
+        mixed ...$attributeList
     ): static {
         $this->clearAttributes();
-        $this->setAttributes($attributes);
+        $this->setAttributes($attributes, ...$attributeList);
         return $this;
     }
 
