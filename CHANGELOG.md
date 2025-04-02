@@ -1,3 +1,6 @@
+## v0.11.2 (2025-04-02)
+* Fixed attributeList iteration
+
 ## v0.11.1 (2025-04-02)
 * Added attribute key normalizer
 
