@@ -73,6 +73,7 @@ trait AttributeContainerTrait
         string $key,
         mixed $value
     ): static {
+        $key = $this->normalizeAttributeKey($key);
         // @phpstan-ignore-next-line PHPStan bug
         $this->attributes[$key] = $value;
         return $this;
@@ -86,6 +87,7 @@ trait AttributeContainerTrait
     public function getAttribute(
         string $key
     ): mixed {
+        $key = $this->normalizeAttributeKey($key);
         return $this->attributes[$key] ?? null;
     }
 
@@ -98,6 +100,7 @@ trait AttributeContainerTrait
         string ...$keys
     ): static {
         foreach ($keys as $key) {
+            $key = $this->normalizeAttributeKey($key);
             unset($this->attributes[$key]);
         }
 
@@ -111,6 +114,8 @@ trait AttributeContainerTrait
         string ...$keys
     ): bool {
         foreach ($keys as $key) {
+            $key = $this->normalizeAttributeKey($key);
+
             if (isset($this->attributes[$key])) {
                 return true;
             }
@@ -126,6 +131,8 @@ trait AttributeContainerTrait
         string ...$keys
     ): bool {
         foreach ($keys as $key) {
+            $key = $this->normalizeAttributeKey($key);
+
             if (!isset($this->attributes[$key])) {
                 return false;
             }
@@ -151,5 +158,14 @@ trait AttributeContainerTrait
     public function countAttributes(): int
     {
         return count($this->attributes);
+    }
+
+    /**
+     * Normalize attribute name
+     */
+    protected function normalizeAttributeKey(
+        string $key
+    ): string {
+        return $key;
     }
 }
