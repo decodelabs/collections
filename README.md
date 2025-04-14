@@ -14,8 +14,6 @@ Yup.. there's plenty out there. This one is specifically for the sake of functio
 
 If you're after standard collections, you should check out the [PHP Ds extension](https://www.php.net/manual/en/book.ds.php).
 
-_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
-
 ---
 
 
