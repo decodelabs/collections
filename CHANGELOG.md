@@ -1,135 +1,337 @@
-## v0.11.2 (2025-04-02)
-* Fixed attributeList iteration
+# Changelog
 
-## v0.11.1 (2025-04-02)
-* Added attribute key normalizer
+All notable changes to this project will be documented in this file.<br>
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.11.0 (2025-04-02)
-* Support named arguments for attributes
+## Unreleased
+--
 
-## v0.10.7 (2025-03-24)
-* Fixed PHPStan interface issues
+---
 
-## v0.10.6 (2025-02-20)
-* Upgraded Coercion dependency
+### [v0.11.2](https://github.com/decodelabs/collections/commits/v0.11.2) - 2nd April 2025
 
-## v0.10.5 (2025-02-17)
-* Removed option Dictionary / Tree key type
-* Replaced Tree type template references
+- Fixed attributeList iteration
 
-## v0.10.4 (2025-02-16)
-* Moved ArrayAccess to implementations only
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.11.1...v0.11.2)
 
-## v0.10.3 (2025-02-16)
-* Added input type override to AttributeContainer
+---
 
-## v0.10.2 (2025-02-15)
-* Fixed fromDelimitedString() return type
+### [v0.11.1](https://github.com/decodelabs/collections/commits/v0.11.1) - 2nd April 2025
 
-## v0.10.1 (2025-02-15)
-* Fixed nested type propagation in PHPStan
+- Added attribute key normalizer
 
-## v0.10.0 (2025-02-14)
-* Restructured interfaces
-* Simplified class structure
-* Upgraded PHPStan to v2
-* Tidied boolean logic
-* Fixed Exceptional syntax
-* Added PHP8.4 to CI workflow
-* Made PHP8.4 minimum version
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.11.0...v0.11.1)
 
-## v0.9.3 (2025-02-07)
-* Fixed missed implicit nullable arguments
+---
 
-## v0.9.2 (2025-02-07)
-* Fixed implicit nullable arguments
-* Fixed PHP issues
-* Added @phpstan-require-implements constraints
+### [v0.11.0](https://github.com/decodelabs/collections/commits/v0.11.0) - 2nd April 2025
 
-## v0.9.1 (2024-08-21)
-* Updated Lucid dependency
+- Support named arguments for attributes
 
-## v0.9.0 (2024-08-21)
-* Converted consts to protected PascalCaes
-* Made PHP8.1 minimum version
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.10.7...v0.11.0)
 
-## v0.8.8 (2023-11-08)
-* Check for empty string in Tree::fromDelimitedString()
+---
 
-## v0.8.7 (2023-11-06)
-* Parse empty delimited string params as true
+### [v0.10.7](https://github.com/decodelabs/collections/commits/v0.10.7) - 24th March 2025
 
-## v0.8.6 (2023-11-01)
-* Fixed numeric keys in array delimited sets
+- Fixed PHPStan interface issues
 
-## v0.8.5 (2023-11-01)
-* Fixed rawurlencode() of int in Tree
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.10.6...v0.10.7)
 
-## v0.8.4 (2023-10-27)
-* Avoid affecting node list in offsetExists in Tree
+---
 
-## v0.8.3 (2023-10-18)
-* Updated Lucid dependency
+### [v0.10.6](https://github.com/decodelabs/collections/commits/v0.10.6) - 20th February 2025
 
-## v0.8.2 (2023-09-26)
-* Converted phpstan doc comments to generic
+- Upgraded Coercion dependency
 
-## v0.8.1 (2022-11-23)
-* Ensure all Collection interfaces are Traversable
-* Migrated to use effigy in CI workflow
-* Fixed PHP8.1 testing
-* Updated composer check script
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.10.5...v0.10.6)
 
-## v0.8.0 (2022-09-08)
-* Replaced Gadgets Sanitizer with Lucid
-* Updated CI environment
+---
 
-## v0.7.3 (2022-08-24)
-* Applied static returns to interfaces
+### [v0.10.5](https://github.com/decodelabs/collections/commits/v0.10.5) - 17th February 2025
 
-## v0.7.2 (2022-08-24)
-* Fixed propagate() interface compatibility
+- Removed option Dictionary / Tree key type
+- Replaced Tree type template references
 
-## v0.7.1 (2022-08-23)
-* Added concrete types to all members
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.10.4...v0.10.5)
 
-## v0.7.0 (2022-08-22)
-* Removed PHP7 compatibility
-* Updated ECS to v11
-* Updated PHPUnit to v9
+---
 
-## v0.6.2 (2022-03-09)
-* Transitioned from Travis to GHA
-* Updated PHPStan and ECS dependencies
+### [v0.10.4](https://github.com/decodelabs/collections/commits/v0.10.4) - 16th February 2025
 
-## v0.6.1 (2021-04-07)
-* Updated for max PHPStan conformance
+- Moved ArrayAccess to implementations only
 
-## v0.6.0 (2021-03-18)
-* Enabled PHP8 testing
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.10.3...v0.10.4)
 
-## v0.5.7 (2020-10-06)
-* Switched to Fluidity for Then dependency
-* Applied full PSR12 standards
-* Added PSR12 check to Travis build
+---
 
-## v0.5.6 (2020-10-02)
-* Removed Glitch dependency
+### [v0.10.3](https://github.com/decodelabs/collections/commits/v0.10.3) - 16th February 2025
 
-## v0.5.5 (2020-09-30)
-* Switched to Exceptional for exception generation
+- Added input type override to AttributeContainer
 
-## v0.5.4 (2020-09-24)
-* Updated Composer dependency handling
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.10.2...v0.10.3)
 
-## v0.5.3 (2019-10-15)
-* Numerous fixes and updates for full PHPStan max scan
+---
 
-## v0.5.2 (2019-10-11)
-* Updated to Gadgets Then interface
+### [v0.10.2](https://github.com/decodelabs/collections/commits/v0.10.2) - 15th February 2025
 
-## v0.5.1 (2019-10-04)
-* Removed Ds dependency
+- Fixed fromDelimitedString() return type
 
-## v0.5.0 (2019-09-10)
-* Added initial codebase (ported from Df)
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.10.1...v0.10.2)
+
+---
+
+### [v0.10.1](https://github.com/decodelabs/collections/commits/v0.10.1) - 15th February 2025
+
+- Fixed nested type propagation in PHPStan
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.10.0...v0.10.1)
+
+---
+
+### [v0.10.0](https://github.com/decodelabs/collections/commits/v0.10.0) - 14th February 2025
+
+- Restructured interfaces
+- Simplified class structure
+- Upgraded PHPStan to v2
+- Tidied boolean logic
+- Fixed Exceptional syntax
+- Added PHP8.4 to CI workflow
+- Made PHP8.4 minimum version
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.9.3...v0.10.0)
+
+---
+
+### [v0.9.3](https://github.com/decodelabs/collections/commits/v0.9.3) - 7th February 2025
+
+- Fixed missed implicit nullable arguments
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.9.2...v0.9.3)
+
+---
+
+### [v0.9.2](https://github.com/decodelabs/collections/commits/v0.9.2) - 7th February 2025
+
+- Fixed implicit nullable arguments
+- Fixed PHP issues
+- Added @phpstan-require-implements constraints
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.9.1...v0.9.2)
+
+---
+
+### [v0.9.1](https://github.com/decodelabs/collections/commits/v0.9.1) - 21st August 2024
+
+- Updated Lucid dependency
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.9.0...v0.9.1)
+
+---
+
+### [v0.9.0](https://github.com/decodelabs/collections/commits/v0.9.0) - 21st August 2024
+
+- Converted consts to protected PascalCaes
+- Made PHP8.1 minimum version
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.8...v0.9.0)
+
+---
+
+### [v0.8.8](https://github.com/decodelabs/collections/commits/v0.8.8) - 8th November 2023
+
+- Check for empty string in Tree::fromDelimitedString()
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.7...v0.8.8)
+
+---
+
+### [v0.8.7](https://github.com/decodelabs/collections/commits/v0.8.7) - 6th November 2023
+
+- Parse empty delimited string params as true
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.6...v0.8.7)
+
+---
+
+### [v0.8.6](https://github.com/decodelabs/collections/commits/v0.8.6) - 1st November 2023
+
+- Fixed numeric keys in array delimited sets
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.5...v0.8.6)
+
+---
+
+### [v0.8.5](https://github.com/decodelabs/collections/commits/v0.8.5) - 1st November 2023
+
+- Fixed rawurlencode() of int in Tree
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.4...v0.8.5)
+
+---
+
+### [v0.8.4](https://github.com/decodelabs/collections/commits/v0.8.4) - 27th October 2023
+
+- Avoid affecting node list in offsetExists in Tree
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.3...v0.8.4)
+
+---
+
+### [v0.8.3](https://github.com/decodelabs/collections/commits/v0.8.3) - 18th October 2023
+
+- Updated Lucid dependency
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.2...v0.8.3)
+
+---
+
+### [v0.8.2](https://github.com/decodelabs/collections/commits/v0.8.2) - 26th September 2023
+
+- Converted phpstan doc comments to generic
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.1...v0.8.2)
+
+---
+
+### [v0.8.1](https://github.com/decodelabs/collections/commits/v0.8.1) - 23rd November 2022
+
+- Ensure all Collection interfaces are Traversable
+- Migrated to use effigy in CI workflow
+- Fixed PHP8.1 testing
+- Updated composer check script
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.8.0...v0.8.1)
+
+---
+
+### [v0.8.0](https://github.com/decodelabs/collections/commits/v0.8.0) - 8th September 2022
+
+- Replaced Gadgets Sanitizer with Lucid
+- Updated CI environment
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.7.3...v0.8.0)
+
+---
+
+### [v0.7.3](https://github.com/decodelabs/collections/commits/v0.7.3) - 24th August 2022
+
+- Applied static returns to interfaces
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.7.2...v0.7.3)
+
+---
+
+### [v0.7.2](https://github.com/decodelabs/collections/commits/v0.7.2) - 24th August 2022
+
+- Fixed propagate() interface compatibility
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.7.1...v0.7.2)
+
+---
+
+### [v0.7.1](https://github.com/decodelabs/collections/commits/v0.7.1) - 23rd August 2022
+
+- Added concrete types to all members
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.7.0...v0.7.1)
+
+---
+
+### [v0.7.0](https://github.com/decodelabs/collections/commits/v0.7.0) - 22nd August 2022
+
+- Removed PHP7 compatibility
+- Updated ECS to v11
+- Updated PHPUnit to v9
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.6.2...v0.7.0)
+
+---
+
+### [v0.6.2](https://github.com/decodelabs/collections/commits/v0.6.2) - 9th March 2022
+
+- Transitioned from Travis to GHA
+- Updated PHPStan and ECS dependencies
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.6.1...v0.6.2)
+
+---
+
+### [v0.6.1](https://github.com/decodelabs/collections/commits/v0.6.1) - 7th April 2021
+
+- Updated for max PHPStan conformance
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.6.0...v0.6.1)
+
+---
+
+### [v0.6.0](https://github.com/decodelabs/collections/commits/v0.6.0) - 18th March 2021
+
+- Enabled PHP8 testing
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.5.7...v0.6.0)
+
+---
+
+### [v0.5.7](https://github.com/decodelabs/collections/commits/v0.5.7) - 6th October 2020
+
+- Switched to Fluidity for Then dependency
+- Applied full PSR12 standards
+- Added PSR12 check to Travis build
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.5.6...v0.5.7)
+
+---
+
+### [v0.5.6](https://github.com/decodelabs/collections/commits/v0.5.6) - 2nd October 2020
+
+- Removed Glitch dependency
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.5.5...v0.5.6)
+
+---
+
+### [v0.5.5](https://github.com/decodelabs/collections/commits/v0.5.5) - 30th September 2020
+
+- Switched to Exceptional for exception generation
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.5.4...v0.5.5)
+
+---
+
+### [v0.5.4](https://github.com/decodelabs/collections/commits/v0.5.4) - 24th September 2020
+
+- Updated Composer dependency handling
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.5.3...v0.5.4)
+
+---
+
+### [v0.5.3](https://github.com/decodelabs/collections/commits/v0.5.3) - 15th October 2019
+
+- Numerous fixes and updates for full PHPStan max scan
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.5.2...v0.5.3)
+
+---
+
+### [v0.5.2](https://github.com/decodelabs/collections/commits/v0.5.2) - 11th October 2019
+
+- Updated to Gadgets Then interface
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.5.1...v0.5.2)
+
+---
+
+### [v0.5.1](https://github.com/decodelabs/collections/commits/v0.5.1) - 4th October 2019
+
+- Removed Ds dependency
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.5.0...v0.5.1)
+
+---
+
+### [v0.5.0](https://github.com/decodelabs/collections/commits/v0.5.0) - 10th September 2019
+
+- Added initial codebase (ported from Df)
