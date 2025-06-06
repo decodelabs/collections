@@ -11,10 +11,10 @@
     "require": {
         "php": "^8.4",
 
-        "decodelabs/coercion": "^0.3",
-        "decodelabs/exceptional": "^0.5.2",
+        "decodelabs/coercion": "^0.3.3",
+        "decodelabs/exceptional": "^0.6.1",
         "decodelabs/fluidity": "^0.3.6",
-        "decodelabs/lucid-support": "^0.5.1"
+        "decodelabs/lucid-support": "^0.5.3"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.7"
