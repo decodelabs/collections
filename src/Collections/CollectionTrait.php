@@ -12,10 +12,6 @@ namespace DecodeLabs\Collections;
 use ArrayIterator;
 use Closure;
 use DecodeLabs\Coercion;
-use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\Collection;
-use DecodeLabs\Collections\Dictionary;
-use DecodeLabs\Collections\SequenceInterface;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Fluidity\ThenTrait;
 use Generator;
@@ -771,7 +767,7 @@ trait CollectionTrait
         mixed $key,
         mixed $value
     ): void {
-        if(!static::Mutable) {
+        if (!static::Mutable) {
             throw Exceptional::DomainException(
                 message: 'Cannot modify immutable collection'
             );

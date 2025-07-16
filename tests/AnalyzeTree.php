@@ -15,9 +15,7 @@ class AnalyzeTree
 {
     public function test(): void
     {
-        /**
-         * @var Tree<string> $tree
-         */
+        /** @var Tree<string> $tree */
         $tree = new Tree();
 
         $tree->test = 'hello';

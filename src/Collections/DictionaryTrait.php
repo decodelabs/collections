@@ -261,7 +261,7 @@ trait DictionaryTrait
         $result = array_combine(ArrayUtils::iterableToArray($keys), $output->items);
 
         // @phpstan-ignore-next-line PHPStan bug
-        if($result === false) {
+        if ($result === false) {
             throw Exceptional::InvalidArgument(
                 'Key count does not match value count'
             );
@@ -282,12 +282,12 @@ trait DictionaryTrait
     ): static {
         $output = static::Mutable ? $this : clone $this;
         $result = array_combine(
-            array_filter($output->items, fn($value) => is_string($value) || is_int($value)),
+            array_filter($output->items, fn ($value) => is_string($value) || is_int($value)),
             ArrayUtils::iterableToArray($values)
         );
 
         // @phpstan-ignore-next-line PHPStan bug
-        if($result === false) {
+        if ($result === false) {
             throw Exceptional::InvalidArgument(
                 'Key count does not match value count'
             );
@@ -319,7 +319,7 @@ trait DictionaryTrait
 
         /** @var array<TValue> $items */
         $items = array_flip(
-            array_filter($output->items, fn($value) => is_string($value) || is_int($value))
+            array_filter($output->items, fn ($value) => is_string($value) || is_int($value))
         );
 
         $output->items = $items;

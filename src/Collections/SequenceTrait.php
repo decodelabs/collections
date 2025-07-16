@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Collections;
 
-use DecodeLabs\Collections\ArrayUtils;
-use DecodeLabs\Collections\Collection;
-use DecodeLabs\Collections\SequenceInterface;
 use DecodeLabs\Exceptional;
 
 /**

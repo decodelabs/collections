@@ -13,7 +13,6 @@ use DecodeLabs\Coercion;
 use DecodeLabs\Exceptional;
 use Generator;
 use JsonSerializable;
-use Traversable;
 
 class ArrayUtils
 {
@@ -359,15 +358,15 @@ class ArrayUtils
     ): array {
         $arrays = self::iterablesToArrays(...$iterables);
 
-        if(empty($arrays)) {
+        if (empty($arrays)) {
             $arrays[] = [];
         }
 
-        if($valueCallback) {
+        if ($valueCallback) {
             $arrays[] = $valueCallback;
         }
 
-        if($keyCallback) {
+        if ($keyCallback) {
             $arrays[] = $keyCallback;
         }
 

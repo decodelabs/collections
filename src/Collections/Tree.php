@@ -661,7 +661,7 @@ class Tree implements
         if ($callback) {
             $output = array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH);
         } else {
-            $output = array_filter($this->items, fn($node) => (bool)$node->getValue());
+            $output = array_filter($this->items, fn ($node) => (bool)$node->getValue());
         }
 
         return $this->propagate($output);
@@ -807,7 +807,7 @@ class Tree implements
             array_map(function ($node) {
                 $output = $node->getValue();
 
-                if(is_int($output)) {
+                if (is_int($output)) {
                     return $output;
                 } else {
                     return Coercion::tryString($output);
@@ -822,7 +822,7 @@ class Tree implements
         $result = array_combine($items, ArrayUtils::iterableToArray($values));
 
         // @phpstan-ignore-next-line PHPStan bug
-        if($result === false) {
+        if ($result === false) {
             throw Exceptional::InvalidArgument(
                 'Key count does not match value count'
             );
@@ -856,7 +856,7 @@ class Tree implements
         $items = array_map(function ($node) {
             $output = $node->getValue();
 
-            if(is_int($output)) {
+            if (is_int($output)) {
                 return $output;
             } else {
                 return Coercion::toString($output);
@@ -1027,7 +1027,7 @@ class Tree implements
     public function sort(
         int $flags = \SORT_REGULAR
     ): static {
-        uasort($this->items, function($a, $b) {
+        uasort($this->items, function ($a, $b) {
             return $a->value <=> $b->value;
         });
 
@@ -1040,7 +1040,7 @@ class Tree implements
     public function reverseSort(
         int $flags = \SORT_REGULAR
     ): static {
-        uasort($this->items, function($a, $b) {
+        uasort($this->items, function ($a, $b) {
             return $b->value <=> $a->value;
         });
 
@@ -1053,7 +1053,7 @@ class Tree implements
     public function sortValues(
         int $flags = \SORT_REGULAR
     ): static {
-        usort($this->items, function($a, $b) {
+        usort($this->items, function ($a, $b) {
             return $a->value <=> $b->value;
         });
 
@@ -1066,7 +1066,7 @@ class Tree implements
     public function reverseSortValues(
         int $flags = \SORT_REGULAR
     ): static {
-        usort($this->items, function($a, $b) {
+        usort($this->items, function ($a, $b) {
             return $b->value <=> $a->value;
         });
 
