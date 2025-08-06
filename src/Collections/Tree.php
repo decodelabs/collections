@@ -741,21 +741,18 @@ class Tree implements
         $output = [];
 
         foreach ($this->toDelimitedSet(true) as $key => $value) {
+            if ($value === false) {
+                continue;
+            }
+
             $key = rawurlencode((string)$key);
 
-            if (
-                $value !== true &&
-                (
-                    !empty($value) ||
-                    $value === '0' ||
-                    $value === 0
-                )
-            ) {
-                $output[] = $key . $valueDelimiter . rawurlencode(
-                    Coercion::asString($value)
-                );
-            } else {
+            if ($value === true) {
                 $output[] = $key;
+            } else {
+                $output[] = $key . $valueDelimiter . rawurlencode(
+                    Coercion::toString($value)
+                );
             }
         }
 
