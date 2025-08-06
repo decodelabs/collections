@@ -409,6 +409,7 @@ trait SequenceTrait
         mixed $value = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        // @phpstan-ignore-next-line
         $output->items = array_pad($output->items, 0 - abs($size), $value);
         return $output;
     }
@@ -421,6 +422,7 @@ trait SequenceTrait
         mixed $value = null
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        // @phpstan-ignore-next-line
         $output->items = array_pad($output->items, abs($size), $value);
         return $output;
     }
@@ -443,7 +445,9 @@ trait SequenceTrait
         $leftSize = $length + floor($padSize);
         $rightSize = $size;
 
+        // @phpstan-ignore-next-line
         $output->items = array_pad($output->items, (int)-$leftSize, $value);
+        // @phpstan-ignore-next-line
         $output->items = array_pad($output->items, (int)$rightSize, $value);
         return $output;
     }
