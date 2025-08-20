@@ -24,8 +24,6 @@ trait DictionaryTrait
     use SortableTrait;
 
     /**
-     * Get all keys in array, enforce string formatting
-     *
      * @return list<int|string>
      */
     public function getKeys(): array
@@ -35,8 +33,6 @@ trait DictionaryTrait
 
 
     /**
-     * Retrieve a single entry
-     *
      * @param int|string $key
      */
     public function get(
@@ -46,8 +42,6 @@ trait DictionaryTrait
     }
 
     /**
-     * Retrieve entry and remove from collection
-     *
      * @param int|string $key
      */
     public function pull(
@@ -63,8 +57,6 @@ trait DictionaryTrait
     }
 
     /**
-     * Direct set a value
-     *
      * @param int|string $key
      */
     public function set(
@@ -77,8 +69,6 @@ trait DictionaryTrait
     }
 
     /**
-     * True if any provided keys have a set value (not null)
-     *
      * @param int|string ...$keys
      */
     public function has(
@@ -94,8 +84,6 @@ trait DictionaryTrait
     }
 
     /**
-     * True if all provided keys have a set value (not null)
-     *
      * @param int|string ...$keys
      */
     public function hasAll(
@@ -111,8 +99,6 @@ trait DictionaryTrait
     }
 
     /**
-     * True if any provided keys are in the collection
-     *
      * @param int|string ...$keys
      */
     public function hasKey(
@@ -128,8 +114,6 @@ trait DictionaryTrait
     }
 
     /**
-     * True if all provided keys are in the collection
-     *
      * @param int|string ...$keys
      */
     public function hasKeys(
@@ -145,8 +129,6 @@ trait DictionaryTrait
     }
 
     /**
-     * Remove all values associated with $keys
-     *
      * @param int|string ...$keys
      */
     public function remove(
@@ -158,8 +140,6 @@ trait DictionaryTrait
     }
 
     /**
-     * Remove all values not associated with $keys
-     *
      * @param int|string ...$keys
      */
     public function keep(
@@ -172,8 +152,6 @@ trait DictionaryTrait
 
 
     /**
-     * Lookup a key by value
-     *
      * @return int|string|null
      */
     public function findKey(
@@ -188,9 +166,6 @@ trait DictionaryTrait
     }
 
 
-    /**
-     * Reset all values
-     */
     public function clear(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -198,9 +173,6 @@ trait DictionaryTrait
         return $output;
     }
 
-    /**
-     * Remove all keys
-     */
     public function clearKeys(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -209,9 +181,6 @@ trait DictionaryTrait
     }
 
 
-    /**
-     * Collapse multi dimensional array to flat
-     */
     public function collapse(
         bool $unique = false,
         bool $removeNull = false
@@ -222,9 +191,6 @@ trait DictionaryTrait
         return $output;
     }
 
-    /**
-     * Collapse without the keys
-     */
     public function collapseValues(
         bool $unique = false,
         bool $removeNull = false
@@ -237,9 +203,6 @@ trait DictionaryTrait
 
 
 
-    /**
-     * Switch key case for all entries
-     */
     public function changeKeyCase(
         int $case = CASE_LOWER
     ): static {
@@ -250,8 +213,6 @@ trait DictionaryTrait
 
 
     /**
-     * Map values of collection to $keys
-     *
      * @param iterable<int|string> $keys
      */
     public function combineWithKeys(
@@ -273,8 +234,6 @@ trait DictionaryTrait
     }
 
     /**
-     * Map $values to values of collection as keys
-     *
      * @param iterable<TValue> $values
      */
     public function combineWithValues(
@@ -298,8 +257,6 @@ trait DictionaryTrait
 
 
     /**
-     * Replace all values with $value
-     *
      * @param TValue $value
      */
     public function fill(
@@ -310,9 +267,6 @@ trait DictionaryTrait
         return $output;
     }
 
-    /**
-     * Flip keys and values
-     */
     public function flip(): MapInterface
     {
         $output = clone $this;
@@ -329,8 +283,6 @@ trait DictionaryTrait
 
 
     /**
-     * Merge all passed collections into one
-     *
      * @param iterable<int|string,TValue> ...$arrays
      */
     public function merge(
@@ -342,8 +294,6 @@ trait DictionaryTrait
     }
 
     /**
-     * Merge EVERYTHING :D
-     *
      * @param iterable<int|string,TValue> ...$arrays
      */
     public function mergeRecursive(
@@ -356,8 +306,6 @@ trait DictionaryTrait
 
 
     /**
-     * Like merge, but replaces.. obvs
-     *
      * @param iterable<int|string,TValue> ...$arrays
      */
     public function replace(
@@ -369,8 +317,6 @@ trait DictionaryTrait
     }
 
     /**
-     * Replace EVERYTHING :D
-     *
      * @param iterable<int|string,TValue> ...$arrays
      */
     public function replaceRecursive(
@@ -384,8 +330,6 @@ trait DictionaryTrait
 
 
     /**
-     * Remove $offet + $length items
-     *
      * @param-out MapInterface<int|string,TValue> $removed
      */
     public function removeSlice(
@@ -407,8 +351,6 @@ trait DictionaryTrait
     }
 
     /**
-     * Like removeSlice, but leaves a present behind
-     *
      * @param iterable<int|string,TValue> $replacement
      * @param-out MapInterface<int|string,TValue> $removed
      */
@@ -432,9 +374,6 @@ trait DictionaryTrait
     }
 
 
-    /**
-     * Remove duplicates from collection
-     */
     public function unique(
         int $flags = SORT_STRING
     ): static {
@@ -444,9 +383,6 @@ trait DictionaryTrait
     }
 
 
-    /**
-     * Iterate each entry
-     */
     public function walk(
         callable $callback,
         mixed $data = null
@@ -456,9 +392,6 @@ trait DictionaryTrait
         return $output;
     }
 
-    /**
-     * Iterate everything
-     */
     public function walkRecursive(
         callable $callback,
         mixed $data = null
@@ -472,8 +405,6 @@ trait DictionaryTrait
 
 
     /**
-     * Copy and reinitialise new object
-     *
      * @template FValue
      * @param iterable<int|string, FValue> $newItems
      */

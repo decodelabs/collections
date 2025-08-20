@@ -36,8 +36,6 @@ trait CollectionTrait
     protected array $items = [];
 
     /**
-     * Direct set items
-     *
      * @param iterable<TKey, TValue> $items
      */
     public function __construct(
@@ -47,26 +45,17 @@ trait CollectionTrait
     }
 
 
-    /**
-     * Can the values in this collection change?
-     */
     public function isMutable(): bool
     {
         return static::Mutable;
     }
 
-    /**
-     * Is array empty?
-     */
     public function isEmpty(): bool
     {
         return empty($this->items);
     }
 
 
-    /**
-     * Duplicate collection, can change type if needed
-     */
     final public function copy(): static
     {
         return clone $this;
@@ -74,35 +63,23 @@ trait CollectionTrait
 
 
 
-    /**
-     * Count items
-     */
     public function count(): int
     {
         return count($this->items);
     }
 
-    /**
-     * Get first item, matching filter
-     */
     public function getFirst(
         ?callable $filter = null
     ): mixed {
         return ArrayUtils::getFirst($this->items, $filter, $this);
     }
 
-    /**
-     * Get the last item in the list, matching filter
-     */
     public function getLast(
         ?callable $filter = null
     ): mixed {
         return ArrayUtils::getLast($this->items, $filter, $this);
     }
 
-    /**
-     * Pick one entry at random
-     */
     public function getRandom(): mixed
     {
         return ArrayUtils::getRandom($this->items);
@@ -110,18 +87,12 @@ trait CollectionTrait
 
 
 
-    /**
-     * Add items to the end
-     */
     public function push(
         mixed ...$values
     ): static {
         return $this->append(...$values);
     }
 
-    /**
-     * Pull first item
-     */
     public function pop(): mixed
     {
         if (static::Mutable) {
@@ -131,18 +102,12 @@ trait CollectionTrait
         }
     }
 
-    /**
-     * Add items to the start
-     */
     public function unshift(
         mixed ...$values
     ): static {
         return $this->prepend(...$values);
     }
 
-    /**
-     * Pull last item
-     */
     public function shift(): mixed
     {
         if (static::Mutable) {
@@ -153,9 +118,7 @@ trait CollectionTrait
     }
 
 
-    /**
-     * Add items to the end
-     */
+
     public function append(
         mixed ...$values
     ): static {
@@ -164,9 +127,7 @@ trait CollectionTrait
         return $output;
     }
 
-    /**
-     * Add items to the start
-     */
+
     public function prepend(
         mixed ...$values
     ): static {
@@ -177,18 +138,14 @@ trait CollectionTrait
 
 
 
-    /**
-     * Get all keys in array
-     */
+
     public function getKeys(): array
     {
         return array_keys($this->items);
     }
 
 
-    /**
-     * Is the value in the collection?
-     */
+
     public function contains(
         mixed $value,
         bool $strict = false
@@ -196,9 +153,7 @@ trait CollectionTrait
         return in_array($value, $this->items, $strict);
     }
 
-    /**
-     * Is the value in the collection, including child arrays?
-     */
+
     public function containsRecursive(
         mixed $value,
         bool $strict = false
@@ -208,9 +163,7 @@ trait CollectionTrait
 
 
 
-    /**
-     * Return new collection containing $offset + $length items
-     */
+
     public function slice(
         int $offset,
         ?int $length = null
@@ -225,9 +178,7 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * Pick a random $number length set of items
-     */
+
     public function sliceRandom(
         int $number
     ): static {
@@ -245,8 +196,6 @@ trait CollectionTrait
 
 
     /**
-     * Split the current items into $size length chunks, maintain keys
-     *
      * @param int<1,max> $size
      */
     public function chunk(
@@ -266,8 +215,6 @@ trait CollectionTrait
     }
 
     /**
-     * Split the current items into $size length chunks, ignore keys
-     *
      * @param int<1,max> $size
      */
     public function chunkValues(
@@ -288,8 +235,6 @@ trait CollectionTrait
 
 
     /**
-     * Return indexed sum list - filters non scalar first
-     *
      * @return MapInterface<TValue,int>
      */
     public function countValues(): MapInterface
@@ -308,9 +253,6 @@ trait CollectionTrait
     }
 
 
-    /**
-     * Return all items in collection where value or key not in $arrays
-     */
     public function diffAssoc(
         iterable ...$arrays
     ): static {
@@ -325,9 +267,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * DiffAssoc with custom key comparator
-     */
     public function diffAssocBy(
         callable $keyCallback,
         iterable ...$arrays
@@ -344,9 +283,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * DiffAssoc with custom value comparator
-     */
     public function diffAssocByValue(
         callable $valueCallback,
         iterable ...$arrays
@@ -363,9 +299,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * DiffAssoc with custom key and value comparator
-     */
     public function diffAssocAll(
         callable $valueCallback,
         callable $keyCallback,
@@ -384,9 +317,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * Return all items in collection where value not in $arrays
-     */
     public function diffValues(
         iterable ...$arrays
     ): static {
@@ -401,9 +331,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * DiffValues with custom value comparator
-     */
     public function diffValuesBy(
         callable $valueCallback,
         iterable ...$arrays
@@ -420,9 +347,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * Return all items in collection where key not in $arrays
-     */
     public function diffKeys(
         iterable ...$arrays
     ): static {
@@ -437,9 +361,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * DiffKeys with custom key comparator
-     */
     public function diffKeysBy(
         callable $keyCallback,
         iterable ...$arrays
@@ -457,9 +378,6 @@ trait CollectionTrait
     }
 
 
-    /**
-     * Return all items in collection where value or key in $arrays
-     */
     public function intersectAssoc(
         iterable ...$arrays
     ): static {
@@ -474,9 +392,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * IntersectAssoc with custom key comparator
-     */
     public function intersectAssocBy(
         callable $keyCallback,
         iterable ...$arrays
@@ -493,9 +408,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * IntersectAssoc with custom value comparator
-     */
     public function intersectAssocByValue(
         callable $valueCallback,
         iterable ...$arrays
@@ -512,9 +424,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * IntersectAssoc with custom key and value comparator
-     */
     public function intersectAssocAll(
         callable $valueCallback,
         callable $keyCallback,
@@ -533,9 +442,7 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * Return all items in collection where value in $arrays
-     */
+
     public function intersectValues(
         iterable ...$arrays
     ): static {
@@ -550,9 +457,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * IntersectValues with custom value comparator
-     */
     public function intersectValuesBy(
         callable $valueCallback,
         iterable ...$arrays
@@ -569,9 +473,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * Return all items in collection where key in $arrays
-     */
     public function intersectKeys(
         iterable ...$arrays
     ): static {
@@ -586,9 +487,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * IntersectKeys with custom key comparator
-     */
     public function intersectKeysBy(
         callable $keyCallback,
         iterable ...$arrays
@@ -606,9 +504,6 @@ trait CollectionTrait
     }
 
 
-    /**
-     * Return subset of collection where callback returns true
-     */
     public function filter(
         ?callable $callback = null
     ): static {
@@ -621,9 +516,6 @@ trait CollectionTrait
         return $this->propagate($output);
     }
 
-    /**
-     * Combine collection with passed arrays via callback
-     */
     public function map(
         callable $callback,
         iterable ...$arrays
@@ -636,9 +528,6 @@ trait CollectionTrait
         ));
     }
 
-    /**
-     * Loop through collection to build new collection
-     */
     public function mapSelf(
         callable $callback
     ): static {
@@ -675,9 +564,6 @@ trait CollectionTrait
         }
     }
 
-    /**
-     * Whittle down collection to single value
-     */
     public function reduce(
         callable $callback,
         mixed $initial = null
@@ -686,9 +572,6 @@ trait CollectionTrait
     }
 
 
-    /**
-     * Add all numeric values in collection
-     */
     public function getSum(
         ?callable $filter = null
     ): float {
@@ -707,9 +590,6 @@ trait CollectionTrait
         );
     }
 
-    /**
-     * Multiple all numeric values in collection
-     */
     public function getProduct(
         ?callable $filter = null
     ): float {
@@ -728,9 +608,6 @@ trait CollectionTrait
         );
     }
 
-    /**
-     * Get average value of numerics
-     */
     public function getAvg(
         ?callable $filter = null
     ): ?float {
@@ -742,9 +619,6 @@ trait CollectionTrait
     }
 
 
-    /**
-     * Combine a column with optional key column into single array
-     */
     public function pluck(
         string $valueKey,
         ?string $indexKey = null
@@ -759,8 +633,6 @@ trait CollectionTrait
 
 
     /**
-     * Set by array access
-     *
      * @param TValue $value
      */
     public function offsetSet(
@@ -788,8 +660,6 @@ trait CollectionTrait
     }
 
     /**
-     * Get by array access
-     *
      * @return ?TValue
      */
     public function offsetGet(
@@ -798,18 +668,12 @@ trait CollectionTrait
         return $this->get($key);
     }
 
-    /**
-     * Check by array access
-     */
     public function offsetExists(
         mixed $key
     ): bool {
         return $this->has($key);
     }
 
-    /**
-     * Remove by array access
-     */
     public function offsetUnset(
         mixed $key
     ): void {
@@ -821,8 +685,6 @@ trait CollectionTrait
 
 
     /**
-     * Iterator interface
-     *
      * @return Iterator<TKey,TValue>
      */
     public function getIterator(): Iterator
@@ -831,8 +693,6 @@ trait CollectionTrait
     }
 
     /**
-     * Convert to array
-     *
      * @return array<TKey,TValue>
      */
     public function toArray(): array
@@ -841,8 +701,6 @@ trait CollectionTrait
     }
 
     /**
-     * Convert to json
-     *
      * @return array<int|string,mixed>
      */
     public function jsonSerialize(): array
@@ -853,8 +711,6 @@ trait CollectionTrait
 
 
     /**
-     * Get dump info
-     *
      * @return array<TKey,TValue>
      */
     public function __debugInfo(): array
@@ -863,9 +719,6 @@ trait CollectionTrait
     }
 
 
-    /**
-     * Copy and reinitialise new object
-     */
     abstract protected static function propagate(
         iterable $newItems = []
     ): static;

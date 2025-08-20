@@ -14,7 +14,6 @@ use ArrayIterator;
 use DecodeLabs\Coercion;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Lucid\Provider\MixedContextTrait as SanitizerProviderTrait;
-use Iterator;
 use IteratorAggregate;
 
 /**
@@ -54,9 +53,6 @@ class Tree implements
      */
     protected array $items = [];
 
-    /**
-     * Value based construct
-     */
     public function __construct(
         ?iterable $items = null,
         mixed $value = null
@@ -76,9 +72,6 @@ class Tree implements
     }
 
 
-    /**
-     * Clone whole tree
-     */
     public function __clone(): void
     {
         foreach ($this->items as $key => $child) {
@@ -89,8 +82,6 @@ class Tree implements
 
 
     /**
-     * Set node value
-     *
      * @param int|string $key
      */
     public function __set(
@@ -101,8 +92,6 @@ class Tree implements
     }
 
     /**
-     * Get node
-     *
      * @param int|string $key
      * @return static
      */
@@ -117,8 +106,6 @@ class Tree implements
     }
 
     /**
-     * Check for node
-     *
      * @param int|string $key
      */
     public function __isset(
@@ -128,8 +115,6 @@ class Tree implements
     }
 
     /**
-     * Remove node
-     *
      * @param int|string $key
      */
     public function __unset(
@@ -141,8 +126,6 @@ class Tree implements
 
 
     /**
-     * Set value by dot access
-     *
      * @param int|string $key
      * @param TValue|iterable<int|string,TValue|iterable<int|string,static>>|null $value
      */
@@ -163,8 +146,6 @@ class Tree implements
     }
 
     /**
-     * Get node by dot access
-     *
      * @param int|string $key
      */
     public function getNode(
@@ -185,8 +166,6 @@ class Tree implements
     }
 
     /**
-     * True if any provided keys exist as a node
-     *
      * @param int|string ...$keys
      */
     public function hasNode(
@@ -219,8 +198,6 @@ class Tree implements
     }
 
     /**
-     * True if all provided keys exist as a node
-     *
      * @param int|string ...$keys
      */
     public function hasAllNodes(
@@ -252,8 +229,6 @@ class Tree implements
 
 
     /**
-     * Split node key string
-     *
      * @param int|string $key
      * @return list<int|string>
      */
@@ -268,18 +243,12 @@ class Tree implements
     }
 
 
-    /**
-     * Get first item, matching filter
-     */
     public function getFirst(
         ?callable $filter = null
     ): mixed {
         return ArrayUtils::getFirst($this->items, $filter, $this)?->getValue();
     }
 
-    /**
-     * Get the last item in the list, matching filter
-     */
     public function getLast(
         ?callable $filter = null
     ): mixed {
@@ -289,8 +258,6 @@ class Tree implements
 
 
     /**
-     * Get value
-     *
      * @param int|string $key
      */
     public function get(
@@ -300,8 +267,6 @@ class Tree implements
     }
 
     /**
-     * Retrieve entry and remove from collection
-     *
      * @param int|string $key
      * @return TValue|null
      */
@@ -319,8 +284,6 @@ class Tree implements
     }
 
     /**
-     * Set value on node
-     *
      * @param int|string $key
      */
     public function set(
@@ -332,8 +295,6 @@ class Tree implements
     }
 
     /**
-     * True if any provided keys have a set value (not null)
-     *
      * @param int|string ...$keys
      */
     public function has(
@@ -371,8 +332,6 @@ class Tree implements
     }
 
     /**
-     * True if all provided keys have a set value (not null)
-     *
      * @param int|string ...$keys
      */
     public function hasAll(
@@ -411,8 +370,6 @@ class Tree implements
 
 
     /**
-     * Pull first item
-     *
      * @return ?TValue
      */
     public function pop(): mixed
@@ -427,8 +384,6 @@ class Tree implements
     }
 
     /**
-     * Pull last item
-     *
      * @return ?TValue
      */
     public function shift(): mixed
@@ -443,9 +398,6 @@ class Tree implements
     }
 
 
-    /**
-     * Remove empty nodes
-     */
     public function removeEmpty(): static
     {
         foreach ($this->items as $key => $node) {
@@ -463,8 +415,6 @@ class Tree implements
     }
 
     /**
-     * Lookup a key by value
-     *
      * @return int|string|null
      */
     public function findKey(
@@ -481,9 +431,6 @@ class Tree implements
     }
 
 
-    /**
-     * Reset all values
-     */
     public function clear(): static
     {
         $this->value = null;
@@ -494,8 +441,6 @@ class Tree implements
 
 
     /**
-     * Set by array access
-     *
      * @param int|string|null $key
      * @param TValue|iterable<int|string,TValue|iterable<int|string,static>>|null $value
      */
@@ -514,8 +459,6 @@ class Tree implements
     }
 
     /**
-     * Get by array access
-     *
      * @param int|string $key
      */
     public function offsetGet(
@@ -525,8 +468,6 @@ class Tree implements
     }
 
     /**
-     * Check by array access
-     *
      * @param int|string $key
      */
     public function offsetExists(
@@ -544,8 +485,6 @@ class Tree implements
 
 
     /**
-     * Set container value
-     *
      * @param ?TValue $value
      */
     public function setValue(
@@ -564,8 +503,6 @@ class Tree implements
     }
 
     /**
-     * Get container value
-     *
      * @return ?TValue
      */
     public function getValue(): mixed
@@ -573,9 +510,6 @@ class Tree implements
         return $this->value;
     }
 
-    /**
-     * Get container value and remove
-     */
     public function pullValue(): mixed
     {
         $output = $this->value;
@@ -583,17 +517,11 @@ class Tree implements
         return $output;
     }
 
-    /**
-     * Check container value
-     */
     public function hasValue(): bool
     {
         return $this->value !== null;
     }
 
-    /**
-     * Check container and children for value
-     */
     public function hasAnyValue(): bool
     {
         if ($this->hasValue()) {
@@ -609,9 +537,6 @@ class Tree implements
         return false;
     }
 
-    /**
-     * Compare value
-     */
     public function isValue(
         mixed $value,
         bool $strict
@@ -625,8 +550,6 @@ class Tree implements
 
 
     /**
-     * Return indexed sum list - filters non scalar first
-     *
      * @return MapInterface<TValue,int>
      */
     public function countValues(): MapInterface
@@ -652,9 +575,6 @@ class Tree implements
     }
 
 
-    /**
-     * Return subset of collection where callback returns true
-     */
     public function filter(
         ?callable $callback = null
     ): static {
@@ -669,9 +589,6 @@ class Tree implements
 
 
 
-    /**
-     * Convert to string
-     */
     public function __toString(): string
     {
         return Coercion::asString($this->value);
@@ -679,8 +596,6 @@ class Tree implements
 
 
     /**
-     * From query string
-     *
      * @return self<string|bool>
      */
     public static function fromDelimitedString(
@@ -731,9 +646,6 @@ class Tree implements
     }
 
 
-    /**
-     * To query string
-     */
     public function toDelimitedString(
         string $setDelimiter = '&',
         string $valueDelimiter = '='
@@ -759,9 +671,6 @@ class Tree implements
         return implode($setDelimiter, $output);
     }
 
-    /**
-     * Convert to delimited set
-     */
     public function toDelimitedSet(
         bool $urlEncode = false,
         ?string $prefix = null
@@ -794,9 +703,6 @@ class Tree implements
     }
 
 
-    /**
-     * Map $values to values of collection as keys
-     */
     public function combineWithValues(
         iterable $values
     ): static {
@@ -830,9 +736,6 @@ class Tree implements
 
 
 
-    /**
-     * Replace all values with $value
-     */
     public function fill(
         mixed $value
     ): static {
@@ -842,8 +745,6 @@ class Tree implements
 
 
     /**
-     * Flip keys and values
-     *
      * @return MapInterface<int|string,int|string,int|string,int|string>
      * @phpstan-ignore-next-line
      */
@@ -867,9 +768,6 @@ class Tree implements
 
 
 
-    /**
-     * Merge all passed collections into one
-     */
     public function merge(
         iterable ...$arrays
     ): static {
@@ -906,9 +804,6 @@ class Tree implements
         return $this;
     }
 
-    /**
-     * Merge EVERYTHING :D
-     */
     public function mergeRecursive(
         iterable ...$arrays
     ): static {
@@ -916,9 +811,6 @@ class Tree implements
     }
 
 
-    /**
-     * Like merge, but replaces.. obvs
-     */
     public function replace(
         iterable ...$arrays
     ): static {
@@ -941,9 +833,6 @@ class Tree implements
         return $this;
     }
 
-    /**
-     * Alias of replace
-     */
     public function replaceRecursive(
         iterable ...$arrays
     ): static {
@@ -951,9 +840,6 @@ class Tree implements
     }
 
 
-    /**
-     * Remove duplicates from collection
-     */
     public function unique(
         int $flags = SORT_STRING
     ): static {
@@ -987,8 +873,6 @@ class Tree implements
     }
 
     /**
-     * Recursive array conversion
-     *
      * @return array<int|string,TValue|array<mixed>|null>
      */
     public function toArray(): array
@@ -1006,9 +890,6 @@ class Tree implements
         return $output;
     }
 
-    /**
-     * Get just item array
-     */
     public function getChildren(): array
     {
         return $this->items;
@@ -1018,9 +899,6 @@ class Tree implements
 
 
 
-    /**
-     * Sort values, keep keys
-     */
     public function sort(
         int $flags = \SORT_REGULAR
     ): static {
@@ -1031,9 +909,6 @@ class Tree implements
         return $this;
     }
 
-    /**
-     * Reverse sort values, keep keys
-     */
     public function reverseSort(
         int $flags = \SORT_REGULAR
     ): static {
@@ -1044,9 +919,6 @@ class Tree implements
         return $this;
     }
 
-    /**
-     * Sort values, ignore keys
-     */
     public function sortValues(
         int $flags = \SORT_REGULAR
     ): static {
@@ -1057,9 +929,6 @@ class Tree implements
         return $this;
     }
 
-    /**
-     * Reverse sort values, ignore keys
-     */
     public function reverseSortValues(
         int $flags = \SORT_REGULAR
     ): static {
@@ -1076,8 +945,6 @@ class Tree implements
 
 
     /**
-     * Iterator interface
-     *
      * @return ArrayIterator<int|string,static>
      */
     public function getIterator(): ArrayIterator
@@ -1088,8 +955,6 @@ class Tree implements
 
 
     /**
-     * Get dump info
-     *
      * @return array<mixed>
      */
     public function __debugInfo(): array
@@ -1127,8 +992,6 @@ class Tree implements
 
 
     /**
-     * Copy and reinitialise new object
-     *
      * @param iterable<int|string,TValue|iterable<mixed>> $newItems
      * @param TValue|null $value
      */

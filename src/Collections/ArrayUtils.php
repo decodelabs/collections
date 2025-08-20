@@ -17,8 +17,6 @@ use JsonSerializable;
 class ArrayUtils
 {
     /**
-     * Collapse multi-dimensional collections to flat array
-     *
      * @template TValue
      * @param iterable<string|int,TValue|iterable<string|int,TValue>> $data
      * @return array<string|int,TValue>
@@ -97,8 +95,6 @@ class ArrayUtils
 
 
     /**
-     * Generator, scanning all non-container nodes
-     *
      * @template TValue
      * @param iterable<string|int,TValue|iterable<string|int,TValue>> $data
      * @return Generator<string|int,TValue>
@@ -146,8 +142,6 @@ class ArrayUtils
 
 
     /**
-     * Get first of a collection
-     *
      * @template TKey
      * @template TValue
      * @param iterable<TKey,TValue> $data
@@ -173,8 +167,6 @@ class ArrayUtils
     }
 
     /**
-     * Get last item in an array
-     *
      * @template TKey
      * @template TValue
      * @param iterable<TKey,TValue> $data
@@ -199,8 +191,6 @@ class ArrayUtils
     }
 
     /**
-     * Get random item in array
-     *
      * @template TKey
      * @template TValue
      * @param array<TKey,TValue> $array
@@ -219,8 +209,6 @@ class ArrayUtils
     }
 
     /**
-     * Get random subset from array
-     *
      * @template TKey
      * @template TValue
      * @param array<TKey,TValue> $array
@@ -251,8 +239,6 @@ class ArrayUtils
     }
 
     /**
-     * Key base shuffling
-     *
      * @template TKey
      * @template TValue
      * @param array<TKey,TValue> $array
@@ -267,8 +253,6 @@ class ArrayUtils
     }
 
     /**
-     * Get subset based on key match
-     *
      * @template TKey of int|string
      * @template TValue
      * @param array<TKey,TValue> $array
@@ -283,8 +267,6 @@ class ArrayUtils
     }
 
     /**
-     * Filter an array
-     *
      * @template TKey
      * @template TValue
      * @param array<TKey,TValue> $array
@@ -298,8 +280,6 @@ class ArrayUtils
     }
 
     /**
-     * Convert iterable to array
-     *
      * @template TKey
      * @template TValue
      * @param iterable<TKey,TValue> $iterable
@@ -324,8 +304,6 @@ class ArrayUtils
     }
 
     /**
-     * Convert list of iterables to arrays
-     *
      * @template TKey
      * @template TValue
      * @param iterable<TKey,TValue> ...$iterables
@@ -344,8 +322,6 @@ class ArrayUtils
     }
 
     /**
-     * Create arg list for positional array functions
-     *
      * @template TKey
      * @template TValue
      * @param array<iterable<TKey,TValue>> $iterables
@@ -374,8 +350,6 @@ class ArrayUtils
     }
 
     /**
-     * Multi dimensional in_array
-     *
      * @param array<string|int,mixed> $array
      */
     public static function inArrayRecursive(
@@ -401,9 +375,7 @@ class ArrayUtils
     }
 
     /**
-     * Re-coding of var_export for tidiness
-     *
-     * @param array<string|int, mixed> $array
+     * @param array<string|int,mixed> $array
      */
     public static function export(
         array $array

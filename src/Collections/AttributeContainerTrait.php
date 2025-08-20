@@ -22,8 +22,6 @@ trait AttributeContainerTrait
     protected array $attributes = [];
 
     /**
-     * Add attributes with map
-     *
      * @param iterable<string,TInput> $attributes
      * @param TInput ...$attributeList
      * @return $this
@@ -44,8 +42,6 @@ trait AttributeContainerTrait
     }
 
     /**
-     * Replace all attributes with new map
-     *
      * @param iterable<string,TInput> $attributes
      * @param TInput ...$attributeList
      */
@@ -59,8 +55,6 @@ trait AttributeContainerTrait
     }
 
     /**
-     * Get map of current attributes
-     *
      * @return array<string,TValue>
      */
     public function getAttributes(): array
@@ -69,8 +63,6 @@ trait AttributeContainerTrait
     }
 
     /**
-     * Replace single value
-     *
      * @param TInput $value
      */
     public function setAttribute(
@@ -84,8 +76,6 @@ trait AttributeContainerTrait
     }
 
     /**
-     * Retrieve attribute value if set
-     *
      * @return ?TValue
      */
     public function getAttribute(
@@ -96,8 +86,6 @@ trait AttributeContainerTrait
     }
 
     /**
-     * Remove single attribute
-     *
      * @return $this
      */
     public function removeAttribute(
@@ -111,9 +99,6 @@ trait AttributeContainerTrait
         return $this;
     }
 
-    /**
-     *  Have any of these attributes been set?
-     */
     public function hasAttribute(
         string ...$keys
     ): bool {
@@ -128,9 +113,6 @@ trait AttributeContainerTrait
         return false;
     }
 
-    /**
-     *  Have all of these attributes been set?
-     */
     public function hasAttributes(
         string ...$keys
     ): bool {
@@ -146,8 +128,6 @@ trait AttributeContainerTrait
     }
 
     /**
-     * Remove all attributes
-     *
      * @return $this
      */
     public function clearAttributes(): static
@@ -156,17 +136,11 @@ trait AttributeContainerTrait
         return $this;
     }
 
-    /**
-     * How many attributes have been set?
-     */
     public function countAttributes(): int
     {
         return count($this->attributes);
     }
 
-    /**
-     * Normalize attribute name
-     */
     protected function normalizeAttributeKey(
         string $key
     ): string {

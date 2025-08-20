@@ -14,9 +14,6 @@ namespace DecodeLabs\Collections;
  */
 trait SortableTrait
 {
-    /**
-     * Sort values, keep keys
-     */
     public function sort(
         int $flags = \SORT_REGULAR
     ): static {
@@ -25,9 +22,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Reverse sort values, keep keys
-     */
     public function reverseSort(
         int $flags = \SORT_REGULAR
     ): static {
@@ -36,9 +30,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Sort values using callback, keep keys
-     */
     public function sortBy(
         callable $callable
     ): static {
@@ -48,9 +39,6 @@ trait SortableTrait
     }
 
 
-    /**
-     * Natural sort values, keep keys
-     */
     public function sortNatural(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -58,9 +46,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Natural sort values, case insensitive, keep keys
-     */
     public function sortCaseNatural(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -69,9 +54,6 @@ trait SortableTrait
     }
 
 
-    /**
-     * Sort values, ignore keys
-     */
     public function sortValues(
         int $flags = \SORT_REGULAR
     ): static {
@@ -80,9 +62,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Reverse sort values, ignore keys
-     */
     public function reverseSortValues(
         int $flags = \SORT_REGULAR
     ): static {
@@ -91,9 +70,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Sort values by callback, ignore keys
-     */
     public function sortValuesBy(
         callable $callback
     ): static {
@@ -103,9 +79,6 @@ trait SortableTrait
     }
 
 
-    /**
-     * Sort values by key
-     */
     public function sortKeys(
         int $flags = \SORT_REGULAR
     ): static {
@@ -114,9 +87,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Reverse sort values by key
-     */
     public function reverseSortKeys(
         int $flags = \SORT_REGULAR
     ): static {
@@ -125,9 +95,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Sort values by key using callback
-     */
     public function sortKeysBy(
         callable $callback
     ): static {
@@ -137,9 +104,7 @@ trait SortableTrait
     }
 
 
-    /**
-     * Reverse all entries
-     */
+
     public function reverse(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -147,9 +112,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Reverse all entries, ignore keys
-     */
     public function reverseValues(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -157,9 +119,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Randomise order, keep keys
-     */
     public function shuffle(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -168,9 +127,6 @@ trait SortableTrait
         return $output;
     }
 
-    /**
-     * Randomise order, ignore keys
-     */
     public function shuffleValues(): static
     {
         $output = static::Mutable ? $this : clone $this;

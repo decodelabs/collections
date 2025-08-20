@@ -24,8 +24,6 @@ trait SequenceTrait
     use SortableTrait;
 
     /**
-     * Direct set items
-     *
      * @param iterable<TValue> $items
      */
     public function __construct(
@@ -37,18 +35,12 @@ trait SequenceTrait
     }
 
 
-    /**
-     * Get all keys in array, enforce int formatting
-     */
     public function getKeys(): array
     {
         return array_map('intval', array_keys($this->items));
     }
 
 
-    /**
-     * Get item by index
-     */
     public function get(
         int $key
     ): mixed {
@@ -66,9 +58,6 @@ trait SequenceTrait
         return $this->items[$key] ?? null;
     }
 
-    /**
-     * Get and remove item by index
-     */
     public function pull(
         int $key
     ): mixed {
@@ -83,9 +72,6 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Set a value by index, keys normalized
-     */
     public function set(
         int $key,
         mixed $value
@@ -98,9 +84,6 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Add an item in at selected index, move rest
-     */
     public function put(
         int $key,
         mixed $value
@@ -126,9 +109,6 @@ trait SequenceTrait
 
 
 
-    /**
-     * True if any provided keys have a set value (not null)
-     */
     public function has(
         int ...$keys
     ): bool {
@@ -154,9 +134,6 @@ trait SequenceTrait
         return false;
     }
 
-    /**
-     * True if all provided keys have a set value (not null)
-     */
     public function hasAll(
         int ...$keys
     ): bool {
@@ -182,9 +159,6 @@ trait SequenceTrait
         return true;
     }
 
-    /**
-     * True if any provided keys are in the collection
-     */
     public function hasKey(
         int ...$keys
     ): bool {
@@ -210,9 +184,6 @@ trait SequenceTrait
         return false;
     }
 
-    /**
-     * True if all provided keys are in the collection
-     */
     public function hasKeys(
         int ...$keys
     ): bool {
@@ -238,9 +209,6 @@ trait SequenceTrait
         return true;
     }
 
-    /**
-     * Remove all values associated with $keys
-     */
     public function remove(
         int ...$keys
     ): static {
@@ -254,9 +222,6 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Remove all values not associated with $keys
-     */
     public function keep(
         int ...$keys
     ): static {
@@ -272,9 +237,7 @@ trait SequenceTrait
 
 
 
-    /**
-     * Lookup a key by value
-     */
+
     public function findKey(
         mixed $value,
         bool $strict = false
@@ -288,9 +251,7 @@ trait SequenceTrait
 
 
 
-    /**
-     * Reset all values
-     */
+
     public function clear(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -298,9 +259,7 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Remove all keys
-     */
+
     public function clearKeys(): static
     {
         $output = static::Mutable ? $this : clone $this;
@@ -310,9 +269,7 @@ trait SequenceTrait
 
 
 
-    /**
-     * Collapse multi dimensional array to flat
-     */
+
     public function collapse(
         bool $unique = false,
         bool $removeNull = false
@@ -325,9 +282,7 @@ trait SequenceTrait
 
 
 
-    /**
-     * Replace all values with $value
-     */
+
     public function fill(
         mixed $value
     ): static {
@@ -337,8 +292,6 @@ trait SequenceTrait
     }
 
     /**
-     * Create a new sequence with numeric range
-     *
      * @param int<0,max> $length
      */
     public static function createFill(
@@ -350,9 +303,6 @@ trait SequenceTrait
 
 
 
-    /**
-     * Merge all passed collections into one
-     */
     public function merge(
         iterable ...$arrays
     ): static {
@@ -361,9 +311,6 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Merge EVERYTHING :D
-     */
     public function mergeRecursive(
         iterable ...$arrays
     ): static {
@@ -373,9 +320,6 @@ trait SequenceTrait
     }
 
 
-    /**
-     * Like merge, but replaces.. obvs
-     */
     public function replace(
         iterable ...$arrays
     ): static {
@@ -386,9 +330,6 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Replace EVERYTHING :D
-     */
     public function replaceRecursive(
         iterable ...$arrays
     ): static {
@@ -401,9 +342,6 @@ trait SequenceTrait
 
 
 
-    /**
-     * Ensure sequence is at least $size long
-     */
     public function padLeft(
         int $size,
         mixed $value = null
@@ -414,9 +352,6 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Ensure sequence is at least $size long
-     */
     public function padRight(
         int $size,
         mixed $value = null
@@ -427,9 +362,6 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Ensure sequence is at least $size long
-     */
     public function padBoth(
         int $size,
         mixed $value = null
@@ -455,8 +387,6 @@ trait SequenceTrait
 
 
     /**
-     * Remove $offet + $length items
-     *
      * @param-out static<TValue> $removed
      */
     public function removeSlice(
@@ -481,8 +411,6 @@ trait SequenceTrait
     }
 
     /**
-     * Like removeSlice, but leaves a present behind
-     *
      * @param-out static<TValue> $removed
      */
     public function replaceSlice(
@@ -509,9 +437,6 @@ trait SequenceTrait
 
 
 
-    /**
-     * Remove duplicates from collection
-     */
     public function unique(
         int $flags = SORT_STRING
     ): static {
@@ -521,9 +446,6 @@ trait SequenceTrait
     }
 
 
-    /**
-     * Iterate each entry
-     */
     public function walk(
         callable $callback,
         mixed $data = null
@@ -533,9 +455,6 @@ trait SequenceTrait
         return $output;
     }
 
-    /**
-     * Iterate everything
-     */
     public function walkRecursive(
         callable $callback,
         mixed $data = null
@@ -547,9 +466,6 @@ trait SequenceTrait
 
 
 
-    /**
-     * Create a collection of numbers
-     */
     public static function createRange(
         int $start,
         int $end,
@@ -559,9 +475,6 @@ trait SequenceTrait
     }
 
 
-    /**
-     * Prepare an index
-     */
     protected function normalizeKey(
         int $key
     ): int {
@@ -582,8 +495,6 @@ trait SequenceTrait
 
 
     /**
-     * Copy and reinitialise new object
-     *
      * @template FValue
      * @param iterable<FValue> $newItems
      */
