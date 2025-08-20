@@ -11,9 +11,9 @@
     "require": {
         "php": "^8.4",
 
-        "decodelabs/coercion": "^0.3.3",
-        "decodelabs/exceptional": "^0.6.1",
-        "decodelabs/fluidity": "^0.3.6",
+        "decodelabs/coercion": "^0.3.5",
+        "decodelabs/exceptional": "^0.6.3",
+        "decodelabs/fluidity": "^0.3.7",
         "decodelabs/lucid-support": "^0.6"
     },
     "require-dev": {
