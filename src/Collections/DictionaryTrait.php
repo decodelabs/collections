@@ -367,6 +367,7 @@ trait DictionaryTrait
         }
 
         $removed = $this->propagate(
+            // @phpstan-ignore-next-line
             array_splice($output->items, $offset, $length, ArrayUtils::iterableToArray($replacement))
         );
 

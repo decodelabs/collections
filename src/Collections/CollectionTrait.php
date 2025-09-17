@@ -123,6 +123,7 @@ trait CollectionTrait
         mixed ...$values
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        // @phpstan-ignore-next-line
         array_push($output->items, ...$values);
         return $output;
     }
@@ -132,6 +133,7 @@ trait CollectionTrait
         mixed ...$values
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        // @phpstan-ignore-next-line
         array_unshift($output->items, ...$values);
         return $output;
     }
