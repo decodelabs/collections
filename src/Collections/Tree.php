@@ -13,7 +13,7 @@ use ArrayAccess;
 use ArrayIterator;
 use DecodeLabs\Coercion;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Lucid\Provider\MixedContextTrait as SanitizerProviderTrait;
+use DecodeLabs\Lucid\Provider\MixedContextTrait as LucidProviderTrait;
 use IteratorAggregate;
 
 /**
@@ -34,9 +34,9 @@ class Tree implements
     use DictionaryTrait;
 
     /**
-     * @use SanitizerProviderTrait<TValue>
+     * @use LucidProviderTrait<TValue>
      */
-    use SanitizerProviderTrait;
+    use LucidProviderTrait;
 
     protected const bool Mutable = true;
 

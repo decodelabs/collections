@@ -9,19 +9,19 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Collections;
 
-use DecodeLabs\Lucid\Provider\MixedContext as SanitizerProvider;
+use DecodeLabs\Lucid\Provider\MixedContext as LucidProvider;
 
 /**
  * @template TValue of string|bool|int|float|resource|object
  * @phpstan-type ChildList = iterable<int|string,TValue|iterable<int|string,TValue|iterable<mixed>>>
  * @extends MapInterface<int|string,TValue,static>
  * @extends ValueProvider<TValue>
- * @extends SanitizerProvider<TValue>
+ * @extends LucidProvider<TValue>
  */
 interface TreeInterface extends
     MapInterface,
     ValueProvider,
-    SanitizerProvider
+    LucidProvider
 {
     /**
      * @param ChildList|null $items
