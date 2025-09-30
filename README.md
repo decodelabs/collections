@@ -17,5 +17,19 @@ If you're after standard collections, you should check out the [PHP Ds extension
 ---
 
 
+## Installation
+
+This package requires PHP 8.4 or higher.
+
+Install via Composer:
+
+```bash
+composer require decodelabs/collections
+```
+
+## Usage
+
+Coming soon...
+
 ## Licensing
 Collections is licensed under the MIT License. See [LICENSE](./LICENSE) for the full license text.
