@@ -258,6 +258,7 @@ trait CollectionTrait
     public function diffAssoc(
         iterable ...$arrays
     ): static {
+        // @phpstan-ignore-next-line
         $output = array_diff_assoc(
             $this->items,
             // @phpstan-ignore-next-line
@@ -322,6 +323,7 @@ trait CollectionTrait
     public function diffValues(
         iterable ...$arrays
     ): static {
+        // @phpstan-ignore-next-line
         $output = array_diff(
             $this->items,
             // @phpstan-ignore-next-line
@@ -383,6 +385,7 @@ trait CollectionTrait
     public function intersectAssoc(
         iterable ...$arrays
     ): static {
+        // @phpstan-ignore-next-line
         $output = array_intersect_assoc(
             $this->items,
             // @phpstan-ignore-next-line
@@ -448,6 +451,7 @@ trait CollectionTrait
     public function intersectValues(
         iterable ...$arrays
     ): static {
+        // @phpstan-ignore-next-line
         $output = array_intersect(
             $this->items,
             // @phpstan-ignore-next-line

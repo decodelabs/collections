@@ -379,6 +379,7 @@ trait DictionaryTrait
         int $flags = SORT_STRING
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        // @phpstan-ignore-next-line
         $output->items = array_unique($output->items, $flags);
         return $output;
     }

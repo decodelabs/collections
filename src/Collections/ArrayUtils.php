@@ -74,6 +74,7 @@ class ArrayUtils
 
             if (
                 $isIterable &&
+                // @phpstan-ignore-next-line
                 $children !== null
             ) {
                 /** @var array<int|string,mixed> $children */
@@ -87,6 +88,7 @@ class ArrayUtils
         }
 
         if ($unique) {
+            // @phpstan-ignore-next-line
             return array_unique($output, $sort);
         } else {
             return $output;
@@ -129,6 +131,7 @@ class ArrayUtils
 
             if (
                 $isIterable &&
+                // @phpstan-ignore-next-line
                 $children !== null
             ) {
                 /** @var array<int|string,mixed> $children */

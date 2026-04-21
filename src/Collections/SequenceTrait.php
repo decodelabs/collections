@@ -275,6 +275,7 @@ trait SequenceTrait
         bool $removeNull = false
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        // @phpstan-ignore-next-line
         $output->items = ArrayUtils::collapse($output->items, false, $unique, $removeNull);
         return $output;
     }
@@ -441,6 +442,7 @@ trait SequenceTrait
         int $flags = SORT_STRING
     ): static {
         $output = static::Mutable ? $this : clone $this;
+        // @phpstan-ignore-next-line
         $output->items = array_unique($output->items, $flags);
         return $output;
     }
