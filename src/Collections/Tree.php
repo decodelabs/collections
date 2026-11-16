@@ -554,20 +554,17 @@ class Tree implements
      */
     public function countValues(): MapInterface
     {
-        $output = array_count_values(
-            array_map(function ($value) {
-                $value = $value->getValue();
+        $values = [];
 
-                if (
-                    is_string($value) ||
-                    is_int($value)
-                ) {
-                    return $value;
-                } else {
-                    return null;
-                }
-            }, $this->items)
-        );
+        foreach ($this->items as $item) {
+            $value = $item->getValue();
+
+            if (is_string($value) || is_int($value)) {
+                $values[] = $value;
+            }
+        }
+
+        $output = array_count_values($values);
 
         /** @var MapInterface<TValue,int> */
         $output = new Dictionary($output);
