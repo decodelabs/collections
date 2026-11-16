@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+--
+
+---
+
+### [v0.12.4](https://github.com/decodelabs/collections/commits/v0.12.4) - 16th November 2026
+
 - Preserve empty-string key behavior for nullable keys, iterators and indexed pluck on PHP 8.5
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.12.3...v0.12.4)
 
 ---
 
