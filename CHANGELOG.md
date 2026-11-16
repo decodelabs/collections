@@ -5,10 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+--
+
+---
+
+### [v0.12.3](https://github.com/decodelabs/collections/commits/v0.12.3) - 16th November 2026
+
 - Fixed tree value counting for empty and non-countable values
 - Improved doc comment headers
 - Added AGENTS.md
 - Integrated Chorus dev dependency
+
+[Full list of changes](https://github.com/decodelabs/collections/compare/v0.12.2...v0.12.3)
 
 ---
 
@@ -387,4 +395,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [v0.5.0](https://github.com/decodelabs/collections/commits/v0.5.0) - 10th September 2019
 
 - Added initial codebase (ported from Df)
-
