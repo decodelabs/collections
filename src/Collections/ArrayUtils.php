@@ -302,7 +302,17 @@ class ArrayUtils
         }
 
         /** @var array<TKey,TValue> $output */
-        $output = iterator_to_array($iterable);
+        $output = iterator_to_array((
+            /**
+             * @param iterable<mixed,mixed> $input
+             * @return \Generator<mixed,mixed>
+             */
+            static function (iterable $input): \Generator {
+                foreach ($input as $key => $value) {
+                    yield $key ?? '' => $value;
+                }
+            }
+        )($iterable));
         return $output;
     }
 

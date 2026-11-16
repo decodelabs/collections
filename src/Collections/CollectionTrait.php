@@ -549,7 +549,7 @@ trait CollectionTrait
                  * @phpstan-ignore-next-line
                  */
                 $iterable = $callback($value, $key);
-                $output = array_merge($output, iterator_to_array($iterable));
+                $output = array_merge($output, ArrayUtils::iterableToArray($iterable));
             }
 
 
@@ -629,9 +629,31 @@ trait CollectionTrait
         string $valueKey,
         ?string $indexKey = null
     ): array {
-        return array_values(
-            array_column($this->items, $valueKey, $indexKey)
-        );
+        if ($indexKey === null) {
+            return array_column($this->items, $valueKey);
+        }
+
+        $output = [];
+
+        foreach ($this->items as $item) {
+            $values = array_column([$item], $valueKey);
+
+            if ($values === []) {
+                continue;
+            }
+
+            $indexes = array_column([$item], $indexKey);
+
+            $row = ['value' => $values[0]];
+
+            if ($indexes !== []) {
+                $row['index'] = $indexes[0] ?? '';
+            }
+
+            $output[] = $row;
+        }
+
+        return array_values(array_column($output, 'value', 'index'));
     }
 
 

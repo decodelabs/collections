@@ -33,20 +33,21 @@ trait DictionaryTrait
 
 
     /**
-     * @param int|string $key
+     * @param int|string|null $key
      */
     public function get(
         mixed $key
     ): mixed {
-        return $this->items[$key] ?? null;
+        return $this->items[$key ?? ''] ?? null;
     }
 
     /**
-     * @param int|string $key
+     * @param int|string|null $key
      */
     public function pull(
         mixed $key
     ): mixed {
+        $key ??= '';
         $output = $this->items[$key] ?? null;
 
         if (static::Mutable) {
@@ -57,25 +58,25 @@ trait DictionaryTrait
     }
 
     /**
-     * @param int|string $key
+     * @param int|string|null $key
      */
     public function set(
         mixed $key,
         mixed $value
     ): static {
         $output = static::Mutable ? $this : clone $this;
-        $output->items[$key] = $value;
+        $output->items[$key ?? ''] = $value;
         return $output;
     }
 
     /**
-     * @param int|string ...$keys
+     * @param int|string|null ...$keys
      */
     public function has(
         mixed ...$keys
     ): bool {
         foreach ($keys as $key) {
-            if (isset($this->items[$key])) {
+            if (isset($this->items[$key ?? ''])) {
                 return true;
             }
         }
@@ -84,13 +85,13 @@ trait DictionaryTrait
     }
 
     /**
-     * @param int|string ...$keys
+     * @param int|string|null ...$keys
      */
     public function hasAll(
         mixed ...$keys
     ): bool {
         foreach ($keys as $key) {
-            if (!isset($this->items[$key])) {
+            if (!isset($this->items[$key ?? ''])) {
                 return false;
             }
         }
@@ -99,13 +100,13 @@ trait DictionaryTrait
     }
 
     /**
-     * @param int|string ...$keys
+     * @param int|string|null ...$keys
      */
     public function hasKey(
         mixed ...$keys
     ): bool {
         foreach ($keys as $key) {
-            if (array_key_exists($key, $this->items)) {
+            if (array_key_exists($key ?? '', $this->items)) {
                 return true;
             }
         }
@@ -114,13 +115,13 @@ trait DictionaryTrait
     }
 
     /**
-     * @param int|string ...$keys
+     * @param int|string|null ...$keys
      */
     public function hasKeys(
         mixed ...$keys
     ): bool {
         foreach ($keys as $key) {
-            if (!array_key_exists($key, $this->items)) {
+            if (!array_key_exists($key ?? '', $this->items)) {
                 return false;
             }
         }

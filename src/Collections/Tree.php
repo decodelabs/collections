@@ -783,6 +783,8 @@ class Tree implements
                 }
             } else {
                 foreach ($array as $key => $value) {
+                    $key ??= '';
+
                     if (isset($this->items[$key])) {
                         if (is_iterable($value)) {
                             // @phpstan-ignore-next-line PHPStan bug
@@ -808,6 +810,9 @@ class Tree implements
     }
 
 
+    /**
+     * @param ChildList ...$arrays
+     */
     public function replace(
         iterable ...$arrays
     ): static {
@@ -822,7 +827,8 @@ class Tree implements
                 }
             } else {
                 foreach ($array as $key => $value) {
-                    $this->items[$key] = new static(null, $value);
+                    // @phpstan-ignore argument.type (The recursive constructor accepts nested ChildList values.)
+                    $this->items[$key ?? ''] = new static(null, $value);
                 }
             }
         }

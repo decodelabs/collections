@@ -13,7 +13,7 @@ use DecodeLabs\Lucid\Provider\MixedContext as LucidProvider;
 
 /**
  * @template TValue of string|bool|int|float|resource|object
- * @phpstan-type ChildList = iterable<int|string,TValue|iterable<int|string,TValue|iterable<mixed>>>
+ * @phpstan-type ChildList = iterable<int|string|null,TValue|iterable<int|string|null,TValue|iterable<mixed>>>
  * @extends MapInterface<int|string,TValue,static>
  * @extends ValueProvider<TValue>
  * @extends LucidProvider<TValue>
